@@ -15,8 +15,9 @@ namespace LBD {
 
 }
 
-void main() {
+int main() {
 
 	LBD::Hello();
 
+	return 0;
 }

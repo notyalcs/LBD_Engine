@@ -15,10 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\DLL.h">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\DLL.cpp">
+    <ClCompile Include="src\MainApp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

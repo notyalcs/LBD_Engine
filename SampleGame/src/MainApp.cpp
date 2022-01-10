@@ -2,6 +2,10 @@
 
 	Sample Game for testing the engine.
 
+	Authors:
+		Sean Clayton
+		Mo Baydoun
+
 */
 
 namespace LBD {

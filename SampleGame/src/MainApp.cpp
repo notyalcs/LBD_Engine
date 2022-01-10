@@ -9,7 +9,7 @@
 
 */
 
-namespace LBD {
+namespace lbd {
 	
 	__declspec(dllimport) void Hello();
 
@@ -17,7 +17,7 @@ namespace LBD {
 
 int main() {
 
-	LBD::Hello();
+	lbd::Hello();
 
 	return 0;
 }

@@ -15,7 +15,7 @@
 
 #pragma once
 
-namespace LBD {
+namespace lbd {
 
 	__declspec(dllexport) void Hello();
 

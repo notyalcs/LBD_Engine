@@ -1,7 +1,7 @@
 #include "DLL.h"
 #include <iostream>
 
-namespace LBD {
+namespace lbd {
 
 	void Hello() {
 		std::cout << "Hello from the LBD engine!" << std::endl;

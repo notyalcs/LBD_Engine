@@ -9,6 +9,7 @@
 	Authors:
 		Sean Clayton
 		Mo Baydoun
+		Joshua Krauchi
 
 */
 

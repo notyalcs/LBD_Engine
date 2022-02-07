@@ -1,0 +1,14 @@
+#include "../../Headers/Main/Game.h"
+
+// Link important libraries.
+#pragma comment(lib, "d3dcompiler.lib")
+#pragma comment(lib, "d3d12.lib")
+#pragma comment(lib, "dxgi.lib")
+
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance, PSTR cmdLine, int showCmd)
+{
+	Game application{ hInstance };
+	if (!application.Initialize()) return 0;
+
+	return application.Run();
+}

@@ -33,7 +33,11 @@ void Render::AddPSO(PSOName psoName, ID3D12Device* device, std::vector<D3D12_INP
 		reinterpret_cast<BYTE*>(_shaders.at(OPAQUE_PS)->GetBufferPointer()),
 		_shaders.at(OPAQUE_PS)->GetBufferSize()
 	};
-	opaquePsoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
+
+	auto rast = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
+	rast.FillMode = (WIREFRAME_STATE) ? D3D12_FILL_MODE_WIREFRAME : D3D12_FILL_MODE_SOLID;
+
+	opaquePsoDesc.RasterizerState = rast;
 	opaquePsoDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
 	opaquePsoDesc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
 	opaquePsoDesc.SampleMask = UINT_MAX;

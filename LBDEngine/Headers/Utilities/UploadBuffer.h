@@ -1,6 +1,8 @@
 #pragma once
 #include "Utilities.h"
 
+//Don't touch this
+
 template<typename T>
 class UploadBuffer
 {

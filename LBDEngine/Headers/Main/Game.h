@@ -11,6 +11,9 @@
 #include "../Behaviours/Physics.h"
 #include "../Behaviours/PhysicsBody.h"
 
+//Extends application, provides features to application
+//
+
 class Game : public Application
 {
 public:
@@ -64,6 +67,7 @@ private:
 
 	std::array<const CD3DX12_STATIC_SAMPLER_DESC, 6> GetStaticSamplers();
 
+	//Everything that exists in the world is a game object
 	static std::vector<std::unique_ptr<GameObject>> _gameObjects;
 	std::vector<std::unique_ptr<FrameResource>> _frameResources;
 	FrameResource* _currentFrameResource = nullptr;

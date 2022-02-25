@@ -18,6 +18,8 @@
 // http://go.microsoft.com/fwlink/?LinkId=248929
 //--------------------------------------------------------------------------------------
 
+//Dont touch this
+
 #ifdef _MSC_VER
 #pragma once
 #endif

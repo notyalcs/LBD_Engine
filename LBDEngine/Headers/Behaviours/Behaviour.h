@@ -6,7 +6,11 @@ class GameObject;
 class Behaviour {
 public:
 	virtual ~Behaviour() = default;
+
+	//Called when the object is first created
 	virtual void Start() {}
+
+	//Called each frame
 	virtual void Update() {}
 
 	GameObject* GetGameObject()
@@ -20,6 +24,7 @@ public:
 	}
 
 private:
+	//The game object that the behaviour is a part of
 	GameObject* _gameObject;
 
 };

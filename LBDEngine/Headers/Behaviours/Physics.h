@@ -2,6 +2,7 @@
 #include "Behaviour.h"
 #include "../Utilities/GameTime.h"
 
+//Applies force to an object
 class Physics : public Behaviour
 {
 public:

@@ -2,6 +2,8 @@
 #include "../Utilities/Utilities.h"
 #include "../Utilities/GameTime.h"
 
+//Initializes DirectX, does not need to be modified or worried about
+
 class Application
 {
 protected:

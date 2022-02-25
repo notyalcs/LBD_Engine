@@ -85,7 +85,7 @@ GeometryObject GeometryGenerator::CreateBox(float width, float height, float dep
 	meshData.Indices.assign(&i[0], &i[36]);
 
 	// Put a cap on the number of subdivisions.
-	numSubdivisions = std::min<UINT>(numSubdivisions, 6u);
+	numSubdivisions = std::min<UINT>(numSubdivisions, MAXIMUM_SUBDIVISIONS);
 
 	for (UINT i = 0; i < numSubdivisions; ++i)
 		Subdivide(meshData);
@@ -302,7 +302,7 @@ GeometryObject GeometryGenerator::CreateGeosphere(float radius, UINT numSubdivis
 	GeometryObject meshData;
 
 	// Put a cap on the number of subdivisions.
-	numSubdivisions = std::min<UINT>(numSubdivisions, 6u);
+	numSubdivisions = std::min<UINT>(numSubdivisions, MAXIMUM_SUBDIVISIONS);
 
 	// Approximate a sphere by tessellating an icosahedron.
 

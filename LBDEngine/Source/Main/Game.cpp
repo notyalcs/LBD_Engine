@@ -28,9 +28,9 @@ bool Game::Initialize()
 
 	GameCameras::GetMainCamera()->SetPosition(INITIAL_CAMERA_POSITION);
 
-	for (auto& gameObject : _gameObjects)
+	for (auto& behaviour : _gameObjects)
 	{
-		gameObject->Start();
+		behaviour->Start();
 	}
 
 	return true;

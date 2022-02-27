@@ -16,9 +16,9 @@ bool Game::Initialize()
 	BuildInputLayout();
 	BuildShapeGeometry();
 	BuildRenderItems();
+	CreatePlayer();
 	BuildFrameResources();
 	AddPSOs();
-	CreatePlayer();
 
 	// Execute the initialization commands.
 	Utilities::ThrowIfFailed(_graphicsCommandList->Close());
@@ -418,7 +418,7 @@ void Game::BuildFrameResources()
 {
 	for (int i = 0; i < NUMBER_OF_FRAME_RESOURCES; ++i)
 	{
-		_frameResources.push_back(std::make_unique<FrameResource>(_device.Get(), 1, (UINT)GetBehavioursOfType<Mesh>().size(), (UINT)Render::GetMaterials().size()));
+		_frameResources.push_back(std::make_unique<FrameResource>(_device.Get(), 1, static_cast<UINT>(GetBehavioursOfType<Mesh>().size()), static_cast<UINT>(Render::GetMaterials().size())));
 	}
 }
 

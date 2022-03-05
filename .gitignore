@@ -3,9 +3,6 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
-#Allow OBJs in Models folder
-!Models/*.obj
-
 # Custom added
 bin-int/
 
@@ -103,6 +100,9 @@ StyleCopReport.xml
 *.pidb
 *.svclog
 *.scc
+
+#Allow OBJs in Models folder
+!LBDEngine/Models/*.obj
 
 # Chutzpah Test files
 _Chutzpah*

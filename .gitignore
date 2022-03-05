@@ -3,6 +3,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+#Allow OBJs in Models folder
+!Models/*.obj
+
 # Custom added
 bin-int/
 

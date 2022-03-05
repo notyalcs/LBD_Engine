@@ -17,6 +17,7 @@ enum SubmeshGeometryName {
 enum TextureName {
 	TEX_BRICK,
 	TEX_CRATE,
+	TEX_CHAIR,
 	TEX_STONE,
 	TEX_TILE,
 	TEX_TREE
@@ -25,6 +26,7 @@ enum TextureName {
 enum MaterialName {
 	MAT_BRICK,
 	MAT_CRATE,
+	MAT_CHAIR,
 	MAT_STONE,
 	MAT_TILE,
 	MAT_TREE

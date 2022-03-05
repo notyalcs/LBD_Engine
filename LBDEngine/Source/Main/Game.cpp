@@ -249,6 +249,7 @@ void Game::LoadRenderData()
 	Render::AddTexture(TEXT("./Textures/stone.dds"), TEX_STONE, _device.Get(), _graphicsCommandList.Get());
 	Render::AddTexture(TEXT("./Textures/grasscube1024.dds"), TEX_TILE, _device.Get(), _graphicsCommandList.Get());
 	Render::AddTexture(TEXT("./Textures/WoodCrate01.dds"), TEX_CRATE, _device.Get(), _graphicsCommandList.Get());
+	Render::AddTexture(TEXT("./Textures/chair_shitty.dds"), TEX_CHAIR, _device.Get(), _graphicsCommandList.Get());
 	Render::AddTexture(TEXT("./Textures/Tree01S.dds"), TEX_TREE, _device.Get(), _graphicsCommandList.Get());
 
 	// Add materials.
@@ -258,6 +259,7 @@ void Game::LoadRenderData()
 	Render::AddMaterial(MAT_STONE, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.05f, 0.05f, 0.05f }, 0.3f);
 	Render::AddMaterial(MAT_TILE, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.02f, 0.02f, 0.02f }, 0.3f);
 	Render::AddMaterial(MAT_CRATE, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.05f, 0.05f, 0.05f }, 0.2f);
+	Render::AddMaterial(MAT_CHAIR, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.05f, 0.05f, 0.05f }, 0.85f);
 
 	// Add shaders.
 	Render::AddShader(TEXT("./Shaders/Default.hlsl"), "VS", STANDARD_VS, "vs_5_1");
@@ -419,7 +421,7 @@ void Game::BuildRenderItems()
 
 	CreateMeshObject(SHAPE, BOX, MAT_CRATE, true, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 1.0f, 0.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
 	
-	CreateMeshObject(SHAPE, CUSTOM, MAT_CRATE, true, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 1.0f, -5.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
+	CreateMeshObject(SHAPE, CUSTOM, MAT_CHAIR, true, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 1.0f, -5.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
 	
 
 	CreateMeshObject(SHAPE, BOX, MAT_CRATE, true, XMMatrixScaling(2.0f, 2.0f, 2.0f), XMMatrixRotationRollPitchYaw(1.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 6.0f, 0.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));

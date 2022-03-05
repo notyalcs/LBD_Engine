@@ -3,6 +3,7 @@
 #include "Behaviour.h"
 #include "../Utilities/Render.h"
 
+//The visual part of an object. The vertices that get drawn
 class Mesh : public Behaviour
 {
 public:

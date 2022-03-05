@@ -300,7 +300,16 @@ bool Application::InitializeMainWindow()
 bool Application::InitializeDirect3D()
 {
 	Utilities::ThrowIfFailed(CreateDXGIFactory1(IID_PPV_ARGS(&_factory)));
-	Utilities::ThrowIfFailed(D3D12CreateDevice(nullptr, CURRENT_FEATURE_LEVEL, IID_PPV_ARGS(&_device)));
+	auto hResult = D3D12CreateDevice(nullptr, CURRENT_FEATURE_LEVEL, IID_PPV_ARGS(&_device));
+
+	if (FAILED(hResult))
+	{
+		// Fall back to the WARP adapter.
+		ComPtr<IDXGIAdapter> pWarpAdapter;
+		Utilities::ThrowIfFailed(_factory->EnumWarpAdapter(IID_PPV_ARGS(&pWarpAdapter)));
+		Utilities::ThrowIfFailed(D3D12CreateDevice(pWarpAdapter.Get(), CURRENT_FEATURE_LEVEL, IID_PPV_ARGS(&_device)));
+	}
+
 	Utilities::ThrowIfFailed(_device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&_fence)));
 
 	_rtvDescriptorSize = _device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);

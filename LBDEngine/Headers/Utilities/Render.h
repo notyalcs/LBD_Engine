@@ -2,6 +2,8 @@
 #include "Utilities.h"
 #include "DDSTextureLoader.h"
 
+//Useful functions, enums, and other resources for rendering
+
 enum MeshGeometryName {
 	SHAPE
 };

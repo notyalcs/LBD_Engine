@@ -2,6 +2,7 @@
 #include "../Utilities/Utilities.h"
 #include "Behaviour.h"
 
+//Allows movement in the world
 class Camera : public Behaviour
 {
 public:

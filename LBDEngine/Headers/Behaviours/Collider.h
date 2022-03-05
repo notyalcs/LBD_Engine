@@ -1,6 +1,8 @@
 #pragma once
 #include "Behaviour.h"
 
+//Adds collision to an object.
+//Allows collision between objects
 class Collider : public Behaviour
 {
 public:

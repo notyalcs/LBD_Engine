@@ -2,6 +2,8 @@
 #include "Utilities.h"
 #include "UploadBuffer.h"
 
+//Dont touch this, its shaders and view stuff
+
 struct ObjectConstants
 {
     DirectX::XMFLOAT4X4 World = MathHelper::CreateIdentity4x4();

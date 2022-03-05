@@ -4,10 +4,15 @@
 
 class Behaviour;
 
+//An empty object in the world that contains a position, scale, and rotation
 class GameObject
 {
 public:
+	//Calls each behaviour's start method
 	void Start();
+
+	//Calls each behaviour's update method
+	//Called each frame.
 	void Update();
 
 	template<typename T>
@@ -82,6 +87,7 @@ private:
 	XMFLOAT4X4 _rotation{ MathHelper::CreateIdentity4x4() };
 	XMFLOAT4X4 _translation{ MathHelper::CreateIdentity4x4() };
 
+	//A list of single purpose objects that provide functionality to a game object.
 	std::vector<std::unique_ptr<Behaviour>> _behaviours;
 
 };

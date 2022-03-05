@@ -1,5 +1,6 @@
 #include "../../Headers/Main/Game.h"
 
+//Entry point for the game
 // Link important libraries.
 #pragma comment(lib, "d3dcompiler.lib")
 #pragma comment(lib, "d3d12.lib")

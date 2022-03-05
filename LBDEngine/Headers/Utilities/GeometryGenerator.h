@@ -5,6 +5,8 @@
 #include <vector>
 #include "Utilities.h"
 
+//I touched this, get rekt @Josh
+
 struct GeometryVertex
 {
 	GeometryVertex() {}

@@ -6,6 +6,8 @@
 
 using namespace DirectX;
 
+//Useful math
+
 class MathHelper
 {
 public:

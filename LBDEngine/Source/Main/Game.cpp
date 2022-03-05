@@ -16,9 +16,9 @@ bool Game::Initialize()
 	BuildInputLayout();
 	BuildShapeGeometry();
 	BuildRenderItems();
+	CreatePlayer();
 	BuildFrameResources();
 	AddPSOs();
-	CreatePlayer();
 
 	// Execute the initialization commands.
 	Utilities::ThrowIfFailed(_graphicsCommandList->Close());
@@ -27,11 +27,6 @@ bool Game::Initialize()
 	FlushCommandQueue();
 
 	GameCameras::GetMainCamera()->SetPosition(INITIAL_CAMERA_POSITION);
-
-	for (auto& behaviour : _gameObjects)
-	{
-		behaviour->Start();
-	}
 
 	return true;
 }
@@ -45,9 +40,19 @@ void Game::OnResize()
 
 void Game::Update()
 {
-	for (auto& behaviour : _gameObjects)
+	auto toStartCopy{ _gameObjectsToStart };
+	_gameObjectsToStart.clear();
+	
+	// Starting is done using a copy because GameObjects could be created in another
+	// GameObject's Start function, and iterating shouldn't be done on an updating vector.
+	for (auto& gameObject : toStartCopy)
 	{
-		behaviour->Update();
+		gameObject->Start();
+	}
+
+	for (auto& gameObject : _gameObjects)
+	{
+		gameObject->Update();
 	}
 	GameCameras::GetMainCamera()->UpdateViewMatrix();
 
@@ -139,6 +144,15 @@ void Game::Draw()
 	// Because we are on the GPU timeline, the new fence point won't be 
 	// set until the GPU finishes processing all the commands prior to this Signal().
 	_commandQueue->Signal(_fence.Get(), _currentFence);
+}
+
+GameObject* Game::CreateGameObject()
+{
+	_gameObjects.push_back(std::make_unique<GameObject>());
+
+	auto gameObject{ _gameObjects.back().get() };
+	_gameObjectsToStart.push_back(gameObject);
+	return gameObject;
 }
 
 void Game::CreatePlayer()
@@ -407,7 +421,7 @@ void Game::BuildFrameResources()
 {
 	for (int i = 0; i < NUMBER_OF_FRAME_RESOURCES; ++i)
 	{
-		_frameResources.push_back(std::make_unique<FrameResource>(_device.Get(), 1, (UINT)GetBehavioursOfType<Mesh>().size(), (UINT)Render::GetMaterials().size()));
+		_frameResources.push_back(std::make_unique<FrameResource>(_device.Get(), 1, static_cast<UINT>(GetBehavioursOfType<Mesh>().size()), static_cast<UINT>(Render::GetMaterials().size())));
 	}
 }
 
@@ -438,7 +452,7 @@ void Game::BuildRenderItems()
 
 void Game::CreateMeshObject(MeshGeometryName meshGeometryName, SubmeshGeometryName submeshGeometryName, MaterialName materialName, bool isDynamic, XMMATRIX scale, XMMATRIX rotation, XMMATRIX translation, XMMATRIX textureTransform)
 {
-	auto meshObject{ std::make_unique<GameObject>() };
+	auto meshObject{ CreateGameObject() };
 	auto mesh{ dynamic_cast<Mesh*>(meshObject->AddBehaviour<Mesh>()) };
 	
 	auto meshGeometry{ Render::GetGeometries().at(meshGeometryName).get() };
@@ -465,8 +479,6 @@ void Game::CreateMeshObject(MeshGeometryName meshGeometryName, SubmeshGeometryNa
 		auto physics{ dynamic_cast<Physics*>(meshObject->AddBehaviour<Physics>()) };
 		auto physicsBody = dynamic_cast<PhysicsBody*>(meshObject->AddBehaviour<PhysicsBody>());
 	}
-
-	_gameObjects.push_back(std::move(meshObject));
 }
 
 void Game::DrawRenderItems(ID3D12GraphicsCommandList* cmdList, const std::vector<Mesh*>& ritems)

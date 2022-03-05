@@ -4,6 +4,8 @@
 
 class Camera;
 
+//Gives access to the main camera, usually the player one
+
 class GameCameras
 {
 public:

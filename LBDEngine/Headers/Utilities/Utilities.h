@@ -26,9 +26,13 @@
 using namespace DirectX;
 using Microsoft::WRL::ComPtr;
 
+//Useful functions
+
 class Utilities
 {
 public:
+
+	//Print Debug works as your console.log
 	static void PrintDebug(double value) {
 		OutputDebugString((std::to_wstring(value) + TEXT(" ")).c_str());
 	}

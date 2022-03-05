@@ -7,6 +7,7 @@
 #include "../Behaviours/Player.h"
 #include "../Utilities/GeometryGenerator.h"
 #include "../Utilities/GameObject.h"
+#include "../Utilities/WavefrontReader.h"
 #include "../Behaviours/Collider.h"
 #include "../Behaviours/Physics.h"
 #include "../Behaviours/PhysicsBody.h"
@@ -59,6 +60,7 @@ private:
 	void BuildFrameResources();
 	void BuildRenderItems();
 	void CreateMeshObject(MeshGeometryName meshGeometryName, SubmeshGeometryName submeshGeometryName, MaterialName materialName, bool isDynamic, XMMATRIX scale, XMMATRIX rotation, XMMATRIX translation, XMMATRIX textureTransform);
+//	void CreateMeshObject(std::string objFile, MaterialName materialName, bool isDynamic, XMMATRIX scale, XMMATRIX rotation, XMMATRIX translation, XMMATRIX textureTransform);
 	void DrawRenderItems(ID3D12GraphicsCommandList* cmdList, const std::vector<Mesh*>& ritems);
 	void CreatePlayer();
 

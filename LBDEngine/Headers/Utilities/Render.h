@@ -10,7 +10,8 @@ enum SubmeshGeometryName {
 	BOX,
 	CYLINDER,
 	GRID,
-	SPHERE
+	SPHERE,
+	CUSTOM
 };
 
 enum TextureName {

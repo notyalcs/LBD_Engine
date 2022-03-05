@@ -334,11 +334,12 @@ void Game::BuildShapeGeometry()
 		GeometryGenerator::CreateBox(1.0f, 1.0f, 1.0f, 3),
 		GeometryGenerator::CreateGrid(20.0f, 30.0f, 60, 40),
 		GeometryGenerator::CreateSphere(0.5f, 20, 20),
-		GeometryGenerator::CreateCylinder(0.5f, 0.3f, 3.0f, 20, 20)
+		GeometryGenerator::CreateCylinder(0.5f, 0.3f, 3.0f, 20, 20),
+		WavefrontReader::ReadFile("./Models/rudimentary_armchair_tris.obj")
 	};
 	SubmeshGeometryName names[] =
 	{
-		BOX, GRID, SPHERE, CYLINDER
+		BOX, GRID, SPHERE, CYLINDER, CUSTOM
 	};
 
 	auto geometry = std::make_unique<MeshGeometry>();
@@ -414,7 +415,11 @@ void Game::BuildFrameResources()
 void Game::BuildRenderItems()
 {
 
+	CreateMeshObject(SHAPE, BOX, MAT_STONE, true, XMMatrixScaling(1.0f, 3.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 24.0f, 6.0f), XMMatrixScaling(1.0f, 3.0f, 1.0f));
+
 	CreateMeshObject(SHAPE, BOX, MAT_CRATE, true, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 1.0f, 0.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
+	
+	CreateMeshObject(SHAPE, CUSTOM, MAT_CRATE, true, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 1.0f, -5.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
 	
 
 	CreateMeshObject(SHAPE, BOX, MAT_CRATE, true, XMMatrixScaling(2.0f, 2.0f, 2.0f), XMMatrixRotationRollPitchYaw(1.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 6.0f, 0.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));

@@ -81,6 +81,9 @@
     <ClInclude Include="Headers\Utilities\d3dx12.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Headers\Utilities\WavefrontReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Utilities\Render.cpp">
@@ -132,6 +135,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Utilities\DDSTextureLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utilities\WavefrontReader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

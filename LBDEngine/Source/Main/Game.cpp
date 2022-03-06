@@ -84,7 +84,7 @@ void Game::Draw()
 
 	// A command list can be reset after it has been added to the command queue via ExecuteCommandList.
 	// Reusing the command list reuses memory.
-	Utilities::ThrowIfFailed(_graphicsCommandList->Reset(cmdListAlloc.Get(), Render::GetPSOs().at(PSO_OPAQUE).Get()));
+	Utilities::ThrowIfFailed(_graphicsCommandList->Reset(cmdListAlloc.Get(), Render::GetPSOs().at("opaque").Get()));
 
 	_graphicsCommandList->RSSetViewports(1, &_viewport);
 	_graphicsCommandList->RSSetScissorRects(1, &_scissorRect);
@@ -157,7 +157,7 @@ GameObject* Game::CreateGameObject()
 
 void Game::CreatePlayer()
 {
-	CreateMeshObject(SHAPE, SPHERE, MAT_STONE, true, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 2.0f, -10.0f), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
+	CreateMeshObject("shape", "sphere", "stone", true, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 2.0f, -10.0f), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
 	_player = dynamic_cast<GameObject*>(_gameObjects.back().get());
 	_player->AddBehaviour<Controller>();
 	_player->AddBehaviour<Player>();
@@ -259,25 +259,24 @@ void Game::UpdateMainPassCB()
 void Game::LoadRenderData()
 {
 	// Add textures.
-	Render::AddTexture(TEXT("./Textures/bricks.dds"), TEX_BRICK, _device.Get(), _graphicsCommandList.Get());
-	Render::AddTexture(TEXT("./Textures/stone.dds"), TEX_STONE, _device.Get(), _graphicsCommandList.Get());
-	Render::AddTexture(TEXT("./Textures/grasscube1024.dds"), TEX_TILE, _device.Get(), _graphicsCommandList.Get());
-	Render::AddTexture(TEXT("./Textures/WoodCrate01.dds"), TEX_CRATE, _device.Get(), _graphicsCommandList.Get());
-	Render::AddTexture(TEXT("./Textures/chair_shitty.dds"), TEX_CHAIR, _device.Get(), _graphicsCommandList.Get());
-	Render::AddTexture(TEXT("./Textures/Tree01S.dds"), TEX_TREE, _device.Get(), _graphicsCommandList.Get());
+	Render::AddTexture(TEXT("./Textures/grasscube1024.dds"), "tile", _device.Get(), _graphicsCommandList.Get());
+	Render::AddTexture(TEXT("./Textures/bricks.dds"), "brick", _device.Get(), _graphicsCommandList.Get());
+	Render::AddTexture(TEXT("./Textures/stone.dds"), "stone", _device.Get(), _graphicsCommandList.Get());
+	Render::AddTexture(TEXT("./Textures/chair_shitty.dds"), "chair", _device.Get(), _graphicsCommandList.Get());
+	Render::AddTexture(TEXT("./Textures/WoodCrate01.dds"), "crate", _device.Get(), _graphicsCommandList.Get());
 
 	// Add materials.
 	// Right now, the order of the materials must be the same as the order of the textures.
 	// This can be refactored if necessary.
-	Render::AddMaterial(MAT_BRICK, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.02f, 0.02f, 0.02f }, 0.1f);
-	Render::AddMaterial(MAT_STONE, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.05f, 0.05f, 0.05f }, 0.3f);
-	Render::AddMaterial(MAT_TILE, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.02f, 0.02f, 0.02f }, 0.3f);
-	Render::AddMaterial(MAT_CRATE, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.05f, 0.05f, 0.05f }, 0.2f);
-	Render::AddMaterial(MAT_CHAIR, { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.05f, 0.05f, 0.05f }, 0.85f);
+	Render::AddMaterial("tile", { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.02f, 0.02f, 0.02f }, 0.3f);
+	Render::AddMaterial("chair", { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.05f, 0.05f, 0.05f }, 0.85f);
+	Render::AddMaterial("stone", { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.05f, 0.05f, 0.05f }, 0.3f);
+	Render::AddMaterial("brick", { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.02f, 0.02f, 0.02f }, 0.1f);
+	Render::AddMaterial("crate", { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.05f, 0.05f, 0.05f }, 0.2f);
 
 	// Add shaders.
-	Render::AddShader(TEXT("./Shaders/Default.hlsl"), "VS", STANDARD_VS, "vs_5_1");
-	Render::AddShader(TEXT("./Shaders/Default.hlsl"), "PS", OPAQUE_PS, "ps_5_1");
+	Render::AddShader(TEXT("./Shaders/Default.hlsl"), "VS", "standard_vs", "vs_5_1");
+	Render::AddShader(TEXT("./Shaders/Default.hlsl"), "PS", "opaque_ps", "ps_5_1");
 }
 
 void Game::InitializeRootSignature()
@@ -353,9 +352,9 @@ void Game::BuildShapeGeometry()
 		GeometryGenerator::CreateCylinder(0.5f, 0.3f, 3.0f, 20, 20),
 		WavefrontReader::ReadFile("./Models/rudimentary_armchair_tris.obj")
 	};
-	SubmeshGeometryName names[] =
+	std::string names[] =
 	{
-		BOX, GRID, SPHERE, CYLINDER, CUSTOM
+		"box", "grid", "sphere", "cylinder", "custom"
 	};
 
 	auto geometry = std::make_unique<MeshGeometry>();
@@ -409,12 +408,12 @@ void Game::BuildShapeGeometry()
 	geometry->IndexFormat = DXGI_FORMAT_R16_UINT;
 	geometry->IndexBufferByteSize = ibByteSize;
 
-	Render::AddGeometry(SHAPE, std::move(geometry));
+	Render::AddGeometry("shape", std::move(geometry));
 }
 
 void Game::AddPSOs()
 {
-	Render::AddPSO(PSO_OPAQUE, _device.Get(), _inputLayout, _rootSignature.Get());
+	Render::AddPSO("opaque", _device.Get(), _inputLayout, _rootSignature.Get());
 }
 
 void Game::BuildFrameResources()
@@ -431,26 +430,26 @@ void Game::BuildFrameResources()
 void Game::BuildRenderItems()
 {
 
-	CreateMeshObject(SHAPE, BOX, MAT_STONE, true, XMMatrixScaling(1.0f, 3.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 24.0f, 6.0f), XMMatrixScaling(1.0f, 3.0f, 1.0f));
+	CreateMeshObject("shape", "box", "stone", true, XMMatrixScaling(1.0f, 3.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 24.0f, 6.0f), XMMatrixScaling(1.0f, 3.0f, 1.0f));
 
-	CreateMeshObject(SHAPE, BOX, MAT_CRATE, true, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 1.0f, 0.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
+	CreateMeshObject("shape", "box", "crate", true, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 1.0f, 0.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
 	
-	CreateMeshObject(SHAPE, CUSTOM, MAT_CHAIR, true, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 1.0f, -5.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
+	CreateMeshObject("shape", "custom", "chair", true, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 1.0f, -5.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
 	
 
-	CreateMeshObject(SHAPE, BOX, MAT_CRATE, true, XMMatrixScaling(2.0f, 2.0f, 2.0f), XMMatrixRotationRollPitchYaw(1.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 6.0f, 0.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
-	CreateMeshObject(SHAPE, GRID, MAT_TILE, false, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 0.0f, 0.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
+	CreateMeshObject("shape", "box", "crate", true, XMMatrixScaling(2.0f, 2.0f, 2.0f), XMMatrixRotationRollPitchYaw(1.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 6.0f, 0.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
+	CreateMeshObject("shape", "grid", "tile", false, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 0.0f, 0.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
 	XMMATRIX brickTexTransform = XMMatrixScaling(1.0f, 1.0f, 1.0f);
 	for (int i = 0; i < 5; ++i)
 	{
-		CreateMeshObject(SHAPE, CYLINDER, MAT_BRICK, false, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(-5.0f, 1.5f, -10.0f + i * 5.0f), brickTexTransform);
-		CreateMeshObject(SHAPE, CYLINDER, MAT_BRICK, false, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(5.0f, 1.5f, -10.0f + i * 5.0f), brickTexTransform);
-		CreateMeshObject(SHAPE, SPHERE, MAT_STONE, false, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(-5.0f, 3.5f, -10.0f + i * 5.0f), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
-		CreateMeshObject(SHAPE, SPHERE, MAT_STONE, true, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(5.0f, 20.5f, -10.0f + i * 5.0f), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
+		CreateMeshObject("shape", "cylinder", "brick", false, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(-5.0f, 1.5f, -10.0f + i * 5.0f), brickTexTransform);
+		CreateMeshObject("shape", "cylinder", "brick", false, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(5.0f, 1.5f, -10.0f + i * 5.0f), brickTexTransform);
+		CreateMeshObject("shape", "sphere", "stone", false, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(-5.0f, 3.5f, -10.0f + i * 5.0f), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
+		CreateMeshObject("shape", "sphere", "stone", true, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(5.0f, 20.5f, -10.0f + i * 5.0f), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
 	}
 }
 
-void Game::CreateMeshObject(MeshGeometryName meshGeometryName, SubmeshGeometryName submeshGeometryName, MaterialName materialName, bool isDynamic, XMMATRIX scale, XMMATRIX rotation, XMMATRIX translation, XMMATRIX textureTransform)
+void Game::CreateMeshObject(std::string meshGeometryName, std::string submeshGeometryName, std::string materialName, bool isDynamic, XMMATRIX scale, XMMATRIX rotation, XMMATRIX translation, XMMATRIX textureTransform)
 {
 	auto meshObject{ CreateGameObject() };
 	auto mesh{ dynamic_cast<Mesh*>(meshObject->AddBehaviour<Mesh>()) };

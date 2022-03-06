@@ -4,45 +4,6 @@
 
 //Useful functions, enums, and other resources for rendering
 
-enum MeshGeometryName {
-	SHAPE
-};
-
-enum SubmeshGeometryName {
-	BOX,
-	CYLINDER,
-	GRID,
-	SPHERE,
-	CUSTOM
-};
-
-enum TextureName {
-	TEX_BRICK,
-	TEX_CRATE,
-	TEX_CHAIR,
-	TEX_STONE,
-	TEX_TILE,
-	TEX_TREE
-};
-
-enum MaterialName {
-	MAT_BRICK,
-	MAT_CRATE,
-	MAT_CHAIR,
-	MAT_STONE,
-	MAT_TILE,
-	MAT_TREE
-};
-
-enum ShaderName {
-	STANDARD_VS,
-	OPAQUE_PS
-};
-
-enum PSOName {
-	PSO_OPAQUE
-};
-
 /*
 * Defines a subrange of vertices and indices in larger MeshGeometry buffers.
 */
@@ -77,7 +38,7 @@ struct MeshGeometry
 	DXGI_FORMAT IndexFormat{ DXGI_FORMAT_R16_UINT };
 	UINT IndexBufferByteSize{ 0 };
 
-	std::unordered_map<SubmeshGeometryName, SubmeshGeometry> Submeshes;
+	std::unordered_map<std::string, SubmeshGeometry> Submeshes;
 
 	D3D12_VERTEX_BUFFER_VIEW GetVertexBufferView() const
 	{
@@ -145,24 +106,24 @@ public:
 	Render(const Render& rhs) = delete;
 	void operator=(const Render& rhs) = delete;
 
-	static void AddGeometry(MeshGeometryName meshGeometryName, std::unique_ptr<MeshGeometry>&& meshGeometry) { _geometries.insert(std::make_pair(meshGeometryName, std::move(meshGeometry))); }
-	static void AddMaterial(MaterialName materialName, XMFLOAT4 diffuseAlbedo, XMFLOAT3 fresnelR0, float roughness);
-	static void AddPSO(PSOName psoName, ID3D12Device* device, std::vector<D3D12_INPUT_ELEMENT_DESC>& inputLayout, ID3D12RootSignature* rootSignature);
-	static void AddShader(std::wstring filePath, std::string entryPoint, ShaderName shaderName, std::string target);
-	static void AddTexture(std::wstring filePath, TextureName textureName, ID3D12Device* device, ID3D12GraphicsCommandList* graphicsCommandList);
+	static void AddGeometry(std::string meshGeometryName, std::unique_ptr<MeshGeometry>&& meshGeometry) { _geometries.insert(std::make_pair(meshGeometryName, std::move(meshGeometry))); }
+	static void AddMaterial(std::string materialName, XMFLOAT4 diffuseAlbedo, XMFLOAT3 fresnelR0, float roughness);
+	static void AddPSO(std::string psoName, ID3D12Device* device, std::vector<D3D12_INPUT_ELEMENT_DESC>& inputLayout, ID3D12RootSignature* rootSignature);
+	static void AddShader(std::wstring filePath, std::string entryPoint, std::string shaderName, std::string target);
+	static void AddTexture(std::wstring filePath, std::string textureName, ID3D12Device* device, ID3D12GraphicsCommandList* graphicsCommandList);
 
-	static std::unordered_map<MeshGeometryName, std::unique_ptr<MeshGeometry>>& GetGeometries() { return _geometries; }
-	static std::unordered_map<MaterialName, std::unique_ptr<Material>>& GetMaterials() { return _materials; }
-	static std::unordered_map<PSOName, ComPtr<ID3D12PipelineState>>& GetPSOs() { return _Psos; }
-	static std::unordered_map<ShaderName, ComPtr<ID3DBlob>>& GetShaders() { return _shaders; }
-	static std::unordered_map<TextureName, std::unique_ptr<Texture>>& GetTextures() { return _textures; }
+	static std::unordered_map<std::string, std::unique_ptr<MeshGeometry>>& GetGeometries() { return _geometries; }
+	static std::unordered_map<std::string, std::unique_ptr<Material>>& GetMaterials() { return _materials; }
+	static std::unordered_map<std::string, ComPtr<ID3D12PipelineState>>& GetPSOs() { return _Psos; }
+	static std::unordered_map<std::string, ComPtr<ID3DBlob>>& GetShaders() { return _shaders; }
+	static std::unordered_map<std::string, std::unique_ptr<Texture>>& GetTextures() { return _textures; }
 
 private:
 	static int _materialIndex;
 
-	static std::unordered_map<MeshGeometryName, std::unique_ptr<MeshGeometry>> _geometries;
-	static std::unordered_map<MaterialName, std::unique_ptr<Material>> _materials;
-	static std::unordered_map<PSOName, ComPtr<ID3D12PipelineState>> _Psos;
-	static std::unordered_map<ShaderName, ComPtr<ID3DBlob>> _shaders;
-	static std::unordered_map<TextureName, std::unique_ptr<Texture>> _textures;
+	static std::unordered_map<std::string, std::unique_ptr<MeshGeometry>> _geometries;
+	static std::unordered_map<std::string, std::unique_ptr<Material>> _materials;
+	static std::unordered_map<std::string, ComPtr<ID3D12PipelineState>> _Psos;
+	static std::unordered_map<std::string, ComPtr<ID3DBlob>> _shaders;
+	static std::unordered_map<std::string, std::unique_ptr<Texture>> _textures;
 };

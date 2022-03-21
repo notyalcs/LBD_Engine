@@ -17,7 +17,13 @@ void PhysicsBody::Update()
 	bool isColliding{ false };
 	for (auto& other : Game::GetBehavioursOfType<Collider>()) {
 		if (_collider != other && boxCast.Intersects(other->GetBoundingBox())) {
-			isColliding = true;
+			if (other->GetIsTrigger()) {
+				other->Trigger();
+			}
+			else
+			{
+				isColliding = true;
+			}
 		}
 	}
 	if (!isColliding) {

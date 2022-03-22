@@ -11,6 +11,7 @@ GeometryObject WavefrontReader::ReadFile(std::string path) {
 
 	std::vector<GeometryVertex> verts{};
 
+	std::vector<XMFLOAT3> positions{};
 	std::vector<XMFLOAT2> texCoords{};
 	std::vector<XMFLOAT3> normals{};
 
@@ -31,7 +32,7 @@ GeometryObject WavefrontReader::ReadFile(std::string path) {
 			iss >> x;
 			iss >> y;
 			iss >> z;
-			verts.emplace_back(GeometryVertex(x, y, z, 0, 0, 0, 0, 0, 0, 0, 0));
+			positions.emplace_back(XMFLOAT3(x, y, z));
 		}
 		else if (marker == "vt")
 		{
@@ -67,29 +68,32 @@ GeometryObject WavefrontReader::ReadFile(std::string path) {
 			std::string v1s;
 			std::getline(elem1, v1s, '/');
 			int v1 = std::stoi(v1s) - 1;
+			verts.emplace_back(GeometryVertex(positions.at(v1).x, positions.at(v1).y, positions.at(v1).z, 0, 0, 0, 0, 0, 0, 0, 0));
 			std::getline(elem1, v1s, '/');
-			verts.at(v1).TexC = texCoords.at(std::stoi(v1s) - 1);
+			verts.at(verts.size() - 1).TexC = texCoords.at(std::stoi(v1s) - 1);
 			std::getline(elem1, v1s, '/');
-			verts.at(v1).Normal = normals.at(std::stoi(v1s) - 1);
-			indeces.emplace_back(v1);
+			verts.at(verts.size() - 1).Normal = normals.at(std::stoi(v1s) - 1);
+			indeces.emplace_back(verts.size() - 1);
 
 			std::string v2s;
 			std::getline(elem2, v2s, '/');
 			int v2 = std::stoi(v2s) - 1;
+			verts.emplace_back(GeometryVertex(positions.at(v2).x, positions.at(v2).y, positions.at(v2).z, 0, 0, 0, 0, 0, 0, 0, 0));
 			std::getline(elem2, v2s, '/');
-			verts.at(v2).TexC = texCoords.at(std::stoi(v2s) - 1);
+			verts.at(verts.size() - 1).TexC = texCoords.at(std::stoi(v2s) - 1);
 			std::getline(elem2, v2s, '/');
-			verts.at(v2).Normal = normals.at(std::stoi(v2s) - 1);
-			indeces.emplace_back(v2);
+			verts.at(verts.size() - 1).Normal = normals.at(std::stoi(v2s) - 1);
+			indeces.emplace_back(verts.size() - 1);
 
 			std::string v3s;
 			std::getline(elem3, v3s, '/');
 			int v3 = std::stoi(v3s) - 1;
+			verts.emplace_back(GeometryVertex(positions.at(v3).x, positions.at(v3).y, positions.at(v3).z, 0, 0, 0, 0, 0, 0, 0, 0));
 			std::getline(elem3, v3s, '/');
-			verts.at(v3).TexC = texCoords.at(std::stoi(v3s) - 1);
+			verts.at(verts.size() - 1).TexC = texCoords.at(std::stoi(v3s) - 1);
 			std::getline(elem3, v3s, '/');
-			verts.at(v3).Normal = normals.at(std::stoi(v3s) - 1);
-			indeces.emplace_back(v3);
+			verts.at(verts.size() - 1).Normal = normals.at(std::stoi(v3s) - 1);
+			indeces.emplace_back(verts.size() - 1);
 		}
 	}
 

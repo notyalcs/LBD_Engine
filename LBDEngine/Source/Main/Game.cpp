@@ -53,6 +53,12 @@ void Game::Update()
 	for (auto& gameObject : _gameObjects)
 	{
 		gameObject->Update();
+		auto physicsBody = gameObject->GetBehaviour<PhysicsBody>();
+		if (physicsBody)
+		{
+			// "gravity" (POC, moving to the physics object itself where it can set acceleration)
+			physicsBody->AddForce({ 0.0f, -0.0005f, 0.0f });
+		}
 	}
 	GameCameras::GetMainCamera()->UpdateViewMatrix();
 
@@ -476,6 +482,7 @@ void Game::CreateMeshObject(std::string meshGeometryName, std::string submeshGeo
 	if (isDynamic)
 	{
 		auto physics{ dynamic_cast<Physics*>(meshObject->AddBehaviour<Physics>()) };
+		physics->SetMass(0.5f); // set mass to 500g, probably definitely add this into the parameter list
 		auto physicsBody = dynamic_cast<PhysicsBody*>(meshObject->AddBehaviour<PhysicsBody>());
 	}
 }

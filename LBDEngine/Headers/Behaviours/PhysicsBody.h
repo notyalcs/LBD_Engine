@@ -15,10 +15,11 @@ class PhysicsBody : public Behaviour
 public:
 	void Start() override;
 	void Update() override;
+	void AddForce(XMFLOAT3 force);
 
 private:
-	Collider* _collider;
-	Mesh* _mesh;
-	Physics* _physics;
+	Collider* _collider{ nullptr };
+	Mesh* _mesh{ nullptr };
+	Physics* _physics{ nullptr };
 
 };

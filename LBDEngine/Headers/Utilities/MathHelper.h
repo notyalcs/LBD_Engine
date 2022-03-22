@@ -55,4 +55,13 @@ public:
 		return I;
 	}
 
+	static XMFLOAT3X3& CreateIdentity3x3()
+	{
+		static XMFLOAT3X3 I{
+			1.0f, 0.0f, 0.0f,
+			0.0f, 1.0f, 0.0f,
+			0.0f, 0.0f, 1.0f,};
+
+		return I;
+	}
 };

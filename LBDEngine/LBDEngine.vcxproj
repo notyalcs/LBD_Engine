@@ -19,10 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Headers\Behaviours\AngularMotion.h" />
     <ClInclude Include="Headers\Behaviours\Behaviour.h" />
     <ClInclude Include="Headers\Behaviours\Camera.h" />
     <ClInclude Include="Headers\Behaviours\Collider.h" />
     <ClInclude Include="Headers\Behaviours\Controller.h" />
+    <ClInclude Include="Headers\Behaviours\LinearMotion.h" />
     <ClInclude Include="Headers\Behaviours\Mesh.h" />
     <ClInclude Include="Headers\Behaviours\Physics.h" />
     <ClInclude Include="Headers\Behaviours\PhysicsBody.h" />

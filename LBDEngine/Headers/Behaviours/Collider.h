@@ -9,7 +9,7 @@ class Collider : public Behaviour
 public:
 	void Update() override;
 
-	void FireTrigger();
+	void FireTrigger(GameObject*);
 
 	void Transform(XMMATRIX transform)
 	{

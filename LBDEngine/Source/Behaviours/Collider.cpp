@@ -6,8 +6,8 @@ void Collider::Update()
 	_boundingBox.Center = { translation._41, translation._42, translation._43 };
 }
 
-void Collider::FireTrigger() {
+void Collider::FireTrigger(GameObject* collidedObject) {
 	for (auto& trigger : Collider::_associatedTriggers) {
-		trigger.FireTrigger();
+		trigger.FireTrigger(collidedObject);
 	}
 }

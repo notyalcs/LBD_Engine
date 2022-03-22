@@ -18,7 +18,7 @@ void PhysicsBody::Update()
 	for (auto& other : Game::GetBehavioursOfType<Collider>()) {
 		if (_collider != other && boxCast.Intersects(other->GetBoundingBox())) {
 			if (other->GetIsTrigger()) {
-				other->Trigger();
+				other->FireTrigger(GetGameObject());
 			}
 			else
 			{

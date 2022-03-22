@@ -3,5 +3,5 @@
 #include "..\GameObject.h"
 
 class Goal : public Trigger {
-	void FireTrigger(GameObject CollidedObject) override;
+	void FireTrigger(GameObject* CollidedObject) override;
 };

@@ -161,6 +161,7 @@ void Game::CreatePlayer()
 	_player = dynamic_cast<GameObject*>(_gameObjects.back().get());
 	_player->AddBehaviour<Controller>();
 	_player->AddBehaviour<Player>();
+	_player->GetBehaviour<Physics>()->SetElasticity(0.9f);
 }
 
 void Game::UpdateObjectCBs()
@@ -433,7 +434,7 @@ void Game::BuildRenderItems()
 	CreateDynamicMeshObject("shape", "box", "stone", 30.0f, XMMatrixScaling(1.0f, 3.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 24.0f, 6.0f), XMMatrixScaling(1.0f, 3.0f, 1.0f));
 
 	CreateDynamicMeshObject("shape", "box", "crate", 10.0f, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 1.0f, 0.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
-	
+
 	CreateDynamicMeshObject("shape", "custom", "chair", 5.0f, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 1.0f, -5.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
 	
 

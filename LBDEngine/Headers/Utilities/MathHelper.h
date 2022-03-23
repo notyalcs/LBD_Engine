@@ -21,7 +21,11 @@ public:
 	static int RandomInt(int fromInclusive, int toExclusive) { return fromInclusive + rand() % ((toExclusive - fromInclusive) + 1); }
 
 	// Returns the polar angle of the point (x,y) in [0, 2*PI).
-	static float AngleFromXY(float x, float y);
+	static float AngleFromXY(float x, float y) { return std::atan2(y, x); }
+
+	// Returns a clamped value between [a, b]. T should support operator<.
+	template<class T>
+	static T Clamp(T val, T min, T max) { return val < max ? min < val ? val : min : max; }
 
 	static XMVECTOR SphericalToCartesian(float radius, float theta, float phi)
 	{

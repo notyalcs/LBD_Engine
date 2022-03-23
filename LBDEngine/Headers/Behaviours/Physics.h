@@ -10,6 +10,8 @@ class Physics : public Behaviour
 private:
 	LinearMotion _lm{ 1.0f };
 	AngularMotion _am{};
+	bool _gravity{ true };
+	void Reflect(XMFLOAT3 normal);
 public:
 	// default mass of 1kg. 
 	Physics() : _lm(1.0f) {};
@@ -19,6 +21,7 @@ public:
 	void Update() override;
 	void AddForce(XMFLOAT3 force);
 	void SetMass(float mass) { _lm.state.mass = mass; _lm.state.inverseMass = 1.0f / mass; }
-	void CollideWith(Physics& other);
+	void CollideWith(GameObject& other);
 	XMFLOAT3 GetVelocity();
+	void SetGravity(bool gravity);
 };

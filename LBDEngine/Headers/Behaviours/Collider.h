@@ -1,5 +1,6 @@
 #pragma once
 #include "Behaviour.h"
+#include "../Utilities/Trigger.h"
 
 //Adds collision to an object.
 //Allows collision between objects
@@ -7,6 +8,8 @@ class Collider : public Behaviour
 {
 public:
 	void Update() override;
+
+	void FireTrigger(GameObject*);
 
 	void Transform(XMMATRIX transform)
 	{
@@ -23,7 +26,25 @@ public:
 		_boundingBox = boundingBox;
 	}
 
+	void SetIsTrigger(bool status) {
+		_isTrigger = status;
+	}
+
+	bool GetIsTrigger() {
+		return _isTrigger;
+	}
+
+	void SetTriggered(bool status) {
+		_triggered = status;
+	}
+
+	bool GetTriggered() {
+		return _triggered;
+	}
+
 private:
 	BoundingBox _boundingBox;
-
+	bool _isTrigger;
+	bool _triggered;
+	std::vector<Trigger> _associatedTriggers;
 };

@@ -84,7 +84,8 @@ private:
 	void AddPSOs();
 	void BuildFrameResources();
 	void BuildRenderItems();
-	void CreateMeshObject(std::string meshGeometryName, std::string submeshGeometryName, std::string materialName, bool isDynamic, XMMATRIX scale, XMMATRIX rotation, XMMATRIX translation, XMMATRIX textureTransform);
+	void CreateMeshObject(std::string meshGeometryName, std::string submeshGeometryName, std::string materialName, XMMATRIX scale, XMMATRIX rotation, XMMATRIX translation, XMMATRIX textureTransform);
+	void CreateDynamicMeshObject(std::string meshGeometryName, std::string submeshGeometryName, std::string materialName, float mass, XMMATRIX scale, XMMATRIX rotation, XMMATRIX translation, XMMATRIX textureTransform);
 //	void CreateMeshObject(std::string objFile, MaterialName materialName, bool isDynamic, XMMATRIX scale, XMMATRIX rotation, XMMATRIX translation, XMMATRIX textureTransform);
 	void DrawRenderItems(ID3D12GraphicsCommandList* cmdList, const std::vector<Mesh*>& ritems);
 	void CreatePlayer();

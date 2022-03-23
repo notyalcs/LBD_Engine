@@ -11,8 +11,8 @@ void PhysicsBody::Update()
 {
 	auto boxCast{ _collider->GetBoundingBox() };
 	XMFLOAT4X4 translationPostForce;
-	auto force{ _physics->Force };
-	XMStoreFloat4x4(&translationPostForce, XMLoadFloat4x4(&GetGameObject()->GetTranslation()) * XMMatrixTranslation(force.x, force.y, force.z));
+	auto velocity{ _physics->GetVelocity() };
+	XMStoreFloat4x4(&translationPostForce, XMLoadFloat4x4(&GetGameObject()->GetTranslation()) * XMMatrixTranslation(velocity.x, velocity.y, velocity.z));
 	boxCast.Center = { translationPostForce._41, translationPostForce._42, translationPostForce._43 };
 	bool isColliding{ false };
 	for (auto& other : Game::GetBehavioursOfType<Collider>()) {
@@ -22,6 +22,7 @@ void PhysicsBody::Update()
 			}
 			else
 			{
+        _physics->CollideWith(*other->GetGameObject());
 				isColliding = true;
 			}
 		}
@@ -30,4 +31,9 @@ void PhysicsBody::Update()
 		GetGameObject()->SetTranslation(XMLoadFloat4x4(&translationPostForce));
 		_mesh->SetDirtyFrames(NUMBER_OF_FRAME_RESOURCES);
 	}
+}
+
+void PhysicsBody::AddForce(XMFLOAT3 force)
+{
+	_physics->AddForce(force);
 }

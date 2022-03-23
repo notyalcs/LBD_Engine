@@ -84,6 +84,10 @@
     <ClInclude Include="Headers\Utilities\WavefrontReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Headers\Behaviours\AngularMotion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\Behaviours\LinearMotion.h">
     <ClInclude Include="Headers\Utilities\Trigger.h">
       <Filter>Header Files</Filter>
     </ClInclude>

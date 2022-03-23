@@ -16,9 +16,16 @@ public:
 	void Start() override;
 	void Update() override;
 
+	/*
+	* BUG: Relies on GameTime::GetDeltaTime(), which is 0 if the game hasn't gone through
+	* the creation of a single frame. It's significantly faster to only calculate everything
+	* when a force is actually added though, so I'm leaving it like this.
+	*/
+	void AddForce(XMFLOAT3 force);
+
 private:
-	Collider* _collider;
-	Mesh* _mesh;
-	Physics* _physics;
+	Collider* _collider{ nullptr };
+	Mesh* _mesh{ nullptr };
+	Physics* _physics{ nullptr };
 
 };

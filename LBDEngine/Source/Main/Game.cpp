@@ -167,15 +167,17 @@ void Game::CreatePlayer()
 
 
 std::vector<Node> pathToGoal;
+Node* nextNode;
 GameObject* _enemy;
 void Game::CreateEnemy()
 {
-	_enemy = CreateDynamicMeshObject("shape", "sphere", "stone", 3.0f, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 2.0f, 10.0f), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
-	GameObject* _flag = CreateDynamicMeshObject("shape", "sphere", "stone", 3.0f, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 2.0f, -10.0f), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
+	_enemy = CreateDynamicMeshObject("shape", "sphere", "stone", 3.0f, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 0.5f, 10.0f), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
+	GameObject* _flag = CreateDynamicMeshObject("shape", "sphere", "stone", 3.0f, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 0.5f, -12.5f), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
 
 	MyGrid myGrid{};
 	auto behaviours = Game::GetBehavioursOfType<Collider>();
 	for (auto behaviour : behaviours) {
+		if (behaviour->GetGameObject() == _enemy || behaviour->GetGameObject() == _flag) continue;
 		XMFLOAT3 location = behaviour->GetBoundingBox().Center;
 		myGrid.locations.push_back(Vector3{ location.x, location.y, location.z });
 		XMFLOAT3 size = behaviour->GetBoundingBox().Extents;
@@ -186,29 +188,31 @@ void Game::CreateEnemy()
 	Pathfinding path{};
 	path.grid = myGrid;
 	path.FindPath(Vector3{ _enemy->GetTranslation()._41,_enemy->GetTranslation()._42,_enemy->GetTranslation()._43 },
-		Vector3{ _flag->GetTranslation()._41,_flag->GetTranslation()._42,_flag->GetTranslation()._43 });
+		Vector3{ _flag->GetTranslation()._41, _flag->GetTranslation()._42, _flag->GetTranslation()._43 });
 
 	pathToGoal = path.pathToGoal;
+	nextNode = &pathToGoal[0];
 
 	/*_gameObjects.push_back(std::move(std::unique_ptr<GameObject>(_enemy)));
 	_gameObjects.push_back(std::move(std::unique_ptr<GameObject>(_flag)));*/
 }
 void Game::UpdateAI() {
-	float range = 0.5;
-	Node *nextNode = &pathToGoal[0];
+	float range = 1;
 
-	if (!(Vector3(_enemy->GetTranslation()._41, _enemy->GetTranslation()._42, _enemy->GetTranslation()._43)
+	if (Vector3(_enemy->GetTranslation()._41, _enemy->GetTranslation()._42, _enemy->GetTranslation()._43)
 	< Vector3(nextNode->worldPosition.x + range, nextNode->worldPosition.y + range, nextNode->worldPosition.z + range) &&
 	Vector3(nextNode->worldPosition.x - range, nextNode->worldPosition.y - range, nextNode->worldPosition.z - range)
-	< Vector3(_enemy->GetTranslation()._41, _enemy->GetTranslation()._42, _enemy->GetTranslation()._43))) {
+	< Vector3(_enemy->GetTranslation()._41, _enemy->GetTranslation()._42, _enemy->GetTranslation()._43)) {
 
-		Vector3 direction{ _enemy->GetTranslation()._41 - nextNode->worldPosition.x,
-			_enemy->GetTranslation()._42 - nextNode->worldPosition.y , _enemy->GetTranslation()._43 - nextNode->worldPosition.z };
-
-		_enemy->GetBehaviour<PhysicsBody>()->AddForce(XMFLOAT3(-direction.x * 0.00001, 0.00001, -direction.z * 0.00001));
+		nextNode++;
 	}
 	else {
-		nextNode++;
+		Vector3 direction{ nextNode->worldPosition.x - _enemy->GetTranslation()._41,
+			nextNode->worldPosition.y - _enemy->GetTranslation()._42 , nextNode->worldPosition.z - _enemy->GetTranslation()._43 };
+		//XMMATRIX position{ 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, nextNode->worldPosition.x, nextNode->worldPosition.y, nextNode->worldPosition.z, 1.0f };
+
+		//_enemy->SetTranslation(position);
+		_enemy->GetBehaviour<PhysicsBody>()->AddForce(XMFLOAT3(direction.x * 0.000002, 0.0000148, direction.z * 0.000002));
 	}
 }
 

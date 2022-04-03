@@ -26,6 +26,8 @@
     <ClInclude Include="Headers\Behaviours\Controller.h" />
     <ClInclude Include="Headers\Behaviours\LinearMotion.h" />
     <ClInclude Include="Headers\Behaviours\Mesh.h" />
+    <ClInclude Include="Headers\Utilities\MyGrid.h" />
+    <ClInclude Include="Headers\Behaviours\Pathfinding.h" />
     <ClInclude Include="Headers\Behaviours\Physics.h" />
     <ClInclude Include="Headers\Behaviours\PhysicsBody.h" />
     <ClInclude Include="Headers\Behaviours\Player.h" />
@@ -40,6 +42,7 @@
     <ClInclude Include="Headers\Utilities\GameTime.h" />
     <ClInclude Include="Headers\Utilities\GeometryGenerator.h" />
     <ClInclude Include="Headers\Utilities\MathHelper.h" />
+    <ClInclude Include="Headers\Utilities\Node.h" />
     <ClInclude Include="Headers\Utilities\Render.h" />
     <ClInclude Include="Headers\Utilities\Trigger.h" />
     <ClInclude Include="Headers\Utilities\Triggers\Goal.h" />

@@ -17,6 +17,7 @@ bool Game::Initialize()
 	BuildShapeGeometry();
 	BuildRenderItems();
 	CreatePlayer();
+	CreateEnemy();
 	BuildFrameResources();
 	AddPSOs();
 
@@ -72,6 +73,7 @@ void Game::Update()
 	UpdateObjectCBs();
 	UpdateMaterialBuffer();
 	UpdateMainPassCB();
+	UpdateAI();
 }
 
 void Game::Draw()
@@ -157,11 +159,57 @@ GameObject* Game::CreateGameObject()
 
 void Game::CreatePlayer()
 {
-	CreateDynamicMeshObject("shape", "sphere", "stone", 3.0f, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 2.0f, -10.0f), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
-	_player = dynamic_cast<GameObject*>(_gameObjects.back().get());
+	_player = CreateDynamicMeshObject("shape", "sphere", "stone", 3.0f, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 2.0f, -10.0f), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
 	_player->AddBehaviour<Controller>();
 	_player->AddBehaviour<Player>();
 	_player->GetBehaviour<Physics>()->SetElasticity(0.9f);
+}
+
+
+std::vector<Node> pathToGoal;
+GameObject* _enemy;
+void Game::CreateEnemy()
+{
+	_enemy = CreateDynamicMeshObject("shape", "sphere", "stone", 3.0f, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 2.0f, 10.0f), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
+	GameObject* _flag = CreateDynamicMeshObject("shape", "sphere", "stone", 3.0f, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 2.0f, -10.0f), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
+
+	MyGrid myGrid{};
+	auto behaviours = Game::GetBehavioursOfType<Collider>();
+	for (auto behaviour : behaviours) {
+		XMFLOAT3 location = behaviour->GetBoundingBox().Center;
+		myGrid.locations.push_back(Vector3{ location.x, location.y, location.z });
+		XMFLOAT3 size = behaviour->GetBoundingBox().Extents;
+		myGrid.sizes.push_back(Vector3{ size.x, size.y, size.z });
+	}
+	myGrid.Start();
+
+	Pathfinding path{};
+	path.grid = myGrid;
+	path.FindPath(Vector3{ _enemy->GetTranslation()._41,_enemy->GetTranslation()._42,_enemy->GetTranslation()._43 },
+		Vector3{ _flag->GetTranslation()._41,_flag->GetTranslation()._42,_flag->GetTranslation()._43 });
+
+	pathToGoal = path.pathToGoal;
+
+	/*_gameObjects.push_back(std::move(std::unique_ptr<GameObject>(_enemy)));
+	_gameObjects.push_back(std::move(std::unique_ptr<GameObject>(_flag)));*/
+}
+void Game::UpdateAI() {
+	float range = 0.5;
+	Node *nextNode = &pathToGoal[0];
+
+	if (!(Vector3(_enemy->GetTranslation()._41, _enemy->GetTranslation()._42, _enemy->GetTranslation()._43)
+	< Vector3(nextNode->worldPosition.x + range, nextNode->worldPosition.y + range, nextNode->worldPosition.z + range) &&
+	Vector3(nextNode->worldPosition.x - range, nextNode->worldPosition.y - range, nextNode->worldPosition.z - range)
+	< Vector3(_enemy->GetTranslation()._41, _enemy->GetTranslation()._42, _enemy->GetTranslation()._43))) {
+
+		Vector3 direction{ _enemy->GetTranslation()._41 - nextNode->worldPosition.x,
+			_enemy->GetTranslation()._42 - nextNode->worldPosition.y , _enemy->GetTranslation()._43 - nextNode->worldPosition.z };
+
+		_enemy->GetBehaviour<PhysicsBody>()->AddForce(XMFLOAT3(-direction.x * 0.00001, 0.00001, -direction.z * 0.00001));
+	}
+	else {
+		nextNode++;
+	}
 }
 
 void Game::UpdateObjectCBs()
@@ -475,7 +523,7 @@ void Game::CreateMeshObject(std::string meshGeometryName, std::string submeshGeo
 	collider->Transform(meshObject->GetWorldTransform());
 }
 
-void Game::CreateDynamicMeshObject(std::string meshGeometryName, std::string submeshGeometryName, std::string materialName, float mass, XMMATRIX scale, XMMATRIX rotation, XMMATRIX translation, XMMATRIX textureTransform)
+GameObject* Game::CreateDynamicMeshObject(std::string meshGeometryName, std::string submeshGeometryName, std::string materialName, float mass, XMMATRIX scale, XMMATRIX rotation, XMMATRIX translation, XMMATRIX textureTransform)
 {
 	auto meshObject{ CreateGameObject() };
 	auto mesh{ dynamic_cast<Mesh*>(meshObject->AddBehaviour<Mesh>()) };
@@ -502,6 +550,7 @@ void Game::CreateDynamicMeshObject(std::string meshGeometryName, std::string sub
 	auto physics{ dynamic_cast<Physics*>(meshObject->AddBehaviour<Physics>()) };
 	physics->SetMass(mass); // set mass to 500g, probably definitely add this into the parameter list
 	auto physicsBody = dynamic_cast<PhysicsBody*>(meshObject->AddBehaviour<PhysicsBody>());
+	return meshObject;
 }
 
 void Game::DrawRenderItems(ID3D12GraphicsCommandList* cmdList, const std::vector<Mesh*>& ritems)

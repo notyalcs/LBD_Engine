@@ -111,12 +111,15 @@ public:
 	static void AddPSO(std::string psoName, ID3D12Device* device, std::vector<D3D12_INPUT_ELEMENT_DESC>& inputLayout, ID3D12RootSignature* rootSignature);
 	static void AddShader(std::wstring filePath, std::string entryPoint, std::string shaderName, std::string target);
 	static void AddTexture(std::wstring filePath, std::string textureName, ID3D12Device* device, ID3D12GraphicsCommandList* graphicsCommandList);
+	static void AddCubeMapTexture(std::wstring filePatch, std::string textureName, ID3D12Device* device, ID3D12GraphicsCommandList* graphicsCommandList);
+	static int GetAllTextureCount();
 
 	static std::unordered_map<std::string, std::unique_ptr<MeshGeometry>>& GetGeometries() { return _geometries; }
 	static std::unordered_map<std::string, std::unique_ptr<Material>>& GetMaterials() { return _materials; }
 	static std::unordered_map<std::string, ComPtr<ID3D12PipelineState>>& GetPSOs() { return _Psos; }
 	static std::unordered_map<std::string, ComPtr<ID3DBlob>>& GetShaders() { return _shaders; }
 	static std::unordered_map<std::string, std::unique_ptr<Texture>>& GetTextures() { return _textures; }
+	static std::unordered_map<std::string, std::unique_ptr<Texture>>& GetTexturesCubeMap() { return _texturesCubeMap; }
 
 private:
 	static int _materialIndex;
@@ -126,4 +129,5 @@ private:
 	static std::unordered_map<std::string, ComPtr<ID3D12PipelineState>> _Psos;
 	static std::unordered_map<std::string, ComPtr<ID3DBlob>> _shaders;
 	static std::unordered_map<std::string, std::unique_ptr<Texture>> _textures;
+	static std::unordered_map<std::string, std::unique_ptr<Texture>> _texturesCubeMap;
 };

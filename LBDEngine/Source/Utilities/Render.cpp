@@ -66,3 +66,14 @@ void Render::AddTexture(std::wstring filePath, std::string textureName, ID3D12De
 
 	_textures.insert(std::make_pair(textureName, std::move(texture)));
 }
+
+void Render::AddCubeMapTexture(std::wstring filePatch, std::string textureName, ID3D12Device* device, ID3D12GraphicsCommandList* graphicsCommandList) {
+	auto texture{ std::make_unique<Texture>() };
+	Utilities::ThrowIfFailed(CreateDDSTextureFromFile12(device, graphicsCommandList, filePatch.c_str(), texture->Resource, texture->UploadHeap));
+
+	_texturesCubeMap.insert(std::make_pair(textureName, std::move(texture)));
+}
+
+int Render::GetAllTextureCount() {
+	return _textures.size() + _texturesCubeMap.size();
+}

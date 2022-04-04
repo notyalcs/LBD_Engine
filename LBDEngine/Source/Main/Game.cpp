@@ -115,10 +115,14 @@ void Game::Draw()
 	auto matBuffer = _currentFrameResource->MaterialBuffer->Resource();
 	_graphicsCommandList->SetGraphicsRootShaderResourceView(2, matBuffer->GetGPUVirtualAddress());
 
+	CD3DX12_GPU_DESCRIPTOR_HANDLE skyTexDescriptor(_SrvDescriptorHeap->GetGPUDescriptorHandleForHeapStart());
+	skyTexDescriptor.Offset(Render::GetTextures().size(), _CbvSrvDescriptorSize);
+	_graphicsCommandList->SetGraphicsRootDescriptorTable(3, skyTexDescriptor);
+
 	// Bind all the textures used in this scene.  Observe
 	// that we only have to specify the first descriptor in the table.  
 	// The root signature knows how many descriptors are expected in the table.
-	_graphicsCommandList->SetGraphicsRootDescriptorTable(3, _SrvDescriptorHeap->GetGPUDescriptorHandleForHeapStart());
+	_graphicsCommandList->SetGraphicsRootDescriptorTable(4, _SrvDescriptorHeap->GetGPUDescriptorHandleForHeapStart());
 
 	DrawRenderItems(_graphicsCommandList.Get(), GetBehavioursOfType<Mesh>());
 
@@ -266,6 +270,8 @@ void Game::LoadRenderData()
 	Render::AddTexture(TEXT("./Textures/chair_shitty.dds"), "chair", _device.Get(), _graphicsCommandList.Get());
 	Render::AddTexture(TEXT("./Textures/WoodCrate01.dds"), "crate", _device.Get(), _graphicsCommandList.Get());
 
+	Render::AddCubeMapTexture(TEXT("./Textures/sunsetcube1024.dds"), "sky", _device.Get(), _graphicsCommandList.Get());
+
 	// Add materials.
 	// Right now, the order of the materials must be the same as the order of the textures.
 	// This can be refactored if necessary.
@@ -274,10 +280,14 @@ void Game::LoadRenderData()
 	Render::AddMaterial("stone", { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.05f, 0.05f, 0.05f }, 0.3f);
 	Render::AddMaterial("brick", { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.02f, 0.02f, 0.02f }, 0.1f);
 	Render::AddMaterial("crate", { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.05f, 0.05f, 0.05f }, 0.2f);
+	Render::AddMaterial("sky", { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.1f, 0.1f, 0.1f }, 1.0f);
 
 	// Add shaders.
 	Render::AddShader(TEXT("./Shaders/Default.hlsl"), "VS", "standard_vs", "vs_5_1");
 	Render::AddShader(TEXT("./Shaders/Default.hlsl"), "PS", "opaque_ps", "ps_5_1");
+
+	Render::AddShader(TEXT("./Shaders/Sky.hlsl"), "VS", "sky_vs", "vs_5_1");
+	Render::AddShader(TEXT("./Shaders/Sky.hlsl"), "PS", "sky_ps", "ps_5_1");
 }
 
 void Game::InitializeRootSignature()
@@ -310,7 +320,7 @@ void Game::BuildDescriptorHeaps()
 {
 	// Create the SRV heap.
 	D3D12_DESCRIPTOR_HEAP_DESC srvHeapDesc = {};
-	srvHeapDesc.NumDescriptors = 4;
+	srvHeapDesc.NumDescriptors = Render::GetAllTextureCount();
 	srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	Utilities::ThrowIfFailed(_device->CreateDescriptorHeap(&srvHeapDesc, IID_PPV_ARGS(&_SrvDescriptorHeap)));
@@ -325,6 +335,17 @@ void Game::BuildDescriptorHeaps()
 		auto& resource = texture.second->Resource;
 		srvDesc.Format = resource->GetDesc().Format;
 		srvDesc.Texture2D.MipLevels = resource->GetDesc().MipLevels;
+		_device->CreateShaderResourceView(resource.Get(), &srvDesc, hDescriptor);
+		hDescriptor.Offset(1, _CbvSrvDescriptorSize);
+	}
+
+	for (auto& texture : Render::GetTexturesCubeMap()) {
+		auto& resource = texture.second->Resource;
+		srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURECUBE;
+		srvDesc.TextureCube.MostDetailedMip = 0;
+		srvDesc.TextureCube.MipLevels = resource->GetDesc().MipLevels;
+		srvDesc.TextureCube.ResourceMinLODClamp = 0.0f;
+		srvDesc.Format = resource->GetDesc().Format;
 		_device->CreateShaderResourceView(resource.Get(), &srvDesc, hDescriptor);
 		hDescriptor.Offset(1, _CbvSrvDescriptorSize);
 	}

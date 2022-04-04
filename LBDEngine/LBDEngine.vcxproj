@@ -39,6 +39,7 @@
     <ClInclude Include="Headers\Utilities\GameObject.h" />
     <ClInclude Include="Headers\Utilities\GameTime.h" />
     <ClInclude Include="Headers\Utilities\GeometryGenerator.h" />
+    <ClInclude Include="Headers\Utilities\GltfReader.h" />
     <ClInclude Include="Headers\Utilities\MathHelper.h" />
     <ClInclude Include="Headers\Utilities\Render.h" />
     <ClInclude Include="Headers\Utilities\Trigger.h" />
@@ -46,6 +47,44 @@
     <ClInclude Include="Headers\Utilities\UploadBuffer.h" />
     <ClInclude Include="Headers\Utilities\Utilities.h" />
     <ClInclude Include="Headers\Utilities\WavefrontReader.h" />
+    <ClInclude Include="Libraries\GLTFSDK\AnimationUtils.h" />
+    <ClInclude Include="Libraries\GLTFSDK\BufferBuilder.h" />
+    <ClInclude Include="Libraries\GLTFSDK\Color.h" />
+    <ClInclude Include="Libraries\GLTFSDK\Constants.h" />
+    <ClInclude Include="Libraries\GLTFSDK\Deserialize.h" />
+    <ClInclude Include="Libraries\GLTFSDK\Document.h" />
+    <ClInclude Include="Libraries\GLTFSDK\Exceptions.h" />
+    <ClInclude Include="Libraries\GLTFSDK\Extension.h" />
+    <ClInclude Include="Libraries\GLTFSDK\ExtensionHandlers.h" />
+    <ClInclude Include="Libraries\GLTFSDK\ExtensionsKHR.h" />
+    <ClInclude Include="Libraries\GLTFSDK\ExtrasDocument.h" />
+    <ClInclude Include="Libraries\GLTFSDK\GLBResourceReader.h" />
+    <ClInclude Include="Libraries\GLTFSDK\GLBResourceWriter.h" />
+    <ClInclude Include="Libraries\GLTFSDK\GLTF.h" />
+    <ClInclude Include="Libraries\GLTFSDK\GLTFResourceReader.h" />
+    <ClInclude Include="Libraries\GLTFSDK\GLTFResourceWriter.h" />
+    <ClInclude Include="Libraries\GLTFSDK\IndexedContainer.h" />
+    <ClInclude Include="Libraries\GLTFSDK\IStreamCache.h" />
+    <ClInclude Include="Libraries\GLTFSDK\IStreamReader.h" />
+    <ClInclude Include="Libraries\GLTFSDK\IStreamWriter.h" />
+    <ClInclude Include="Libraries\GLTFSDK\Math.h" />
+    <ClInclude Include="Libraries\GLTFSDK\MeshPrimitiveUtils.h" />
+    <ClInclude Include="Libraries\GLTFSDK\MicrosoftGeneratorVersion.h" />
+    <ClInclude Include="Libraries\GLTFSDK\Optional.h" />
+    <ClInclude Include="Libraries\GLTFSDK\PBRUtils.h" />
+    <ClInclude Include="Libraries\GLTFSDK\RapidJsonUtils.h" />
+    <ClInclude Include="Libraries\GLTFSDK\ResourceReaderUtils.h" />
+    <ClInclude Include="Libraries\GLTFSDK\ResourceWriter.h" />
+    <ClInclude Include="Libraries\GLTFSDK\Schema.h" />
+    <ClInclude Include="Libraries\GLTFSDK\SchemaValidation.h" />
+    <ClInclude Include="Libraries\GLTFSDK\Serialize.h" />
+    <ClInclude Include="Libraries\GLTFSDK\StreamCache.h" />
+    <ClInclude Include="Libraries\GLTFSDK\StreamCacheLRU.h" />
+    <ClInclude Include="Libraries\GLTFSDK\StreamUtils.h" />
+    <ClInclude Include="Libraries\GLTFSDK\Traverse.h" />
+    <ClInclude Include="Libraries\GLTFSDK\Validation.h" />
+    <ClInclude Include="Libraries\GLTFSDK\Version.h" />
+    <ClInclude Include="Libraries\GLTFSDK\Visitor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Behaviours\Camera.cpp" />
@@ -64,6 +103,7 @@
     <ClCompile Include="Source\Utilities\GameObject.cpp" />
     <ClCompile Include="Source\Utilities\GameTime.cpp" />
     <ClCompile Include="Source\Utilities\GeometryGenerator.cpp" />
+    <ClCompile Include="Source\Utilities\GltfReader.cpp" />
     <ClCompile Include="Source\Utilities\Render.cpp" />
     <ClCompile Include="Source\Utilities\Triggers\Goal.cpp" />
     <ClCompile Include="Source\Utilities\WavefrontReader.cpp" />
@@ -166,10 +206,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)Libraries;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)Libraries;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>GLTFSDK.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

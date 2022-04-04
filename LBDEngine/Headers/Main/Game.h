@@ -8,6 +8,7 @@
 #include "../Utilities/GeometryGenerator.h"
 #include "../Utilities/GameObject.h"
 #include "../Utilities/WavefrontReader.h"
+#include "../Utilities/GltfReader.h"
 #include "../Behaviours/Collider.h"
 #include "../Behaviours/Physics.h"
 #include "../Behaviours/PhysicsBody.h"

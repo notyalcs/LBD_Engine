@@ -358,6 +358,8 @@ void Game::BuildShapeGeometry()
 		"box", "grid", "sphere", "cylinder", "custom"
 	};
 
+//	Deserialize("./Models/rudimentary_armchair_gltf.gltf");
+
 	auto geometry = std::make_unique<MeshGeometry>();
 
 	UINT vertexOffset{ 0 };

@@ -1,8 +1,11 @@
 #include "../../Headers/Behaviours/Controller.h"
+#include "../../Headers/Behaviours/PhysicsBody.h"
 
 void Controller::Update()
 {
 	ResetController();
+
+	auto PhysicsBehaviour = GetGameObject()->GetBehaviour<PhysicsBody>()->GetPhysics();\
 
 	if (GetAsyncKeyState('W') & HighBitMask)
 	{
@@ -24,6 +27,14 @@ void Controller::Update()
 		_horizontalAxis += 1.0f;
 	}
 
+	if (GetAsyncKeyState(VK_SPACE) & HighBitMask) {
+		if (GetGameObject()->GetBehaviour<Player>()->GetFloored()) {
+  			PhysicsBehaviour->AddForce({ 0.0f, 10.0f * GameTime::GetDeltaTime(), 0.0f});
+		}
+	}
+
+	PhysicsBehaviour->SetVelocity({ 0.0f, 0.0f, 0.0f });
+	
 	_isMouseDown = GetAsyncKeyState(VK_LBUTTON);
 	_lastMousePosition = _currentMousePosition;
 	GetCursorPos(&_currentMousePosition);

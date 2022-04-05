@@ -157,11 +157,10 @@ GameObject* Game::CreateGameObject()
 
 void Game::CreatePlayer()
 {
-	CreateDynamicMeshObject("shape", "sphere", "stone", 3.0f, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 2.0f, -10.0f), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
-	_player = dynamic_cast<GameObject*>(_gameObjects.back().get());
+	_player = CreateDynamicMeshObject("shape", "sphere", "stone", 3.0f, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 2.0f, -10.0f), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
 	_player->AddBehaviour<Controller>();
 	_player->AddBehaviour<Player>();
-	_player->GetBehaviour<Physics>()->SetElasticity(0.9f);
+	_player->GetBehaviour<Physics>()->SetElasticity(0.0f);
 }
 
 void Game::UpdateObjectCBs()
@@ -475,7 +474,7 @@ void Game::CreateMeshObject(std::string meshGeometryName, std::string submeshGeo
 	collider->Transform(meshObject->GetWorldTransform());
 }
 
-void Game::CreateDynamicMeshObject(std::string meshGeometryName, std::string submeshGeometryName, std::string materialName, float mass, XMMATRIX scale, XMMATRIX rotation, XMMATRIX translation, XMMATRIX textureTransform)
+GameObject* Game::CreateDynamicMeshObject(std::string meshGeometryName, std::string submeshGeometryName, std::string materialName, float mass, XMMATRIX scale, XMMATRIX rotation, XMMATRIX translation, XMMATRIX textureTransform)
 {
 	auto meshObject{ CreateGameObject() };
 	auto mesh{ dynamic_cast<Mesh*>(meshObject->AddBehaviour<Mesh>()) };
@@ -502,6 +501,8 @@ void Game::CreateDynamicMeshObject(std::string meshGeometryName, std::string sub
 	auto physics{ dynamic_cast<Physics*>(meshObject->AddBehaviour<Physics>()) };
 	physics->SetMass(mass); // set mass to 500g, probably definitely add this into the parameter list
 	auto physicsBody = dynamic_cast<PhysicsBody*>(meshObject->AddBehaviour<PhysicsBody>());
+
+	return meshObject;
 }
 
 void Game::DrawRenderItems(ID3D12GraphicsCommandList* cmdList, const std::vector<Mesh*>& ritems)

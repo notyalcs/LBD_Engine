@@ -23,6 +23,10 @@ public:
 	*/
 	void AddForce(XMFLOAT3 force);
 
+	Physics* GetPhysics() {
+		return _physics;
+	}
+
 private:
 	Collider* _collider{ nullptr };
 	Mesh* _mesh{ nullptr };

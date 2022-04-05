@@ -7,6 +7,7 @@ void Player::Start()
 
 void Player::Update()
 {
+	isOnFloor();
 	if (_controller->GetIsMouseDown()) {
 		// Make each pixel correspond to a quarter of a degree.
 		auto lastMousePosition{ _controller->GetLastMousePosition() };
@@ -20,8 +21,24 @@ void Player::Update()
 
 	const float deltaTime = GameTime::GetDeltaTime();
 
-	GameCameras::GetMainCamera()->Walk(_controller->GetVerticalAxis() * VERTICAL_MOVEMENT_SPEED * deltaTime);
-	GameCameras::GetMainCamera()->Strafe(_controller->GetHorizontalAxis() * HORIZONTAL_MOVEMENT_SPEED * deltaTime);
+	auto body = GetGameObject()->GetTranslation();
+	GameCameras::GetMainCamera()->SetPosition({ body._41, body._42, body._43 });
 
 	GameCameras::GetMainCamera()->UpdateViewMatrix();
+}
+
+void Player::isOnFloor()
+{
+	auto boxCast{ GetGameObject()->GetBehaviour<Collider>()->GetBoundingBox()};
+	XMFLOAT4X4 translationPostForce;
+	XMFLOAT3 velocity{ 0, -0.005, 0 };
+	XMStoreFloat4x4(&translationPostForce, XMLoadFloat4x4(&GetGameObject()->GetTranslation()) * XMMatrixTranslation(velocity.x, velocity.y, velocity.z));
+	boxCast.Center = { translationPostForce._41, translationPostForce._42, translationPostForce._43 };
+	bool isColliding{ false };
+	for (auto& other : Game::GetBehavioursOfType<Collider>()) {
+		if (GetGameObject()->GetBehaviour<Collider>() != other && boxCast.Intersects(other->GetBoundingBox())) {
+			isColliding = true;
+		}
+	}
+	_floored = isColliding;
 }

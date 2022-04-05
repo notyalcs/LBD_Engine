@@ -9,7 +9,6 @@
 class Physics : public Behaviour
 {
 private:
-	static constexpr float GRAVITY_ADJUST{ 0.0000005f };
 	LinearMotion _lm{ 1.0f };
 	AngularMotion _am{};
 	bool _gravity{ true };
@@ -33,6 +32,7 @@ public:
 	void CollideWith(GameObject& other);
 	XMFLOAT3 GetVelocity() { return _lm.state.velocity; }
 	void SetGravity(bool gravity) { _gravity = gravity; }
+	void SetVelocity(XMVECTOR newVelocity) { XMStoreFloat3(&_lm.derivative.velocity, newVelocity); }
 
 	/*
 	 * Set a hardness value between [0, 1]

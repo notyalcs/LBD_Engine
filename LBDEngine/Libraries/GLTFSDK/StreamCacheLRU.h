@@ -17,7 +17,7 @@ namespace Microsoft
         {
         public:
             template<typename Fn>
-            StreamCacheLRU(Fn fnGenerate, size_t cacheMaxSize = std::numeric_limits<size_t>::max()) :
+            StreamCacheLRU(Fn fnGenerate, size_t cacheMaxSize = (std::numeric_limits<size_t>::max)()) :
                 cacheMaxSize(cacheMaxSize),
                 m_cache([fnGenerate, this](const std::string& uri) { return Update(uri, fnGenerate(uri)); }),
                 m_cacheList()

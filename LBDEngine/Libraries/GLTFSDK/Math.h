@@ -7,6 +7,8 @@
 #include <cmath>
 #include <cstdint>
 
+#define NOMINMAX
+
 namespace Microsoft
 {
     namespace glTF
@@ -74,7 +76,7 @@ namespace Microsoft
         {
             template<class T>
             const T& Clamp(const T& v, const T& lo, const T& hi) {
-                return std::min(hi, std::max(v, lo));
+                return (std::min)(hi, (std::max)(v, lo));
             }
 
             // https://en.wikipedia.org/wiki/SRGB#The_reverse_transformation

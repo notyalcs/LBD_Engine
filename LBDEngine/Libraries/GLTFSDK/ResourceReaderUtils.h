@@ -96,7 +96,7 @@ namespace Microsoft
 
         inline std::vector<uint8_t> GetDecodeTable()
         {
-            std::vector<uint8_t> decodeTable(128, std::numeric_limits<uint8_t>::max());
+            std::vector<uint8_t> decodeTable(128, (std::numeric_limits<uint8_t>::max)());
 
             static constexpr size_t characterSetCount = std::extent<decltype(characterSet)>::value - 1U;
 
@@ -133,7 +133,7 @@ namespace Microsoft
 
                 const auto decodedChar = decodeTable[encodedChar];
 
-                if (decodedChar == std::numeric_limits<uint8_t>::max())
+                if (decodedChar == (std::numeric_limits<uint8_t>::max)())
                 {
                     throw GLTFException("Invalid base64 character");
                 }
@@ -220,9 +220,9 @@ namespace Microsoft
 
         // Conversions of normalized component types to/from floats are explicitly defined in the 2.0 spec
         inline float ComponentToFloat(const float w)   { return w; }
-        inline float ComponentToFloat(const int8_t w)  { return std::max(static_cast<float>(w) / 127.0f, -1.0f); }
+        inline float ComponentToFloat(const int8_t w)  { return (std::max)(static_cast<float>(w) / 127.0f, -1.0f); }
         inline float ComponentToFloat(const uint8_t w) { return static_cast<float>(w) / 255.0f; }
-        inline float ComponentToFloat(const int16_t w) { return std::max(static_cast<float>(w) / 32767.0f, -1.0f); }
+        inline float ComponentToFloat(const int16_t w) { return (std::max)(static_cast<float>(w) / 32767.0f, -1.0f); }
         inline float ComponentToFloat(const uint16_t w){ return static_cast<float>(w) / 65535.0f; }
 
         template<typename T>

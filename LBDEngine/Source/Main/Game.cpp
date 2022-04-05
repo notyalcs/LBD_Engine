@@ -200,8 +200,9 @@ void Game::CreateEnemy()
 	}*/
 
 }
+int i = 0;
 void Game::UpdateAI() {
-	float range = 1.0f;
+	float range = 1.0;
 	float directionalForce = 0.000002f;
 	float upwardForce = 0.0000148f;
 
@@ -216,8 +217,10 @@ void Game::UpdateAI() {
 	else {
 		Vector3 direction{ nextNode->worldPosition.x - _enemy->GetTranslation()._41,
 			nextNode->worldPosition.y - _enemy->GetTranslation()._42 , nextNode->worldPosition.z - _enemy->GetTranslation()._43 };
-		XMMATRIX position{ 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, nextNode->worldPosition.x, 0.0f, nextNode->worldPosition.z, 1.0f };
-
+		XMMATRIX position{ 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, nextNode->worldPosition.x, 0.5f, nextNode->worldPosition.z, 1.0f };
+		i++;
+		if (i > pathToGoal.size()) 
+			return;
 		_enemy->SetTranslation(position);
 		_enemy->GetBehaviour<Mesh>()->SetDirtyFrames(3);
 		//_enemy->GetBehaviour<PhysicsBody>()->AddForce(XMFLOAT3(direction.x * directionalForce, upwardForce, direction.z * directionalForce));

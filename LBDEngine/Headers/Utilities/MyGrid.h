@@ -55,6 +55,11 @@ public:
                 ((locationFront >= front && locationFront <= back) || (locationBack >= front && locationBack <= back))) {
                 isWalkable = false;
             }
+            if (((left >= locationLeft && left <= locationRight) || (right >= locationLeft && right <= locationRight)) &&
+                ((bottom >= locationBottom && bottom <= locationTop) || (top >= locationBottom && top <= locationTop)) &&
+                ((front >= locationFront && front <= locationBack) || (back >= locationFront && back <= locationBack))) {
+                isWalkable = false;
+            }
         }
         return isWalkable;
     }

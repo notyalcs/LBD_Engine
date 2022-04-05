@@ -1,6 +1,6 @@
 #pragma once
 #include "Behaviour.h"
-#include "../Main/Game.h"
+#include "../Main/GameData.h"
 #include "Collider.h"
 #include "Mesh.h"
 #include "Physics.h"

@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Headers\Main\GameData.h" />
     <ClInclude Include="Headers\Behaviours\AngularMotion.h" />
     <ClInclude Include="Headers\Behaviours\Behaviour.h" />
     <ClInclude Include="Headers\Behaviours\Camera.h" />
@@ -46,8 +47,11 @@
     <ClInclude Include="Headers\Utilities\UploadBuffer.h" />
     <ClInclude Include="Headers\Utilities\Utilities.h" />
     <ClInclude Include="Headers\Utilities\WavefrontReader.h" />
+    <ClInclude Include="Headers\Main\LBDGame.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Main\GameData.cpp" />
+    <ClCompile Include="Source\Main\LBDGame.cpp" />
     <ClCompile Include="Source\Behaviours\Camera.cpp" />
     <ClCompile Include="Source\Behaviours\Collider.cpp" />
     <ClCompile Include="Source\Behaviours\Controller.cpp" />

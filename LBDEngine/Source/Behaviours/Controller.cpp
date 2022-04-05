@@ -1,5 +1,4 @@
 #include "../../Headers/Behaviours/Controller.h"
-#include "../../Headers/Behaviours/PhysicsBody.h"
 
 void Controller::Update()
 {
@@ -28,9 +27,9 @@ void Controller::Update()
 	}
 
 	if (GetAsyncKeyState(VK_SPACE) & HighBitMask) {
-		if (GetGameObject()->GetBehaviour<Player>()->GetFloored()) {
-  			PhysicsBehaviour->AddForce({ 0.0f, 10.0f * GameTime::GetDeltaTime(), 0.0f});
-		}
+		/*if (GetGameObject()->GetBehaviour<Player>()->GetFloored() && GetGameObject()->GetBehaviour<Physics>()->GetVelocity().y <= 0) {
+  			PhysicsBehaviour->AddForce({ 0.0f, 0.5f * GameTime::GetDeltaTime(), 0.0f});
+		}*/
 	}
 
 	PhysicsBehaviour->SetVelocity({ 0.0f, 0.0f, 0.0f });

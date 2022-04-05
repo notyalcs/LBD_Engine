@@ -1,6 +1,7 @@
 #pragma once
 #include "../Utilities/Utilities.h"
 #include "Behaviour.h"
+#include "PhysicsBody.h"
 
 class Controller : public Behaviour
 {

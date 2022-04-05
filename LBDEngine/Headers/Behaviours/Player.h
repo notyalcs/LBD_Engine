@@ -4,6 +4,7 @@
 #include "../Utilities/GameCameras.h"
 #include "../Utilities/GameTime.h"
 #include "PhysicsBody.h"
+#include "../Main/GameData.h"
 
 class Player : public Behaviour
 {

@@ -38,7 +38,7 @@ struct Vector3 {
 
     bool operator< (const Vector3& v)
     {
-        return (x < v.x && z < v.z);
+        return (x < v.x && y < v.y && z < v.z);
     }
 
 };

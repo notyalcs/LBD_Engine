@@ -183,6 +183,7 @@ void Game::CreateEnemy()
 		XMFLOAT3 size = behaviour->GetBoundingBox().Extents;
 		myGrid.sizes.push_back(Vector3{ size.x, size.y, size.z });
 	}
+
 	myGrid.Start();
 
 	Pathfinding path{};
@@ -193,26 +194,33 @@ void Game::CreateEnemy()
 	pathToGoal = path.pathToGoal;
 	nextNode = &pathToGoal[0];
 
-	/*_gameObjects.push_back(std::move(std::unique_ptr<GameObject>(_enemy)));
-	_gameObjects.push_back(std::move(std::unique_ptr<GameObject>(_flag)));*/
+	/*std::vector<GameObject*> enemies;
+	for (Node &obj : pathToGoal) {
+		enemies.push_back(CreateDynamicMeshObject("shape", "sphere", "stone", 3.0f, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(obj.worldPosition.x, obj.worldPosition.y, obj.worldPosition.z), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4())));
+	}*/
+
 }
 void Game::UpdateAI() {
-	float range = 1;
+	float range = 1.0f;
+	float directionalForce = 0.000002f;
+	float upwardForce = 0.0000148f;
+
 
 	if (Vector3(_enemy->GetTranslation()._41, _enemy->GetTranslation()._42, _enemy->GetTranslation()._43)
 	< Vector3(nextNode->worldPosition.x + range, nextNode->worldPosition.y + range, nextNode->worldPosition.z + range) &&
 	Vector3(nextNode->worldPosition.x - range, nextNode->worldPosition.y - range, nextNode->worldPosition.z - range)
 	< Vector3(_enemy->GetTranslation()._41, _enemy->GetTranslation()._42, _enemy->GetTranslation()._43)) {
-
+		
 		nextNode++;
 	}
 	else {
 		Vector3 direction{ nextNode->worldPosition.x - _enemy->GetTranslation()._41,
 			nextNode->worldPosition.y - _enemy->GetTranslation()._42 , nextNode->worldPosition.z - _enemy->GetTranslation()._43 };
-		//XMMATRIX position{ 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, nextNode->worldPosition.x, nextNode->worldPosition.y, nextNode->worldPosition.z, 1.0f };
+		XMMATRIX position{ 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, nextNode->worldPosition.x, 0.0f, nextNode->worldPosition.z, 1.0f };
 
-		//_enemy->SetTranslation(position);
-		_enemy->GetBehaviour<PhysicsBody>()->AddForce(XMFLOAT3(direction.x * 0.000002, 0.0000148, direction.z * 0.000002));
+		_enemy->SetTranslation(position);
+		_enemy->GetBehaviour<Mesh>()->SetDirtyFrames(3);
+		//_enemy->GetBehaviour<PhysicsBody>()->AddForce(XMFLOAT3(direction.x * directionalForce, upwardForce, direction.z * directionalForce));
 	}
 }
 

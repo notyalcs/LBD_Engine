@@ -44,9 +44,15 @@ public:
         float front = worldPoint.z - nodeRadius;
 
         for (int i = 0; i < locations.size(); i++) {
-            if (((left >= locations[i].x - sizes[i].x && left <= locations[i].x + sizes[i].x) || (right >= locations[i].x - sizes[i].x && right <= locations[i].x + sizes[i].x)) &&
-                ((bottom >= locations[i].y - sizes[i].y && bottom <= locations[i].y + sizes[i].y) || (top >= locations[i].y - sizes[i].y && top <= locations[i].y + sizes[i].y)) &&
-                ((front >= locations[i].z - sizes[i].z && front <= locations[i].z + sizes[i].z) || (back >= locations[i].z - sizes[i].z && back <= locations[i].z + sizes[i].z))) {
+            int locationLeft = locations[i].x - sizes[i].x;
+            int locationRight = locations[i].x + sizes[i].x;
+            int locationTop = locations[i].y + sizes[i].y;
+            int locationBottom = locations[i].y - sizes[i].y;
+            int locationBack = locations[i].z + sizes[i].z;
+            int locationFront = locations[i].z - sizes[i].z;
+            if (((locationLeft >= left && locationLeft <= right) || (locationRight >= left && locationRight <= right)) &&
+                ((locationBottom >= bottom && locationBottom <= top) || (locationTop >= bottom && locationTop <= top)) &&
+                ((locationFront >= front && locationFront <= back) || (locationBack >= front && locationBack <= back))) {
                 isWalkable = false;
             }
         }

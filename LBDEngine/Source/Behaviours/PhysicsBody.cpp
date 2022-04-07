@@ -30,7 +30,6 @@ void PhysicsBody::Update()
 	}
 	if (!isColliding) {
 		GetGameObject()->SetTranslation(XMLoadFloat4x4(&translationPostForce));
-		_mesh->SetDirtyFrames(NUMBER_OF_FRAME_RESOURCES);
 	}
 }
 

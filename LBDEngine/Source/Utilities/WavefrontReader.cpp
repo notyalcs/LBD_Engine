@@ -73,7 +73,7 @@ GeometryObject WavefrontReader::ReadFile(std::string path) {
 			verts.at(verts.size() - 1).TexC = texCoords.at(std::stoi(v1s) - 1);
 			std::getline(elem1, v1s, '/');
 			verts.at(verts.size() - 1).Normal = normals.at(std::stoi(v1s) - 1);
-			indeces.emplace_back(verts.size() - 1);
+			indeces.push_back(static_cast<USHORT>(verts.size() - 1));
 
 			std::string v2s;
 			std::getline(elem2, v2s, '/');
@@ -83,7 +83,7 @@ GeometryObject WavefrontReader::ReadFile(std::string path) {
 			verts.at(verts.size() - 1).TexC = texCoords.at(std::stoi(v2s) - 1);
 			std::getline(elem2, v2s, '/');
 			verts.at(verts.size() - 1).Normal = normals.at(std::stoi(v2s) - 1);
-			indeces.emplace_back(verts.size() - 1);
+			indeces.push_back(static_cast<USHORT>(verts.size() - 1));
 
 			std::string v3s;
 			std::getline(elem3, v3s, '/');
@@ -93,7 +93,7 @@ GeometryObject WavefrontReader::ReadFile(std::string path) {
 			verts.at(verts.size() - 1).TexC = texCoords.at(std::stoi(v3s) - 1);
 			std::getline(elem3, v3s, '/');
 			verts.at(verts.size() - 1).Normal = normals.at(std::stoi(v3s) - 1);
-			indeces.emplace_back(verts.size() - 1);
+			indeces.push_back(static_cast<USHORT>(verts.size() - 1));
 		}
 	}
 

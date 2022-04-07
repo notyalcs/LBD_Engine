@@ -33,6 +33,11 @@ public:
         return _verticalAxis;
     }
 
+    bool GetKey(int key) const
+    {
+        return GetAsyncKeyState(key) & HighBitMask;
+    }
+
 private:
     const int HighBitMask{ 0x8000 };
 

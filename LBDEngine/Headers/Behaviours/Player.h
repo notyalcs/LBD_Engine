@@ -11,7 +11,7 @@ class Player : public Behaviour
 public:
 	void Start() override;
 	void Update() override;
-	void isOnFloor();
+	void IsOnFloor();
 	bool GetFloored() { return _floored; }
 private:
 	Controller* _controller;

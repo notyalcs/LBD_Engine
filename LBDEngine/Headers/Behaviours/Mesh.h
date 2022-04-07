@@ -8,6 +8,9 @@ class Mesh final : public Behaviour
 {
 public:
 	void Start() override;
+	void Update() override;
+
+	bool HasWorldTransformChanged();
 
 	UINT GetDirtyFrames()
 	{
@@ -54,5 +57,7 @@ private:
 	XMFLOAT4X4 _textureTransform{ MathHelper::CreateIdentity4x4() };
 	// Index into GPU constant buffer corresponding to the ObjectCB for this render item.
 	UINT ObjCBIndex = -1;
+
+	XMFLOAT4X4 _recordedWorldTransform;
 
 };

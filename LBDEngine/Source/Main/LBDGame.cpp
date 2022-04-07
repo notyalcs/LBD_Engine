@@ -8,7 +8,7 @@ void LBDGame::StartGame()
 
 void LBDGame::CreatePlayer()
 {
-	_player = CreateDynamicMeshObject("shape", "cylinder", "stone", 3.0f, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 2.0f, -10.0f), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
+	_player = CreateDynamicMeshObject("shape", "sphere", "stone", 3.0f, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 2.0f, -10.0f), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
 	_player->AddBehaviour<Controller>();
 	_player->AddBehaviour<Player>();
 	_player->GetBehaviour<Physics>()->SetElasticity(0.0f);
@@ -39,7 +39,7 @@ void LBDGame::BuildRenderItems()
 	}
 }
 
-void LBDGame::CreateMeshObject(std::string meshGeometryName, std::string submeshGeometryName, std::string materialName, XMMATRIX scale, XMMATRIX rotation, XMMATRIX translation, XMMATRIX textureTransform)
+GameObject* LBDGame::CreateMeshObject(std::string meshGeometryName, std::string submeshGeometryName, std::string materialName, XMMATRIX scale, XMMATRIX rotation, XMMATRIX translation, XMMATRIX textureTransform)
 {
 	auto meshObject{ GameState::CreateGameObject() };
 	auto mesh{ dynamic_cast<Mesh*>(meshObject->AddBehaviour<Mesh>()) };
@@ -61,26 +61,15 @@ void LBDGame::CreateMeshObject(std::string meshGeometryName, std::string submesh
 	auto collider{ dynamic_cast<Collider*>(meshObject->AddBehaviour<Collider>()) };
 	collider->SetBoundingBox(submeshGeometry.Bounds);
 	collider->Transform(meshObject->GetWorldTransform());
+
+	return meshObject;
 }
 
 GameObject* LBDGame::CreateDynamicMeshObject(std::string meshGeometryName, std::string submeshGeometryName, std::string materialName, float mass, XMMATRIX scale, XMMATRIX rotation, XMMATRIX translation, XMMATRIX textureTransform)
 {
-	auto meshObject{ GameState::CreateGameObject() };
-	auto mesh{ dynamic_cast<Mesh*>(meshObject->AddBehaviour<Mesh>()) };
-
+	auto meshObject{ CreateMeshObject(meshGeometryName, submeshGeometryName, materialName, scale, rotation, translation, textureTransform) };
 	auto meshGeometry{ Render::GetGeometries().at(meshGeometryName).get() };
 	auto& submeshGeometry{ meshGeometry->Submeshes.at(submeshGeometryName) };
-
-	meshObject->SetScale(scale);
-	meshObject->SetRotation(rotation);
-	meshObject->SetTranslation(translation);
-	mesh->SetTextureTransform(textureTransform);
-	mesh->Mat = Render::GetMaterials().at(materialName).get();
-	mesh->Geo = Render::GetGeometries().at(meshGeometryName).get();
-	mesh->PrimitiveType = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
-	mesh->IndexCount = submeshGeometry.IndexCount;
-	mesh->StartIndexLocation = submeshGeometry.StartIndexLocation;
-	mesh->BaseVertexLocation = submeshGeometry.BaseVertexLocation;
 
 	auto collider{ dynamic_cast<Collider*>(meshObject->AddBehaviour<Collider>()) };
 	collider->SetBoundingBox(submeshGeometry.Bounds);

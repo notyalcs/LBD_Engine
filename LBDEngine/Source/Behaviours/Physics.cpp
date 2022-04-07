@@ -8,8 +8,11 @@ void Physics::Update()
 	if (_gravity)
 	{
 		XMFLOAT3 fg{ 0.0f, _lm.state.mass * GRAVITY * GRAVITY_ADJUST, 0.0f };
-		AddForce(fg);
+		AddForce(std::forward<XMFLOAT3>(fg));
 	}
+
+	// Linear Motion
+	XMStoreFloat3(&_lm.state.position, XMLoadFloat3(&_lm.state.position) + (XMLoadFloat3(&_lm.state.velocity) * GameTime::GetDeltaTime()));
 
 	// angular motion
 }
@@ -52,7 +55,7 @@ void Physics::CollideWith(GameObject& other)
 	// TODO: angular momentum
 }
 
-void Physics::AddForce(XMFLOAT3 force)
+void Physics::AddForce(XMFLOAT3&& force)
 {
 	XMStoreFloat3(&_lm.derivative.force, XMLoadFloat3(&_lm.derivative.force) + XMLoadFloat3(&force));
 	// not sure if I actually need this but maybe. Not expensive and only runs when a force is added.
@@ -67,13 +70,20 @@ void Physics::AddForce(XMFLOAT3 force)
 	XMStoreFloat3(&_lm.state.momentum, XMLoadFloat3(&_lm.state.momentum) + XMLoadFloat3(&impulse));
 	// recalculate velocity state
 	_lm.state.Recalculate();
-	XMStoreFloat3(&_lm.state.position, XMLoadFloat3(&_lm.state.position) + (XMLoadFloat3(&_lm.state.velocity) * GameTime::GetDeltaTime()));
 }
 
-void Physics::Reflect(XMFLOAT3 normal)
+void Physics::Reflect(XMFLOAT3&& normal)
 {
 	XMStoreFloat3(&_lm.state.momentum, _elasticity * XMVector3Reflect(XMLoadFloat3(&_lm.state.momentum), XMLoadFloat3(&normal)));
 	// recalculate velocity state
 	_lm.state.Recalculate();
-	XMStoreFloat3(&_lm.state.position, XMLoadFloat3(&_lm.state.position) + (XMLoadFloat3(&_lm.state.velocity) * GameTime::GetDeltaTime()));
+}
+
+void Physics::SetVelocity(XMFLOAT3&& velocity)
+{
+	XMStoreFloat3(&_lm.derivative.velocity, XMLoadFloat3(&velocity));
+	XMStoreFloat3(&_lm.state.momentum, XMLoadFloat3(&velocity) * _lm.state.mass);
+	_lm.state.Recalculate();
+	// using GameTime::GetDeltaTime() is possibly a bug here, as this isn't actually when this object is being updated.
+	XMStoreFloat3(&_lm.derivative.force, XMLoadFloat3(&_lm.state.momentum) * GameTime::GetDeltaTime());
 }

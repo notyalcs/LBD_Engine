@@ -14,7 +14,7 @@ private:
 	AngularMotion _am{};
 	bool _gravity{ true };
 	float _elasticity{ 0.85f };
-	void Reflect(XMFLOAT3 normal);
+	void Reflect(XMFLOAT3&& normal);
 public:
 	// default mass of 1kg. 
 	Physics() : _lm(1.0f) {};
@@ -28,9 +28,10 @@ public:
 	* the creation of a single frame. It's significantly faster to only calculate everything
 	* when a force is actually added though, so I'm leaving it like this.
 	*/
-	void AddForce(XMFLOAT3 force);
+	void AddForce(XMFLOAT3&& force);
 	void SetMass(float mass) { _lm.state.mass = mass; _lm.state.inverseMass = 1.0f / mass; }
 	void CollideWith(GameObject& other);
+	void SetVelocity(XMFLOAT3&& velocity);
 	XMFLOAT3 GetVelocity() { return _lm.state.velocity; }
 	void SetGravity(bool gravity) { _gravity = gravity; }
 

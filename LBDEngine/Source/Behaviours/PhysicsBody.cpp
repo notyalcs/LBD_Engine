@@ -33,7 +33,7 @@ void PhysicsBody::Update()
 	}
 }
 
-void PhysicsBody::AddForce(XMFLOAT3 force)
+void PhysicsBody::AddForce(XMFLOAT3&& force)
 {
-	_physics->AddForce(force);
+	_physics->AddForce(std::forward<XMFLOAT3>(force));
 }

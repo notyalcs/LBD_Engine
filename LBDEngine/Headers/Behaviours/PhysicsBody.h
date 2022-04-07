@@ -21,7 +21,7 @@ public:
 	* the creation of a single frame. It's significantly faster to only calculate everything
 	* when a force is actually added though, so I'm leaving it like this.
 	*/
-	void AddForce(XMFLOAT3 force);
+	void AddForce(XMFLOAT3&& force);
 
 private:
 	Collider* _collider{ nullptr };

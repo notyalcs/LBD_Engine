@@ -40,8 +40,8 @@ void Game::OnResize()
 
 void Game::Update()
 {
-	auto toStartCopy{ GameData::GetGameObjectsToStart()};
-	GameData::GetGameObjectsToStart().clear();
+	auto toStartCopy{ GameState::GetGameObjectsToStart()};
+	GameState::GetGameObjectsToStart().clear();
 	
 	// Starting is done using a copy because GameObjects could be created in another
 	// GameObject's Start function, and iterating shouldn't be done on an updating vector.
@@ -50,7 +50,7 @@ void Game::Update()
 		gameObject->Start();
 	}
 
-	for (auto& gameObject : GameData::GetGameObjects())
+	for (auto& gameObject : GameState::GetGameObjects())
 	{
 		gameObject->Update();
 	}
@@ -120,7 +120,7 @@ void Game::Draw()
 	// The root signature knows how many descriptors are expected in the table.
 	_graphicsCommandList->SetGraphicsRootDescriptorTable(3, _SrvDescriptorHeap->GetGPUDescriptorHandleForHeapStart());
 
-	DrawRenderItems(_graphicsCommandList.Get(), GameData::GetBehavioursOfType<Mesh>());
+	DrawRenderItems(_graphicsCommandList.Get(), GameState::GetBehavioursOfType<Mesh>());
 
 	// Indicate a state transition on the resource usage.
 	resourceBarrier = CD3DX12_RESOURCE_BARRIER::Transition(GetCurrentBackBuffer(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
@@ -149,7 +149,7 @@ void Game::Draw()
 void Game::UpdateObjectCBs()
 {
 	auto currObjectCB = _currentFrameResource->ObjectCB.get();
-	for (auto& item : GameData::GetBehavioursOfType<Mesh>())
+	for (auto& item : GameState::GetBehavioursOfType<Mesh>())
 	{
 		auto dirtyFrames{ item->GetDirtyFrames() };
 		// Only update the cbuffer data if the constants have changed.  
@@ -165,7 +165,7 @@ void Game::UpdateObjectCBs()
 			XMStoreFloat4x4(&objConstants.TextureTransform, XMMatrixTranspose(texTransform));
 			objConstants.MaterialIndex = item->Mat->MatCBIndex;
 
-			currObjectCB->CopyData(item->ObjCBIndex, objConstants);
+			currObjectCB->CopyData(item->GetObjectCBIndex(), objConstants);
 
 			// Next FrameResource need to be updated too.
 			item->SetDirtyFrames(dirtyFrames - 1);
@@ -403,7 +403,7 @@ void Game::BuildFrameResources()
 {
 	for (int i = 0; i < NUMBER_OF_FRAME_RESOURCES; ++i)
 	{
-		_frameResources.push_back(std::make_unique<FrameResource>(_device.Get(), 1, static_cast<UINT>(GameData::GetBehavioursOfType<Mesh>().size()), static_cast<UINT>(Render::GetMaterials().size())));
+		_frameResources.push_back(std::make_unique<FrameResource>(_device.Get(), 1, static_cast<UINT>(GameState::GetBehavioursOfType<Mesh>().size()), static_cast<UINT>(Render::GetMaterials().size())));
 	}
 }
 
@@ -424,7 +424,7 @@ void Game::DrawRenderItems(ID3D12GraphicsCommandList* cmdList, const std::vector
 		cmdList->IASetIndexBuffer(&indexBufferView);
 		cmdList->IASetPrimitiveTopology(ri->PrimitiveType);
 
-		D3D12_GPU_VIRTUAL_ADDRESS objCBAddress = objectCB->GetGPUVirtualAddress() + ri->ObjCBIndex * objCBByteSize;
+		D3D12_GPU_VIRTUAL_ADDRESS objCBAddress = objectCB->GetGPUVirtualAddress() + ri->GetObjectCBIndex() * objCBByteSize;
 
 		cmdList->SetGraphicsRootConstantBufferView(0, objCBAddress);
 		cmdList->DrawIndexedInstanced(ri->IndexCount, 1, ri->StartIndexLocation, ri->BaseVertexLocation, 0);

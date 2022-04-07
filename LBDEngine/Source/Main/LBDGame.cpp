@@ -1,7 +1,5 @@
 #include "../../Headers/Main/LBDGame.h"
 
-int LBDGame::_constantBufferIndex{ 0 };
-
 void LBDGame::StartGame()
 {
 	CreatePlayer();
@@ -43,7 +41,7 @@ void LBDGame::BuildRenderItems()
 
 void LBDGame::CreateMeshObject(std::string meshGeometryName, std::string submeshGeometryName, std::string materialName, XMMATRIX scale, XMMATRIX rotation, XMMATRIX translation, XMMATRIX textureTransform)
 {
-	auto meshObject{ GameData::CreateGameObject() };
+	auto meshObject{ GameState::CreateGameObject() };
 	auto mesh{ dynamic_cast<Mesh*>(meshObject->AddBehaviour<Mesh>()) };
 
 	auto meshGeometry{ Render::GetGeometries().at(meshGeometryName).get() };
@@ -53,7 +51,6 @@ void LBDGame::CreateMeshObject(std::string meshGeometryName, std::string submesh
 	meshObject->SetRotation(rotation);
 	meshObject->SetTranslation(translation);
 	mesh->SetTextureTransform(textureTransform);
-	mesh->ObjCBIndex = _constantBufferIndex++;
 	mesh->Mat = Render::GetMaterials().at(materialName).get();
 	mesh->Geo = Render::GetGeometries().at(meshGeometryName).get();
 	mesh->PrimitiveType = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
@@ -68,7 +65,7 @@ void LBDGame::CreateMeshObject(std::string meshGeometryName, std::string submesh
 
 GameObject* LBDGame::CreateDynamicMeshObject(std::string meshGeometryName, std::string submeshGeometryName, std::string materialName, float mass, XMMATRIX scale, XMMATRIX rotation, XMMATRIX translation, XMMATRIX textureTransform)
 {
-	auto meshObject{ GameData::CreateGameObject() };
+	auto meshObject{ GameState::CreateGameObject() };
 	auto mesh{ dynamic_cast<Mesh*>(meshObject->AddBehaviour<Mesh>()) };
 
 	auto meshGeometry{ Render::GetGeometries().at(meshGeometryName).get() };
@@ -78,7 +75,6 @@ GameObject* LBDGame::CreateDynamicMeshObject(std::string meshGeometryName, std::
 	meshObject->SetRotation(rotation);
 	meshObject->SetTranslation(translation);
 	mesh->SetTextureTransform(textureTransform);
-	mesh->ObjCBIndex = _constantBufferIndex++;
 	mesh->Mat = Render::GetMaterials().at(materialName).get();
 	mesh->Geo = Render::GetGeometries().at(meshGeometryName).get();
 	mesh->PrimitiveType = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;

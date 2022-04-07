@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Headers\Main\GameData.h" />
+    <ClInclude Include="Headers\Main\GameState.h" />
     <ClInclude Include="Headers\Behaviours\AngularMotion.h" />
     <ClInclude Include="Headers\Behaviours\Behaviour.h" />
     <ClInclude Include="Headers\Behaviours\Camera.h" />
@@ -50,7 +50,7 @@
     <ClInclude Include="Headers\Main\LBDGame.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Main\GameData.cpp" />
+    <ClCompile Include="Source\Main\GameState.cpp" />
     <ClCompile Include="Source\Main\LBDGame.cpp" />
     <ClCompile Include="Source\Behaviours\Camera.cpp" />
     <ClCompile Include="Source\Behaviours\Collider.cpp" />

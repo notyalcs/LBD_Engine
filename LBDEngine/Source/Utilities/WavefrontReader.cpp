@@ -26,9 +26,9 @@ GeometryObject WavefrontReader::ReadFile(std::string path) {
 		iss >> marker;
 		if (marker == "v")
 		{
-			double x;
-			double y;
-			double z;
+			float x;
+			float y;
+			float z;
 			iss >> x;
 			iss >> y;
 			iss >> z;

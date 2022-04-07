@@ -4,9 +4,11 @@
 #include "../Utilities/Render.h"
 
 //The visual part of an object. The vertices that get drawn
-class Mesh : public Behaviour
+class Mesh final : public Behaviour
 {
 public:
+	void Start() override;
+
 	UINT GetDirtyFrames()
 	{
 		return _dirtyFrames;
@@ -27,8 +29,10 @@ public:
 		XMStoreFloat4x4(&_textureTransform, textureTransform);
 	}
 
-	// Index into GPU constant buffer corresponding to the ObjectCB for this render item.
-	UINT ObjCBIndex = -1;
+	UINT GetObjectCBIndex()
+	{
+		return ObjCBIndex;
+	}
 
 	Material* Mat = nullptr;
 	MeshGeometry* Geo = nullptr;
@@ -42,9 +46,13 @@ public:
 	int BaseVertexLocation = 0;
 
 private:
+	static UINT _currentObjectCBIndex;
+	
 	// The number of frame resources where the object data has changed.
 	UINT _dirtyFrames{ NUMBER_OF_FRAME_RESOURCES };
 
 	XMFLOAT4X4 _textureTransform{ MathHelper::CreateIdentity4x4() };
+	// Index into GPU constant buffer corresponding to the ObjectCB for this render item.
+	UINT ObjCBIndex = -1;
 
 };

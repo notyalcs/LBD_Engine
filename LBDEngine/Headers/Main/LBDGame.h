@@ -13,9 +13,6 @@ public:
 private:
 	// Player already exists inside of the gameObjects vector, but it's helpful to have a direct pointer to it.
 	GameObject* _player;
-	// Provides an index for every object placed in the world.
-	// Incremented after each object placed.
-	static int _constantBufferIndex;
 
 	void BuildRenderItems();
 	void CreatePlayer();

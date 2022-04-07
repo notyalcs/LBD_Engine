@@ -23,3 +23,4 @@ constexpr float GRAVITY_ADJUST{ 0.0005f };
 constexpr unsigned int MAXIMUM_SUBDIVISIONS = 5u;
 constexpr bool WIREFRAME_STATE = false;
 constexpr float MAXIMUM_PLAYER_VELOCITY = 0.005f;
+constexpr bool GOD_MODE{ false };

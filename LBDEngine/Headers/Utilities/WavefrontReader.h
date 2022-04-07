@@ -9,6 +9,9 @@
 using namespace DirectX;
 using Microsoft::WRL::ComPtr;
 
+/// <summary>
+/// For importing graphics files.
+/// </summary>
 class WavefrontReader
 {
 public:

@@ -7,7 +7,7 @@ void Physics::Update()
 	// gravity calculation
 	if (_gravity)
 	{
-		XMFLOAT3 fg{ 0.0f, _lm.state.mass * GRAVITY * GRAVITY_ADJUST * GameTime::GetDeltaTime(), 0.0f};
+		XMFLOAT3 fg{ 0.0f, _lm.state.mass * GRAVITY * GRAVITY_ADJUST, 0.0f };
 		AddForce(fg);
 	}
 

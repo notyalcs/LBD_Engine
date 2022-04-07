@@ -25,6 +25,13 @@ void Player::Update()
 
 	auto body = GetGameObject()->GetTranslation();
 
+	if (_controller->GetKey(VK_SPACE))
+	{
+		/*if (GetGameObject()->GetBehaviour<Player>()->GetFloored() && GetGameObject()->GetBehaviour<Physics>()->GetVelocity().y <= 0) {
+			PhysicsBehaviour->AddForce({ 0.0f, 0.5f * GameTime::GetDeltaTime(), 0.0f});
+		}*/
+	}
+
 	if (!GOD_MODE)
 	{
 		mainCamera->SetPosition({ body._41, body._42, body._43 });

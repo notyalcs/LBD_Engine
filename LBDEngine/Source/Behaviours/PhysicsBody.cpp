@@ -22,9 +22,8 @@ void PhysicsBody::Update()
 			}
 			else
 			{
-        _physics->CollideWith(*other->GetGameObject());
+				_physics->CollideWith(*other->GetGameObject());
 				isColliding = true;
-				_physics->SetVelocity({ 0.0f, 0.0f, 0.0f });
 			}
 		}
 	}

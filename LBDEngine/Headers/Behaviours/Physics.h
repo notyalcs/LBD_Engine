@@ -32,8 +32,7 @@ public:
 	void CollideWith(GameObject& other);
 	XMFLOAT3 GetVelocity() { return _lm.state.velocity; }
 	void SetGravity(bool gravity) { _gravity = gravity; }
-	void SetVelocity(XMVECTOR newVelocity) { XMStoreFloat3(&_lm.derivative.velocity, newVelocity); }
-
+	
 	/*
 	 * Set a hardness value between [0, 1]
 	 * An elasticity of 0 (fully inelastic) means that the object loses all energy upon collision with another.

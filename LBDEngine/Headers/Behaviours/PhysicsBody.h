@@ -1,6 +1,6 @@
 #pragma once
 #include "Behaviour.h"
-#include "../Main/Game.h"
+#include "../Main/GameState.h"
 #include "Collider.h"
 #include "Mesh.h"
 #include "Physics.h"
@@ -22,6 +22,10 @@ public:
 	* when a force is actually added though, so I'm leaving it like this.
 	*/
 	void AddForce(XMFLOAT3 force);
+
+	Physics* GetPhysics() {
+		return _physics;
+	}
 
 private:
 	Collider* _collider{ nullptr };

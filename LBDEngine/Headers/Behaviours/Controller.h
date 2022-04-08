@@ -1,6 +1,7 @@
 #pragma once
 #include "../Utilities/Utilities.h"
 #include "Behaviour.h"
+#include "PhysicsBody.h"
 
 class Controller : public Behaviour
 {
@@ -30,6 +31,11 @@ public:
     float GetVerticalAxis() const
     {
         return _verticalAxis;
+    }
+
+    bool GetKey(int key) const
+    {
+        return GetAsyncKeyState(key) & HighBitMask;
     }
 
 private:

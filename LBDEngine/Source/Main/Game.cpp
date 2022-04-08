@@ -1,7 +1,5 @@
 #include "../../Headers/Main/Game.h"
 
-std::vector<std::unique_ptr<GameObject>> Game::_gameObjects;
-
 bool Game::Initialize()
 {
 	if (!Application::Initialize()) return false;
@@ -15,8 +13,10 @@ bool Game::Initialize()
 	BuildDescriptorHeaps();
 	BuildInputLayout();
 	BuildShapeGeometry();
-	BuildRenderItems();
-	CreatePlayer();
+
+	LBDGame game;
+	game.StartGame();
+
 	BuildFrameResources();
 	AddPSOs();
 
@@ -40,8 +40,8 @@ void Game::OnResize()
 
 void Game::Update()
 {
-	auto toStartCopy{ _gameObjectsToStart };
-	_gameObjectsToStart.clear();
+	auto toStartCopy{ GameState::GetGameObjectsToStart()};
+	GameState::GetGameObjectsToStart().clear();
 	
 	// Starting is done using a copy because GameObjects could be created in another
 	// GameObject's Start function, and iterating shouldn't be done on an updating vector.
@@ -50,7 +50,7 @@ void Game::Update()
 		gameObject->Start();
 	}
 
-	for (auto& gameObject : _gameObjects)
+	for (auto& gameObject : GameState::GetGameObjects())
 	{
 		gameObject->Update();
 	}
@@ -120,7 +120,7 @@ void Game::Draw()
 	// The root signature knows how many descriptors are expected in the table.
 	_graphicsCommandList->SetGraphicsRootDescriptorTable(3, _SrvDescriptorHeap->GetGPUDescriptorHandleForHeapStart());
 
-	DrawRenderItems(_graphicsCommandList.Get(), GetBehavioursOfType<Mesh>());
+	DrawRenderItems(_graphicsCommandList.Get(), GameState::GetBehavioursOfType<Mesh>());
 
 	// Indicate a state transition on the resource usage.
 	resourceBarrier = CD3DX12_RESOURCE_BARRIER::Transition(GetCurrentBackBuffer(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
@@ -146,28 +146,10 @@ void Game::Draw()
 	_commandQueue->Signal(_fence.Get(), _currentFence);
 }
 
-GameObject* Game::CreateGameObject()
-{
-	_gameObjects.push_back(std::make_unique<GameObject>());
-
-	auto gameObject{ _gameObjects.back().get() };
-	_gameObjectsToStart.push_back(gameObject);
-	return gameObject;
-}
-
-void Game::CreatePlayer()
-{
-	CreateDynamicMeshObject("shape", "sphere", "stone", 3.0f, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 2.0f, -10.0f), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
-	_player = dynamic_cast<GameObject*>(_gameObjects.back().get());
-	_player->AddBehaviour<Controller>();
-	_player->AddBehaviour<Player>();
-	_player->GetBehaviour<Physics>()->SetElasticity(0.9f);
-}
-
 void Game::UpdateObjectCBs()
 {
 	auto currObjectCB = _currentFrameResource->ObjectCB.get();
-	for (auto& item : GetBehavioursOfType<Mesh>())
+	for (auto& item : GameState::GetBehavioursOfType<Mesh>())
 	{
 		auto dirtyFrames{ item->GetDirtyFrames() };
 		// Only update the cbuffer data if the constants have changed.  
@@ -183,7 +165,7 @@ void Game::UpdateObjectCBs()
 			XMStoreFloat4x4(&objConstants.TextureTransform, XMMatrixTranspose(texTransform));
 			objConstants.MaterialIndex = item->Mat->MatCBIndex;
 
-			currObjectCB->CopyData(item->ObjCBIndex, objConstants);
+			currObjectCB->CopyData(item->GetObjectCBIndex(), objConstants);
 
 			// Next FrameResource need to be updated too.
 			item->SetDirtyFrames(dirtyFrames - 1);
@@ -421,87 +403,8 @@ void Game::BuildFrameResources()
 {
 	for (int i = 0; i < NUMBER_OF_FRAME_RESOURCES; ++i)
 	{
-		_frameResources.push_back(std::make_unique<FrameResource>(_device.Get(), 1, static_cast<UINT>(GetBehavioursOfType<Mesh>().size()), static_cast<UINT>(Render::GetMaterials().size())));
+		_frameResources.push_back(std::make_unique<FrameResource>(_device.Get(), 1, static_cast<UINT>(GameState::GetBehavioursOfType<Mesh>().size()), static_cast<UINT>(Render::GetMaterials().size())));
 	}
-}
-
-/*
-* Configure the placement of objects here.
-*/
-void Game::BuildRenderItems()
-{
-
-	CreateDynamicMeshObject("shape", "box", "stone", 30.0f, XMMatrixScaling(1.0f, 3.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 24.0f, 6.0f), XMMatrixScaling(1.0f, 3.0f, 1.0f));
-
-	CreateDynamicMeshObject("shape", "box", "crate", 10.0f, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 1.0f, 0.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
-
-	CreateDynamicMeshObject("shape", "custom", "chair", 5.0f, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 1.0f, -5.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
-	
-
-	CreateDynamicMeshObject("shape", "box", "crate", 1.0f, XMMatrixScaling(2.0f, 2.0f, 2.0f), XMMatrixRotationRollPitchYaw(1.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 6.0f, 0.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
-	CreateMeshObject("shape", "grid", "tile", XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 0.0f, 0.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
-	XMMATRIX brickTexTransform = XMMatrixScaling(1.0f, 1.0f, 1.0f);
-	for (int i = 0; i < 5; ++i)
-	{
-		CreateMeshObject("shape", "cylinder", "brick", XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(-5.0f, 1.5f, -10.0f + i * 5.0f), brickTexTransform);
-		CreateMeshObject("shape", "cylinder", "brick", XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(5.0f, 1.5f, -10.0f + i * 5.0f), brickTexTransform);
-		CreateMeshObject("shape", "sphere", "stone", XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(-5.0f, 3.5f, -10.0f + i * 5.0f), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
-		CreateDynamicMeshObject("shape", "sphere", "stone", 0.5f, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(5.0f, 20.5f, -10.0f + i * 5.0f), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
-	}
-}
-
-void Game::CreateMeshObject(std::string meshGeometryName, std::string submeshGeometryName, std::string materialName, XMMATRIX scale, XMMATRIX rotation, XMMATRIX translation, XMMATRIX textureTransform)
-{
-	auto meshObject{ CreateGameObject() };
-	auto mesh{ dynamic_cast<Mesh*>(meshObject->AddBehaviour<Mesh>()) };
-	
-	auto meshGeometry{ Render::GetGeometries().at(meshGeometryName).get() };
-	auto& submeshGeometry{ meshGeometry->Submeshes.at(submeshGeometryName) };
-
-	meshObject->SetScale(scale);
-	meshObject->SetRotation(rotation);
-	meshObject->SetTranslation(translation);
-	mesh->SetTextureTransform(textureTransform);
-	mesh->ObjCBIndex = _constantBufferIndex++;
-	mesh->Mat = Render::GetMaterials().at(materialName).get();
-	mesh->Geo = Render::GetGeometries().at(meshGeometryName).get();
-	mesh->PrimitiveType = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
-	mesh->IndexCount = submeshGeometry.IndexCount;
-	mesh->StartIndexLocation = submeshGeometry.StartIndexLocation;
-	mesh->BaseVertexLocation = submeshGeometry.BaseVertexLocation;
-
-	auto collider{ dynamic_cast<Collider*>(meshObject->AddBehaviour<Collider>()) };
-	collider->SetBoundingBox(submeshGeometry.Bounds);
-	collider->Transform(meshObject->GetWorldTransform());
-}
-
-void Game::CreateDynamicMeshObject(std::string meshGeometryName, std::string submeshGeometryName, std::string materialName, float mass, XMMATRIX scale, XMMATRIX rotation, XMMATRIX translation, XMMATRIX textureTransform)
-{
-	auto meshObject{ CreateGameObject() };
-	auto mesh{ dynamic_cast<Mesh*>(meshObject->AddBehaviour<Mesh>()) };
-
-	auto meshGeometry{ Render::GetGeometries().at(meshGeometryName).get() };
-	auto& submeshGeometry{ meshGeometry->Submeshes.at(submeshGeometryName) };
-
-	meshObject->SetScale(scale);
-	meshObject->SetRotation(rotation);
-	meshObject->SetTranslation(translation);
-	mesh->SetTextureTransform(textureTransform);
-	mesh->ObjCBIndex = _constantBufferIndex++;
-	mesh->Mat = Render::GetMaterials().at(materialName).get();
-	mesh->Geo = Render::GetGeometries().at(meshGeometryName).get();
-	mesh->PrimitiveType = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
-	mesh->IndexCount = submeshGeometry.IndexCount;
-	mesh->StartIndexLocation = submeshGeometry.StartIndexLocation;
-	mesh->BaseVertexLocation = submeshGeometry.BaseVertexLocation;
-
-	auto collider{ dynamic_cast<Collider*>(meshObject->AddBehaviour<Collider>()) };
-	collider->SetBoundingBox(submeshGeometry.Bounds);
-	collider->Transform(meshObject->GetWorldTransform());
-	
-	auto physics{ dynamic_cast<Physics*>(meshObject->AddBehaviour<Physics>()) };
-	physics->SetMass(mass); // set mass to 500g, probably definitely add this into the parameter list
-	auto physicsBody = dynamic_cast<PhysicsBody*>(meshObject->AddBehaviour<PhysicsBody>());
 }
 
 void Game::DrawRenderItems(ID3D12GraphicsCommandList* cmdList, const std::vector<Mesh*>& ritems)
@@ -521,7 +424,7 @@ void Game::DrawRenderItems(ID3D12GraphicsCommandList* cmdList, const std::vector
 		cmdList->IASetIndexBuffer(&indexBufferView);
 		cmdList->IASetPrimitiveTopology(ri->PrimitiveType);
 
-		D3D12_GPU_VIRTUAL_ADDRESS objCBAddress = objectCB->GetGPUVirtualAddress() + ri->ObjCBIndex * objCBByteSize;
+		D3D12_GPU_VIRTUAL_ADDRESS objCBAddress = objectCB->GetGPUVirtualAddress() + ri->GetObjectCBIndex() * objCBByteSize;
 
 		cmdList->SetGraphicsRootConstantBufferView(0, objCBAddress);
 		cmdList->DrawIndexedInstanced(ri->IndexCount, 1, ri->StartIndexLocation, ri->BaseVertexLocation, 0);

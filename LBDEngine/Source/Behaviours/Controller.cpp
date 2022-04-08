@@ -23,7 +23,7 @@ void Controller::Update()
 	{
 		_horizontalAxis += 1.0f;
 	}
-
+	
 	_isMouseDown = GetAsyncKeyState(VK_LBUTTON);
 	_lastMousePosition = _currentMousePosition;
 	GetCursorPos(&_currentMousePosition);

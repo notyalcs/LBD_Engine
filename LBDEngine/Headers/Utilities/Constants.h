@@ -17,7 +17,7 @@ constexpr int MINIMUM_WINDOW_WIDTH{ 400 };
 constexpr int MINIMUM_WINDOW_HEIGHT{ 300 };
 constexpr float HORIZONTAL_MOVEMENT_SPEED{ 10.0f };
 constexpr float VERTICAL_MOVEMENT_SPEED{ 10.0f };
-constexpr DirectX::XMFLOAT3 INITIAL_CAMERA_POSITION{ 0.0f, 3.0f, -20.0f };
+constexpr DirectX::XMFLOAT3 INITIAL_CAMERA_POSITION{ 0.0f, 10.0f, -20.0f };
 constexpr float GRAVITY{ -9.8f };
 constexpr float GRAVITY_ADJUST{ 0.00001f };
 constexpr unsigned int MAXIMUM_SUBDIVISIONS = 5u;

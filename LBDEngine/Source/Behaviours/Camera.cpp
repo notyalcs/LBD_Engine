@@ -165,3 +165,19 @@ void Camera::UpdateViewMatrix()
 		_viewDirty = false;
 	}
 }
+
+void Camera::UpdateOrbit(XMFLOAT4X4 focus, float distance) {
+	XMVECTOR focusScale;
+	XMVECTOR focusRot;
+	XMVECTOR focusTrans;
+	XMMATRIX focusWorld = XMLoadFloat4x4(&focus);
+	XMMatrixDecompose(&focusScale, &focusRot, &focusTrans, focusWorld);
+
+	XMVECTOR lookDirection = XMLoadFloat3(&_lookAt);
+
+	XMVECTOR newPos = XMVectorSubtract(focusTrans, XMVectorScale(lookDirection, distance));
+	XMFLOAT3 updatedPos;
+	XMStoreFloat3(&updatedPos, newPos);
+
+	SetPosition(updatedPos);
+}

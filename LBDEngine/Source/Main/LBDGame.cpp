@@ -2,16 +2,21 @@
 
 void LBDGame::StartGame()
 {
-	CreatePlayer();
+	CreatePlayer(XMMatrixTranslation(-3.0f, 1.0f, -10.0f));
+	CreatePlayer(XMMatrixTranslation(-1.0f, 1.0f, -10.0f));
+	CreatePlayer(XMMatrixTranslation(1.0f, 1.0f, -10.0f));
+	CreatePlayer(XMMatrixTranslation(3.0f, 1.0f, -10.0f));
 	BuildRenderItems();
 }
 
-void LBDGame::CreatePlayer()
+void LBDGame::CreatePlayer(XMMATRIX translation)
 {
-	_player = CreateDynamicMeshObject("shape", "sphere", "stone", 3.0f, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 2.0f, -10.0f), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
-	_player->AddBehaviour<Controller>();
-	_player->AddBehaviour<Player>();
-	_player->GetBehaviour<Physics>()->SetElasticity(0.0f);
+	GameObject* player;
+	player = CreateDynamicMeshObject("shape", "sphere", "stone", 3.0f, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), translation, XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
+	player->AddBehaviour<Controller>();
+	player->AddBehaviour<Player>();
+	player->GetBehaviour<Physics>()->SetElasticity(0.0f);
+	_players.push_back(player);
 }
 
 /*

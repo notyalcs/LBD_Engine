@@ -25,3 +25,6 @@ constexpr bool WIREFRAME_STATE = false;
 constexpr float MAXIMUM_PLAYER_VELOCITY = 0.005f;
 constexpr bool GOD_MODE{ false };
 constexpr float RISE_MOVEMENT_SPEED{ 7.5f };
+constexpr int PORT = 2121;
+constexpr int BUFLEN = 512;
+constexpr auto SERVER = "10.0.0.2";

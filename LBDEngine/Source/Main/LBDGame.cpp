@@ -64,7 +64,32 @@ void LBDGame::BuildRenderItems()
 	CreateMeshObject("shape", "grid", "tile", XMMatrixScaling(2.0f, 1.0f, 2.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 0.0f, offsetZ2), XMMatrixScaling(1.0f, 1.0f, 1.0f));
 	// Walls
 	CreateMeshObject("shape", "box", "brick", XMMatrixScaling(30.0f, 7.0f, 2.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 2.0f, offsetZ2 - 20.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
+	CreateMeshObject("shape", "box", "brick", XMMatrixScaling(25.0f, 7.0f, 2.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(-7.5f, 2.0f, offsetZ2 - 10.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
+	CreateMeshObject("shape", "box", "brick", XMMatrixScaling(5.0f, 7.0f, 2.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(17.5f, 2.0f, offsetZ2 - 10.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
+	CreateMeshObject("shape", "box", "brick", XMMatrixScaling(25.0f, 7.0f, 2.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(7.5f, 2.0f, offsetZ2), XMMatrixScaling(1.0f, 1.0f, 1.0f));
+	CreateMeshObject("shape", "box", "brick", XMMatrixScaling(30.0f, 7.0f, 2.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(-5.0f, 2.0f, offsetZ2 + 10.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
+	CreateMeshObject("shape", "box", "brick", XMMatrixScaling(30.0f, 7.0f, 2.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(5.0f, 2.0f, offsetZ2 + 20.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
 
+	// Small corridor leading to challenge area 3.
+	CreateMeshObject("shape", "grid", "tile", XMMatrixScaling(0.2f, 1.0f, 0.4f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 0.0f, offsetZ2 + 40.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
+
+	// -- CHALLENGE AREA 3 --
+	auto offsetZ3 = 200.0f;
+	// Floor
+	CreateMeshObject("shape", "grid", "tile", XMMatrixScaling(3.0f, 1.0f, 0.15f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 0.0f, offsetZ3 - 28.5f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
+	CreateMeshObject("shape", "grid", "tile", XMMatrixScaling(0.2f, 1.0f, 1.7f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(-20.5f, 0.0f, offsetZ3), XMMatrixScaling(1.0f, 1.0f, 1.0f));
+	CreateMeshObject("shape", "grid", "tile", XMMatrixScaling(0.2f, 1.0f, 1.7f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(20.5f, 0.0f, offsetZ3), XMMatrixScaling(1.0f, 1.0f, 1.0f));
+	CreateMeshObject("shape", "grid", "tile", XMMatrixScaling(3.0f, 1.0f, 0.15f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 0.0f, offsetZ3 + 28.5f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
+	// Platforms
+	CreateMeshObject("shape", "box", "brick", XMMatrixScaling(5.0f, 1.0f, 5.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, -1.0f, offsetZ3 - 15.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
+	CreateMeshObject("shape", "box", "brick", XMMatrixScaling(5.0f, 1.0f, 5.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, -1.0f, offsetZ3), XMMatrixScaling(1.0f, 1.0f, 1.0f));
+	CreateMeshObject("shape", "box", "brick", XMMatrixScaling(5.0f, 1.0f, 5.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, -1.0f, offsetZ3 + 15.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
+
+	// Small corridor leading to the goal.
+	CreateMeshObject("shape", "grid", "tile", XMMatrixScaling(0.2f, 1.0f, 0.4f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 0.0f, offsetZ3 + 40.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
+
+	// -- GOAL --
+	CreateMeshObject("shape", "grid", "tile", XMMatrixScaling(0.5f, 1.0f, 0.35f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 0.0f, 250.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
 
 }
 

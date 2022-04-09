@@ -1,8 +1,11 @@
 #pragma once
 
+#define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #include <DirectXMath.h>
 #include <cstdint>
+
+#pragma comment(lib, "ws2_32.lib")
 
 using namespace DirectX;
 

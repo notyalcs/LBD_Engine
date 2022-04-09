@@ -2,21 +2,22 @@
 
 void LBDGame::StartGame()
 {
-	CreatePlayer(XMMatrixTranslation(-3.0f, 1.0f, -10.0f));
+	InitToServer();
 	CreatePlayer(XMMatrixTranslation(-1.0f, 1.0f, -10.0f));
 	CreatePlayer(XMMatrixTranslation(1.0f, 1.0f, -10.0f));
-	CreatePlayer(XMMatrixTranslation(3.0f, 1.0f, -10.0f));
 	BuildRenderItems();
 }
 
 void LBDGame::CreatePlayer(XMMATRIX translation)
 {
 	GameObject* player;
-	player = CreateDynamicMeshObject("shape", "sphere", "stone", 3.0f, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), translation, XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
-	player->AddBehaviour<Controller>();
-	player->AddBehaviour<Player>();
-	player->GetBehaviour<Physics>()->SetElasticity(0.0f);
 	_players.push_back(player);
+	player = CreateDynamicMeshObject("shape", "sphere", "stone", 3.0f, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), translation, XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
+	if (_players.size() == _playerNum) {
+		player->AddBehaviour<Controller>();
+		player->AddBehaviour<Player>();
+	}
+	player->GetBehaviour<Physics>()->SetElasticity(0.0f);
 }
 
 /*
@@ -85,4 +86,71 @@ GameObject* LBDGame::CreateDynamicMeshObject(std::string meshGeometryName, std::
 	auto physicsBody = dynamic_cast<PhysicsBody*>(meshObject->AddBehaviour<PhysicsBody>());
 
 	return meshObject;
+}
+
+void LBDGame::InitToServer() {
+	struct sockaddr_in si_other;
+	SOCKET s;
+	int slen = sizeof(si_other);
+	char buf[BUFLEN];
+	char message[BUFLEN];
+	char init[] = "Init";
+	bool start = false;
+	WSADATA wsa;
+
+	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0) {
+		Utilities::PrintDebugLine(L"WSAStartup fail");
+		exit(EXIT_FAILURE);
+	}
+
+	if ((s = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == SOCKET_ERROR) {
+		Utilities::PrintDebugLine(L"Socket fail");
+		exit(EXIT_FAILURE);
+	}
+
+	memset((char*)&si_other, 0, sizeof(si_other));
+
+	si_other.sin_family = AF_INET;
+	si_other.sin_port = htons(PORT);
+	si_other.sin_addr.S_un.S_addr = inet_addr(SERVER);
+
+	//inet_pton(AF_INET, SERVER, &si_other.sin_addr.S_un.S_addr);
+
+	if (sendto(s, init, strlen(init), 0, (struct sockaddr*)&si_other, slen) == SOCKET_ERROR) {
+		Utilities::PrintDebugLine(L"Send fail");
+		exit(EXIT_FAILURE);
+	}
+
+	memset(buf, '\0', BUFLEN);
+
+	if (recvfrom(s, buf, BUFLEN, 0, (struct sockaddr*)&si_other, &slen) == SOCKET_ERROR) {
+		Utilities::PrintDebugLine(L"Receive fail");
+		exit(EXIT_FAILURE);
+	}
+
+	_playerNum = ParseInt(buf[0]);
+
+	Utilities::PrintDebugLine(_playerNum);
+
+	while (!start) {
+		if (GetAsyncKeyState('F') & 0x8000) start = true;
+	}
+
+	Utilities::PrintDebugLine(L"Does this actually work");
+
+	_inputLoop = std::thread(GetFromServer, message, buf, s, slen, si_other);
+
+
+}
+
+void LBDGame::GetFromServer(char* message, char* buf, SOCKET s, int slen, sockaddr_in si_other) {
+	while (1) {
+		
+	}
+	closesocket(s);
+	WSACleanup();
+}
+
+int LBDGame::ParseInt(char c) {
+	return c - '0';
 }

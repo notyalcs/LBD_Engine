@@ -77,3 +77,26 @@ void Physics::Reflect(XMFLOAT3 normal)
 	_lm.state.Recalculate();
 	XMStoreFloat3(&_lm.state.position, XMLoadFloat3(&_lm.state.position) + (XMLoadFloat3(&_lm.state.velocity) * GameTime::GetDeltaTime()));
 }
+
+void Physics::SetVelocity(XMFLOAT3&& velocity)
+{
+	XMStoreFloat3(&_lm.derivative.velocity, XMLoadFloat3(&velocity));
+	XMStoreFloat3(&_lm.state.momentum, XMLoadFloat3(&velocity) * _lm.state.mass);
+	_lm.state.Recalculate();
+	// using GameTime::GetDeltaTime() is possibly a bug here, as this isn't actually when this object is being updated.
+	XMStoreFloat3(&_lm.derivative.force, XMLoadFloat3(&_lm.state.momentum) * GameTime::GetDeltaTime());
+}
+
+void Physics::SetVelocityNotY(XMFLOAT3&& velocity)
+{
+
+	_lm.derivative.velocity.x = velocity.x;
+	_lm.derivative.velocity.z = velocity.z;
+	_lm.state.momentum.x = velocity.x * _lm.state.mass;
+	_lm.state.momentum.z = velocity.z * _lm.state.mass;
+	
+	_lm.state.Recalculate();
+	// using GameTime::GetDeltaTime() is possibly a bug here, as this isn't actually when this object is being updated.
+	_lm.derivative.force.x = _lm.state.momentum.x * GameTime::GetDeltaTime();
+	_lm.derivative.force.z = _lm.state.momentum.z * GameTime::GetDeltaTime();
+}

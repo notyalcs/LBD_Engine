@@ -31,6 +31,8 @@ public:
 	void SetMass(float mass) { _lm.state.mass = mass; _lm.state.inverseMass = 1.0f / mass; }
 	void CollideWith(GameObject& other);
 	XMFLOAT3 GetVelocity() { return _lm.state.velocity; }
+	void SetVelocity(XMFLOAT3&& velocity);
+	void SetVelocityNotY(XMFLOAT3&& velocity);
 	void SetGravity(bool gravity) { _gravity = gravity; }
 	
 	/*

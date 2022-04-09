@@ -8,7 +8,7 @@ void LBDGame::StartGame()
 
 void LBDGame::CreatePlayer()
 {
-	_player = CreateDynamicMeshObject("shape", "sphere", "stone", 3.0f, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 2.0f, -10.0f), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
+	_player = CreateDynamicMeshObject("shape", "sphere", "stone", 3.0f, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 2.0f, 0.0f), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
 	_player->AddBehaviour<Controller>();
 	_player->AddBehaviour<Player>();
 	_player->GetBehaviour<Physics>()->SetElasticity(0.0f);
@@ -19,13 +19,11 @@ void LBDGame::CreatePlayer()
 */
 void LBDGame::BuildRenderItems()
 {
-
-	CreateDynamicMeshObject("shape", "box", "stone", 30.0f, XMMatrixScaling(1.0f, 3.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 24.0f, 6.0f), XMMatrixScaling(1.0f, 3.0f, 1.0f));
+	/*CreateDynamicMeshObject("shape", "box", "stone", 30.0f, XMMatrixScaling(1.0f, 3.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 24.0f, 6.0f), XMMatrixScaling(1.0f, 3.0f, 1.0f));
 
 	CreateDynamicMeshObject("shape", "box", "crate", 10.0f, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 1.0f, 0.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
 
 	CreateDynamicMeshObject("shape", "custom", "chair", 5.0f, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 1.0f, -5.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
-
 
 	CreateDynamicMeshObject("shape", "box", "crate", 1.0f, XMMatrixScaling(2.0f, 2.0f, 2.0f), XMMatrixRotationRollPitchYaw(1.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 6.0f, 0.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
 	CreateMeshObject("shape", "grid", "tile", XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 0.0f, 0.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
@@ -36,7 +34,38 @@ void LBDGame::BuildRenderItems()
 		CreateMeshObject("shape", "cylinder", "brick", XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(5.0f, 1.5f, -10.0f + i * 5.0f), brickTexTransform);
 		CreateMeshObject("shape", "sphere", "stone", XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(-5.0f, 3.5f, -10.0f + i * 5.0f), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
 		CreateDynamicMeshObject("shape", "sphere", "stone", 0.5f, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(5.0f, 20.5f, -10.0f + i * 5.0f), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
-	}
+	}*/
+
+	// Starting platform.
+	CreateMeshObject("shape", "grid", "tile", XMMatrixScaling(0.5f, 1.0f, 0.35f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 0.0f, 0.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
+	
+	// Small corridor leading to challenge area 1.
+	CreateMeshObject("shape", "grid", "tile", XMMatrixScaling(0.2f, 1.0f, 0.4f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 0.0f, 11.25f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
+
+	// -- CHALLENGE AREA 1 --
+	auto offsetZ1 = 47.25f;
+	// Floor
+	CreateMeshObject("shape", "grid", "tile", XMMatrixScaling(1.0f, 1.0f, 2.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 0.0f, offsetZ1), XMMatrixScaling(1.0f, 1.0f, 1.0f));
+	// Obstacles
+	CreateMeshObject("shape", "box", "brick", XMMatrixScaling(15.0f, 1.0f, 3.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(-2.5f, 0.5f, offsetZ1 - 20.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
+	CreateMeshObject("shape", "box", "brick", XMMatrixScaling(15.0f, 1.0f, 3.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(2.5f, 0.5f, offsetZ1 - 10.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
+	CreateMeshObject("shape", "box", "brick", XMMatrixScaling(15.0f, 1.0f, 3.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(-2.5f, 0.5f, offsetZ1), XMMatrixScaling(1.0f, 1.0f, 1.0f));
+	// Staircase leading to second challenge area.
+	CreateMeshObject("shape", "box", "brick", XMMatrixScaling(5.0f, 1.0f, 5.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(1.75f, 2.0f, offsetZ1 + 7.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
+	CreateMeshObject("shape", "box", "brick", XMMatrixScaling(5.0f, 1.0f, 5.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(-1.75f, 4.0f, offsetZ1 + 17.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
+	CreateMeshObject("shape", "box", "brick", XMMatrixScaling(5.0f, 1.0f, 5.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(2.0f, 7.0f, offsetZ1 + 27.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
+
+	// Small corridor leading to challenge area 2.
+	CreateMeshObject("shape", "grid", "tile", XMMatrixScaling(0.2f, 1.0f, 0.4f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 0.0f, offsetZ1 + 36.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
+
+	// -- CHALLENGE AREA 2 --
+	auto offsetZ2 = 120.0f;
+	// Floor
+	CreateMeshObject("shape", "grid", "tile", XMMatrixScaling(2.0f, 1.0f, 2.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 0.0f, offsetZ2), XMMatrixScaling(1.0f, 1.0f, 1.0f));
+	// Walls
+	CreateMeshObject("shape", "box", "brick", XMMatrixScaling(30.0f, 7.0f, 2.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 2.0f, offsetZ2 - 20.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
+
+
 }
 
 GameObject* LBDGame::CreateMeshObject(std::string meshGeometryName, std::string submeshGeometryName, std::string materialName, XMMATRIX scale, XMMATRIX rotation, XMMATRIX translation, XMMATRIX textureTransform)

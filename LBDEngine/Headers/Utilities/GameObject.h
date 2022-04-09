@@ -15,6 +15,13 @@ public:
 	//Called each frame.
 	void Update();
 
+	/// <summary>
+	/// Fixed time step.
+	/// Unlike Update, which is called once per frame, this is called at a consistent rate regardless of framerate.
+	/// Mainly used for physics updates.
+	/// </summary>
+	void FixedUpdate();
+
 	template<typename T>
 	T* GetBehaviour()
 	{

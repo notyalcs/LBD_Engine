@@ -24,6 +24,7 @@ public:
 	bool Initialize() override;
 
 private:
+	float _deltaAccumulator{ 0.0f };
 	std::vector<std::unique_ptr<FrameResource>> _frameResources;
 	FrameResource* _currentFrameResource = nullptr;
 	int _currentFrameResourceIndex = 0;
@@ -43,6 +44,7 @@ private:
 	void UpdateObjectCBs();
 	void UpdateMaterialBuffer();
 	void UpdateMainPassCB();
+	void HandleFixedUpdate();
 
 	void LoadRenderData();
 	void InitializeRootSignature();

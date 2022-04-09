@@ -54,6 +54,9 @@ void Game::Update()
 	{
 		gameObject->Update();
 	}
+	
+	HandleFixedUpdate();
+
 	GameCameras::GetMainCamera()->UpdateViewMatrix();
 
 	// Cycle through the circular frame resource array.
@@ -237,6 +240,22 @@ void Game::UpdateMainPassCB()
 
 	auto currPassCB = _currentFrameResource->PassCB.get();
 	currPassCB->CopyData(0, _mainPassCB);
+}
+
+void Game::HandleFixedUpdate()
+{
+	_deltaAccumulator += GameTime::GetDeltaTime();
+
+	int fixedUpdates = static_cast<int>(_deltaAccumulator / FIXED_DELTA_TIME);
+	_deltaAccumulator -= fixedUpdates * FIXED_DELTA_TIME;
+
+	for (auto i{ 0 }; i < fixedUpdates; ++i)
+	{
+		for (auto& gameObject : GameState::GetGameObjects())
+		{
+			gameObject->FixedUpdate();
+		}
+	}
 }
 
 void Game::LoadRenderData()

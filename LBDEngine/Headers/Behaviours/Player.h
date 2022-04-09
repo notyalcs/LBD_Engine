@@ -13,7 +13,11 @@ public:
 	void Update() override;
 	void IsOnFloor();
 	bool GetFloored() { return _floored; }
+
 private:
+	const float JumpHeight{ 0.015f };
+	const float MovementSpeed{ 7.0f };
+
 	Controller* _controller;
 	bool _floored;
 };

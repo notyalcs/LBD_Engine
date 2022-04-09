@@ -31,7 +31,7 @@ void Player::Update()
 	if (_controller->GetKey(VK_SPACE))
 	{
 		if (GetGameObject()->GetBehaviour<Physics>()->GetVelocity().y == 0.0f) {
-			physics->SetVelocity({ 0.0f, 0.035f, 0.0f });
+			physics->SetVelocity({ 0.0f, JumpHeight, 0.0f });
 		}
 	}
 
@@ -42,35 +42,35 @@ void Player::Update()
 		
 		if (_controller->GetKey('W') && _controller->GetKey('A'))
 		{
-			physics->SetVelocityNotY({ (-1 * cameraRight.x + cameraLook.x) * GameTime::GetDeltaTime(), 0.0f, (-1 * cameraRight.z + cameraLook.z) * GameTime::GetDeltaTime() });
+			physics->SetVelocityNotY({ (-1 * cameraRight.x + cameraLook.x) * GameTime::GetDeltaTime() * MovementSpeed, 0.0f, (-1 * cameraRight.z + cameraLook.z) * GameTime::GetDeltaTime() * MovementSpeed });
 		}
 		else if (_controller->GetKey('W') && _controller->GetKey('D'))
 		{
-			physics->SetVelocityNotY({ (cameraRight.x + cameraLook.x) * GameTime::GetDeltaTime(), 0.0f, (cameraRight.z + cameraLook.z) * GameTime::GetDeltaTime() });
+			physics->SetVelocityNotY({ (cameraRight.x + cameraLook.x) * GameTime::GetDeltaTime() * MovementSpeed, 0.0f, (cameraRight.z + cameraLook.z) * GameTime::GetDeltaTime() * MovementSpeed });
 		}
 		else if (_controller->GetKey('S') && _controller->GetKey('A'))
 		{
-			physics->SetVelocityNotY({ -1 * (cameraRight.x + cameraLook.x) * GameTime::GetDeltaTime(), 0.0f, (-1 * cameraRight.z + cameraLook.z) * GameTime::GetDeltaTime() });
+			physics->SetVelocityNotY({ -1 * (cameraRight.x + cameraLook.x) * GameTime::GetDeltaTime() * MovementSpeed, 0.0f, (-1 * cameraRight.z + cameraLook.z) * GameTime::GetDeltaTime() * MovementSpeed });
 		}
 		else if (_controller->GetKey('S') && _controller->GetKey('D'))
 		{
-			physics->SetVelocityNotY({ (cameraRight.x + -1 * cameraLook.x) * GameTime::GetDeltaTime(), 0.0f, (cameraRight.z + -1 * cameraLook.z) * GameTime::GetDeltaTime() });
+			physics->SetVelocityNotY({ (cameraRight.x + -1 * cameraLook.x) * GameTime::GetDeltaTime() * MovementSpeed, 0.0f, (cameraRight.z + -1 * cameraLook.z) * GameTime::GetDeltaTime() * MovementSpeed });
 		}
 		else if (_controller->GetKey('W'))
 		{
-			physics->SetVelocityNotY({ cameraLook.x * GameTime::GetDeltaTime(), 0.0f, cameraLook.z * GameTime::GetDeltaTime() });
+			physics->SetVelocityNotY({ cameraLook.x * GameTime::GetDeltaTime() * MovementSpeed, 0.0f, cameraLook.z * GameTime::GetDeltaTime() * MovementSpeed });
 		}
 		else if (_controller->GetKey('S'))
 		{
-			physics->SetVelocityNotY({ -1 * cameraLook.x * GameTime::GetDeltaTime(), 0.0f, -1 * cameraLook.z * GameTime::GetDeltaTime() });
+			physics->SetVelocityNotY({ -1 * cameraLook.x * GameTime::GetDeltaTime() * MovementSpeed, 0.0f, -1 * cameraLook.z * GameTime::GetDeltaTime() * MovementSpeed });
 		}
 		else if (_controller->GetKey('A'))
 		{
-			physics->SetVelocityNotY({ -1 * cameraRight.x * GameTime::GetDeltaTime(), 0.0f, -1 * cameraRight.z * GameTime::GetDeltaTime() });
+			physics->SetVelocityNotY({ -1 * cameraRight.x * GameTime::GetDeltaTime() * MovementSpeed, 0.0f, -1 * cameraRight.z * GameTime::GetDeltaTime() * MovementSpeed });
 		}
 		else if (_controller->GetKey('D'))
 		{
-			physics->SetVelocityNotY({ cameraRight.x * GameTime::GetDeltaTime(), 0.0f, cameraRight.z * GameTime::GetDeltaTime() });
+			physics->SetVelocityNotY({ cameraRight.x * GameTime::GetDeltaTime() * MovementSpeed, 0.0f, cameraRight.z * GameTime::GetDeltaTime() * MovementSpeed });
 		}
 
 		mainCamera->SetPosition({ body._41, body._42, body._43 });

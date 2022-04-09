@@ -73,7 +73,7 @@ void Player::Update()
 			physics->SetVelocityNotY({ cameraRight.x * GameTime::GetDeltaTime(), 0.0f, cameraRight.z * GameTime::GetDeltaTime() });
 		}
 
-		mainCamera->SetPosition({ body._41, body._42, body._43 });
+		mainCamera->UpdateOrbit(body, 5.0f);
 	}
 	else
 	{

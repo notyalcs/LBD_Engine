@@ -2,7 +2,7 @@
 
 
 // Defines how many nodes we can fit into our grid world size
-void MyGrid::Start()
+void MyGrid::Commence()
 {
     nodeDiameter = nodeRadius * 2;
     gridSizeX = round(gridWorldSize.x / nodeDiameter);
@@ -12,7 +12,8 @@ void MyGrid::Start()
 }
 
 bool MyGrid::CheckCollision(Vector3 worldPoint) {
-    bool isWalkable = true;
+    bool walkable = false;
+
     float left = worldPoint.x - enemyRadiusX;
     float right = worldPoint.x + enemyRadiusX;
     float top = worldPoint.y + enemyRadiusY;
@@ -27,18 +28,30 @@ bool MyGrid::CheckCollision(Vector3 worldPoint) {
         int locationBottom = locations[i].y - sizes[i].y;
         int locationBack = locations[i].z + sizes[i].z;
         int locationFront = locations[i].z - sizes[i].z;
+
+
         if (((locationLeft >= left && locationLeft <= right) || (locationRight >= left && locationRight <= right)) &&
             ((locationBottom >= bottom && locationBottom <= top) || (locationTop >= bottom && locationTop <= top)) &&
             ((locationFront >= front && locationFront <= back) || (locationBack >= front && locationBack <= back))) {
-            isWalkable = false;
+            return false;
         }
         if (((left >= locationLeft && left <= locationRight) || (right >= locationLeft && right <= locationRight)) &&
             ((bottom >= locationBottom && bottom <= locationTop) || (top >= locationBottom && top <= locationTop)) &&
             ((front >= locationFront && front <= locationBack) || (back >= locationFront && back <= locationBack))) {
-            isWalkable = false;
+            return false;
         }
+
+
+        if (locationTop == locationBottom) {
+            if (worldPoint.x >= locationLeft && worldPoint.x <= locationRight &&
+                worldPoint.z >= locationFront && worldPoint.z <= locationBack) {
+                walkable = true;
+            }
+        }
+
     }
-    return isWalkable;
+
+    return walkable;
 }
 
 void MyGrid::CreateGrid()

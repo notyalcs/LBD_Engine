@@ -11,9 +11,9 @@ public:
     //  Anything with a mask that defines where it can't walk
     //LayerMask unwalkableMask;
     //Size the grid will cover 30x30
-    Vector2 gridWorldSize{ 30, 30 };
+    Vector2 gridWorldSize{ 250, 500 };
     // How much space each node covers
-    float nodeRadius = 0.1;
+    float nodeRadius = 0.5;
     std::vector< std::vector<Node> > grid;
 
     float nodeDiameter;
@@ -27,9 +27,11 @@ public:
     float enemyRadiusY;
     float enemyRadiusZ;
 
+    Vector3 currentLocation;
+
 
     // Defines how many nodes we can fit into our grid world size
-    void Start();
+    void Commence();
 
     bool CheckCollision(Vector3 worldPoint);
 

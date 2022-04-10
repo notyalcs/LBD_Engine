@@ -4,6 +4,7 @@
 #include "../Behaviours/Player.h"
 #include "../Behaviours/Physics.h"
 #include "../Behaviours/Platform.h"
+#include "../Behaviours/EnemyAI.h"
 
 class LBDGame
 {
@@ -16,6 +17,7 @@ private:
 
 	void BuildRenderItems();
 	void CreatePlayer();
+	void CreateEnemy();
 
 	GameObject* CreateMeshObject(std::string meshGeometryName, std::string submeshGeometryName, std::string materialName, XMMATRIX scale, XMMATRIX rotation, XMMATRIX translation, XMMATRIX textureTransform);
 	GameObject* CreateDynamicMeshObject(std::string meshGeometryName, std::string submeshGeometryName, std::string materialName, float mass, XMMATRIX scale, XMMATRIX rotation, XMMATRIX translation, XMMATRIX textureTransform);

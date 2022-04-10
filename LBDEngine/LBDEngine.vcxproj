@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Headers\Behaviours\EnemyAI.h" />
     <ClInclude Include="Headers\Main\GameState.h" />
     <ClInclude Include="Headers\Behaviours\AngularMotion.h" />
     <ClInclude Include="Headers\Behaviours\Behaviour.h" />

@@ -1,10 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <ClCompile Include="Source\Behaviours\Platform.cpp" />
+    <ClCompile Include="Source\Main\GameState.cpp" />
+    <ClCompile Include="Source\Main\LBDGame.cpp" />
     <ClCompile Include="Source\Behaviours\Camera.cpp" />
     <ClCompile Include="Source\Behaviours\Collider.cpp" />
     <ClCompile Include="Source\Behaviours\Controller.cpp" />
     <ClCompile Include="Source\Behaviours\Mesh.cpp" />
+    <ClCompile Include="Source\Behaviours\Pathfinding.cpp" />
     <ClCompile Include="Source\Behaviours\Physics.cpp" />
     <ClCompile Include="Source\Behaviours\PhysicsBody.cpp" />
     <ClCompile Include="Source\Behaviours\Player.cpp" />
@@ -17,151 +21,45 @@
     <ClCompile Include="Source\Utilities\GameObject.cpp" />
     <ClCompile Include="Source\Utilities\GameTime.cpp" />
     <ClCompile Include="Source\Utilities\GeometryGenerator.cpp" />
+    <ClCompile Include="Source\Utilities\MyGrid.cpp" />
     <ClCompile Include="Source\Utilities\Render.cpp" />
     <ClCompile Include="Source\Utilities\Triggers\Goal.cpp" />
     <ClCompile Include="Source\Utilities\WavefrontReader.cpp" />
-    <ClCompile Include="Source\Main\LBDGame.cpp" />
-    <ClCompile Include="Source\Main\GameState.cpp" />
-    <ClCompile Include="Source\Behaviours\Platform.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Headers\Utilities\Utilities.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Utilities\Constants.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Utilities\FrameResource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Utilities\GameCameras.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Utilities\GameObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Utilities\GameTime.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Utilities\GeometryGenerator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Utilities\MathHelper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Utilities\Render.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Utilities\UploadBuffer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Main\Game.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Main\Application.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Behaviours\Player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Behaviours\PhysicsBody.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Behaviours\Physics.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Behaviours\Mesh.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Behaviours\Controller.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Behaviours\Collider.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Behaviours\Camera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Behaviours\Behaviour.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Utilities\DDSTextureLoader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Utilities\d3dx12.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Utilities\WavefrontReader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Behaviours\AngularMotion.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Behaviours\LinearMotion.h">
-    <ClInclude Include="Headers\Utilities\Trigger.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\Utilities\Triggers\Goal.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Source\Utilities\Render.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Utilities\FrameResource.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Utilities\GameCameras.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Utilities\GameObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Utilities\GameTime.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Utilities\GeometryGenerator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Main\Source.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Main\Game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Main\Application.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Behaviours\Player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Behaviours\PhysicsBody.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Behaviours\Physics.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Behaviours\Controller.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Behaviours\Mesh.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Behaviours\Collider.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Behaviours\Camera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Utilities\DDSTextureLoader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Utilities\WavefrontReader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Utilities\Triggers\Goal.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <ClInclude Include="Headers\Main\GameState.h" />
+    <ClInclude Include="Headers\Behaviours\AngularMotion.h" />
+    <ClInclude Include="Headers\Behaviours\Behaviour.h" />
+    <ClInclude Include="Headers\Behaviours\Camera.h" />
+    <ClInclude Include="Headers\Behaviours\Collider.h" />
+    <ClInclude Include="Headers\Behaviours\Controller.h" />
+    <ClInclude Include="Headers\Behaviours\LinearMotion.h" />
+    <ClInclude Include="Headers\Behaviours\Mesh.h" />
+    <ClInclude Include="Headers\Utilities\MyGrid.h" />
+    <ClInclude Include="Headers\Behaviours\Pathfinding.h" />
+    <ClInclude Include="Headers\Behaviours\Physics.h" />
+    <ClInclude Include="Headers\Behaviours\PhysicsBody.h" />
+    <ClInclude Include="Headers\Behaviours\Player.h" />
+    <ClInclude Include="Headers\Main\Application.h" />
+    <ClInclude Include="Headers\Main\Game.h" />
+    <ClInclude Include="Headers\Utilities\Constants.h" />
+    <ClInclude Include="Headers\Utilities\d3dx12.h" />
+    <ClInclude Include="Headers\Utilities\DDSTextureLoader.h" />
+    <ClInclude Include="Headers\Utilities\FrameResource.h" />
+    <ClInclude Include="Headers\Utilities\GameCameras.h" />
+    <ClInclude Include="Headers\Utilities\GameObject.h" />
+    <ClInclude Include="Headers\Utilities\GameTime.h" />
+    <ClInclude Include="Headers\Utilities\GeometryGenerator.h" />
+    <ClInclude Include="Headers\Utilities\MathHelper.h" />
+    <ClInclude Include="Headers\Utilities\Node.h" />
+    <ClInclude Include="Headers\Utilities\Render.h" />
+    <ClInclude Include="Headers\Utilities\Trigger.h" />
+    <ClInclude Include="Headers\Utilities\Triggers\Goal.h" />
+    <ClInclude Include="Headers\Utilities\UploadBuffer.h" />
+    <ClInclude Include="Headers\Utilities\Utilities.h" />
+    <ClInclude Include="Headers\Utilities\WavefrontReader.h" />
+    <ClInclude Include="Headers\Main\LBDGame.h" />
+    <ClInclude Include="Headers\Behaviours\Platform.h" />
+    <ClInclude Include="Headers\Behaviours\EnemyAI.h" />
   </ItemGroup>
 </Project>

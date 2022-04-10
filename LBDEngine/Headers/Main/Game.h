@@ -3,9 +3,6 @@
 #include "Application.h"
 #include "../Utilities/FrameResource.h"
 
-#include "../Behaviours/Pathfinding.h"
-#include "../Utilities/MyGrid.h"
-#include "../Utilities/Node.h"
 #include "../Utilities/GeometryGenerator.h"
 #include "../Utilities/GameObject.h"
 #include "../Utilities/WavefrontReader.h"
@@ -49,7 +46,6 @@ private:
 	void UpdateMaterialBuffer();
 	void UpdateMainPassCB();
 	void HandleFixedUpdate();
-	void UpdateAI();
 
 	void LoadRenderData();
 	void InitializeRootSignature();
@@ -58,7 +54,6 @@ private:
 	void BuildShapeGeometry();
 	void AddPSOs();
 	void BuildFrameResources();
-	void CreateEnemy();
 	
 	void DrawRenderItems(ID3D12GraphicsCommandList* cmdList, const std::vector<Mesh*>& ritems);
 

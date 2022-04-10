@@ -16,7 +16,6 @@ bool Game::Initialize()
 
 	LBDGame game;
 	game.StartGame();
-	CreateEnemy();
 
 	BuildFrameResources();
 	AddPSOs();
@@ -76,7 +75,6 @@ void Game::Update()
 	UpdateObjectCBs();
 	UpdateMaterialBuffer();
 	UpdateMainPassCB();
-	UpdateAI();
 }
 
 void Game::Draw()
@@ -149,87 +147,6 @@ void Game::Draw()
 	// Because we are on the GPU timeline, the new fence point won't be 
 	// set until the GPU finishes processing all the commands prior to this Signal().
 	_commandQueue->Signal(_fence.Get(), _currentFence);
-}
-
-std::vector<Node> pathToGoal;
-Node* nextNode;
-GameObject* _enemy;
-float aiTime = GameTime::GetTotalTime();
-void Game::CreateEnemy()
-{
-	_enemy = CreateDynamicMeshObject("shape", "sphere", "stone", 3.0f, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 0.5f, 10.0f), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
-	GameObject* _flag = CreateDynamicMeshObject("shape", "sphere", "stone", 3.0f, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 0.5f, -12.5f), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
-
-	MyGrid myGrid{};
-	auto behaviours = Game::GetBehavioursOfType<Collider>();
-	for (auto behaviour : behaviours) {
-		if (behaviour->GetGameObject() == _enemy) {
-			myGrid.enemyRadiusX = behaviour->GetBoundingBox().Extents.x;
-			myGrid.enemyRadiusY = behaviour->GetBoundingBox().Extents.y;
-			myGrid.enemyRadiusZ = behaviour->GetBoundingBox().Extents.z;
-			continue;
-		}
-		if (behaviour->GetGameObject() == _flag) {
-			continue;
-		}
-		XMFLOAT3 location = behaviour->GetBoundingBox().Center;
-		myGrid.locations.push_back(Vector3{ location.x, location.y, location.z });
-		XMFLOAT3 size = behaviour->GetBoundingBox().Extents;
-		myGrid.sizes.push_back(Vector3{ size.x, size.y, size.z });
-	}
-
-	myGrid.Start();
-
-	Pathfinding path{};
-	path.grid = myGrid;
-	path.FindPath(Vector3{ _enemy->GetTranslation()._41,_enemy->GetTranslation()._42,_enemy->GetTranslation()._43 },
-		Vector3{ _flag->GetTranslation()._41, _flag->GetTranslation()._42, _flag->GetTranslation()._43 });
-
-	pathToGoal = path.pathToGoal;
-	nextNode = &pathToGoal[0];
-
-	/*std::vector<GameObject*> enemies;
-	for (Node &obj : pathToGoal) {
-		enemies.push_back(CreateDynamicMeshObject("shape", "sphere", "stone", 3.0f, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(obj.worldPosition.x, obj.worldPosition.y, obj.worldPosition.z), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4())));
-	}*/
-
-}
-void Game::UpdateAI() {
-	float range = 1.0;
-	float directionalForce = 0.000002f;
-	float upwardForce = 0.0000148f;
-
-	if (GameTime::GetTotalTime() - aiTime > 0.05) {
-		aiTime = GameTime::GetTotalTime();
-	}
-	else {
-		return;
-	}
-
-	//if (Vector3(_enemy->GetTranslation()._41, _enemy->GetTranslation()._42, _enemy->GetTranslation()._43)
-	//< Vector3(nextNode->worldPosition.x + range, nextNode->worldPosition.y + range, nextNode->worldPosition.z + range) &&
-	//Vector3(nextNode->worldPosition.x - range, nextNode->worldPosition.y - range, nextNode->worldPosition.z - range)
-	//< Vector3(_enemy->GetTranslation()._41, _enemy->GetTranslation()._42, _enemy->GetTranslation()._43)) {
-	//	
-	//	nextNode++;
-	//}
-	//else {
-	//	Vector3 direction{ nextNode->worldPosition.x - _enemy->GetTranslation()._41,
-	//		nextNode->worldPosition.y - _enemy->GetTranslation()._42 , nextNode->worldPosition.z - _enemy->GetTranslation()._43 };
-	//	Node* endNode = &pathToGoal[pathToGoal.size() - 1];
-	//	if (nextNode > endNode)
-	//		return;
-	//	_enemy->GetBehaviour<PhysicsBody>()->AddForce(XMFLOAT3(direction.x * directionalForce, upwardForce, direction.z * directionalForce));
-	//}
-
-	XMMATRIX position{ 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, nextNode->worldPosition.x, 0.5f, nextNode->worldPosition.z, 1.0f };
-	Node* endNode = &pathToGoal[pathToGoal.size() - 1];
-	if (nextNode > endNode)
-		return;
-	_enemy->SetTranslation(position);
-	_enemy->GetBehaviour<Mesh>()->SetDirtyFrames(3);
-	nextNode++;
-
 }
 
 void Game::UpdateObjectCBs()

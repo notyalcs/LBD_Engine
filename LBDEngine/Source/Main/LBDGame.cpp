@@ -3,6 +3,7 @@
 void LBDGame::StartGame()
 {
 	CreatePlayer();
+	CreateEnemy();
 	BuildRenderItems();
 }
 
@@ -12,6 +13,15 @@ void LBDGame::CreatePlayer()
 	_player->AddBehaviour<Controller>();
 	_player->AddBehaviour<Player>();
 	_player->GetBehaviour<Physics>()->SetElasticity(0.0f);
+}
+
+void LBDGame::CreateEnemy()
+{
+	GameObject* _enemy = CreateDynamicMeshObject("shape", "sphere", "stone", 3.0f, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(2.5f, 0.5f, 0.0f), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
+	GameObject* _flag = CreateDynamicMeshObject("shape", "sphere", "stone", 3.0f, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 0.5f, 225.0f), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
+	//_flag->GetBehaviour<Physics>()->SetGravity(false);
+	//_enemy->GetBehaviour<Physics>()->SetGravity(false);
+	static_cast<EnemyAI*>(_enemy->AddBehaviour<EnemyAI>())->_flag = _flag;
 }
 
 /*

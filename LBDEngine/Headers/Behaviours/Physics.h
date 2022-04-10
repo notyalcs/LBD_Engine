@@ -9,7 +9,6 @@
 class Physics : public Behaviour
 {
 private:
-	static constexpr float GRAVITY_ADJUST{ 0.0000005f };
 	LinearMotion _lm{ 1.0f };
 	AngularMotion _am{};
 	bool _gravity{ true };
@@ -32,8 +31,10 @@ public:
 	void SetMass(float mass) { _lm.state.mass = mass; _lm.state.inverseMass = 1.0f / mass; }
 	void CollideWith(GameObject& other);
 	XMFLOAT3 GetVelocity() { return _lm.state.velocity; }
+	void SetVelocity(XMFLOAT3&& velocity);
+	void SetVelocityNotY(XMFLOAT3&& velocity);
 	void SetGravity(bool gravity) { _gravity = gravity; }
-
+	
 	/*
 	 * Set a hardness value between [0, 1]
 	 * An elasticity of 0 (fully inelastic) means that the object loses all energy upon collision with another.

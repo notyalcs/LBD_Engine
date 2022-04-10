@@ -53,6 +53,9 @@ public:
 	// After modifying camera position/orientation, call to rebuild the view matrix.
 	void UpdateViewMatrix();
 
+	// Update the camera location along the orbit each frame.
+	void UpdateOrbit(XMFLOAT4X4 focus, float distance);
+
 private:
 	// Camera coordinate system with coordinates relative to world space.
 	XMFLOAT3 _position = { 0.0f, 0.0f, 0.0f };

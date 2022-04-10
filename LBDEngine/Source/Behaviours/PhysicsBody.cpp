@@ -15,21 +15,20 @@ void PhysicsBody::Update()
 	XMStoreFloat4x4(&translationPostForce, XMLoadFloat4x4(&GetGameObject()->GetTranslation()) * XMMatrixTranslation(velocity.x, velocity.y, velocity.z));
 	boxCast.Center = { translationPostForce._41, translationPostForce._42, translationPostForce._43 };
 	bool isColliding{ false };
-	for (auto& other : Game::GetBehavioursOfType<Collider>()) {
+	for (auto& other : GameState::GetBehavioursOfType<Collider>()) {
 		if (_collider != other && boxCast.Intersects(other->GetBoundingBox())) {
 			if (other->GetIsTrigger()) {
 				other->FireTrigger(GetGameObject());
 			}
 			else
 			{
-        _physics->CollideWith(*other->GetGameObject());
+				_physics->CollideWith(*other->GetGameObject());
 				isColliding = true;
 			}
 		}
 	}
 	if (!isColliding) {
 		GetGameObject()->SetTranslation(XMLoadFloat4x4(&translationPostForce));
-		_mesh->SetDirtyFrames(NUMBER_OF_FRAME_RESOURCES);
 	}
 }
 

@@ -55,6 +55,25 @@ public:
         }
     }
 
+	template<typename T>
+	static int Sign(T value)
+	{
+		return (T{ 0 } < value) - (value < T{ 0 });
+	}
+
+	static XMMATRIX MoveTowards(XMFLOAT4X4 current, XMFLOAT4X4 target, float deltaPosition)
+	{
+		auto difference{ XMFLOAT3{ target._41 - current._41, target._42 - current._42, target._43 - current._43 } };
+		auto movement{ XMFLOAT3 {
+			std::fabs(difference.x) > deltaPosition ? Sign(difference.x) * deltaPosition : difference.x,
+			std::fabs(difference.y) > deltaPosition ? Sign(difference.y) * deltaPosition : difference.y,
+			std::fabs(difference.z) > deltaPosition ? Sign(difference.z) * deltaPosition : difference.z
+			}
+		};
+
+		return XMMatrixTranslationFromVector(XMLoadFloat3(&movement));
+	}
+
 	static UINT CalcConstantBufferByteSize(UINT byteSize)
 	{
 		// Constant buffers must be a multiple of the minimum hardware

@@ -13,6 +13,8 @@ public:
 	//Called each frame
 	virtual void Update() {}
 
+	virtual void FixedUpdate() {}
+
 	GameObject* GetGameObject()
 	{
 		return _gameObject;

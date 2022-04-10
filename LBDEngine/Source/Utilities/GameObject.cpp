@@ -14,3 +14,11 @@ void GameObject::Update()
 		behaviour->Update();
 	}
 }
+
+void GameObject::FixedUpdate()
+{
+	for (auto& behaviour : _behaviours)
+	{
+		behaviour->FixedUpdate();
+	}
+}

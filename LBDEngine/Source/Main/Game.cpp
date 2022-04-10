@@ -35,7 +35,7 @@ void Game::OnResize()
 {
 	Application::OnResize();
 
-	GameCameras::GetMainCamera()->SetLens(0.25f * XM_PI, GetAspectRatio(), 1.0f, 1000.0f);
+	GameCameras::GetMainCamera()->SetLens(0.25f * XM_PI, GetAspectRatio(), 0.01f, 1000.0f);
 }
 
 void Game::Update()

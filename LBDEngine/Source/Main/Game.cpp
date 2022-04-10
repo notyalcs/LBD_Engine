@@ -15,6 +15,7 @@ bool Game::Initialize()
 	BuildShapeGeometry();
 
 	LBDGame game;
+	InitToServer(game.playerNum);
 	game.StartGame();
 
 	BuildFrameResources();
@@ -405,6 +406,67 @@ void Game::BuildFrameResources()
 	{
 		_frameResources.push_back(std::make_unique<FrameResource>(_device.Get(), 1, static_cast<UINT>(GameState::GetBehavioursOfType<Mesh>().size()), static_cast<UINT>(Render::GetMaterials().size())));
 	}
+}
+
+void Game::InitToServer(int& playerNum) {
+	struct sockaddr_in si_other;
+	SOCKET s;
+	int slen = sizeof(si_other);
+	char buf[BUFLEN];
+	char message[BUFLEN];
+	char init[] = "Init";
+	bool start = false;
+	WSADATA wsa;
+
+	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0) {
+		Utilities::PrintDebugLine(L"WSAStartup fail");
+		exit(EXIT_FAILURE);
+	}
+
+	if ((s = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == SOCKET_ERROR) {
+		Utilities::PrintDebugLine(L"Socket fail");
+		exit(EXIT_FAILURE);
+	}
+
+	memset((char*)&si_other, 0, sizeof(si_other));
+
+	si_other.sin_family = AF_INET;
+	si_other.sin_port = htons(PORT);
+	si_other.sin_addr.S_un.S_addr = inet_addr(SERVER);
+
+	//inet_pton(AF_INET, SERVER, &si_other.sin_addr.S_un.S_addr);
+
+	if (sendto(s, init, strlen(init), 0, (struct sockaddr*)&si_other, slen) == SOCKET_ERROR) {
+		Utilities::PrintDebugLine(L"Send fail");
+		exit(EXIT_FAILURE);
+	}
+
+	memset(buf, '\0', BUFLEN);
+
+	if (recvfrom(s, buf, BUFLEN, 0, (struct sockaddr*)&si_other, &slen) == SOCKET_ERROR) {
+		Utilities::PrintDebugLine(L"Receive fail");
+		exit(EXIT_FAILURE);
+	}
+
+	playerNum = Utilities::ParseInt(buf[0]);
+
+	Utilities::PrintDebugLine(playerNum);
+
+	while (!start) {
+		if (GetAsyncKeyState('F') & 0x8000) start = true;
+	}
+
+	Utilities::PrintDebugLine(L"Does this actually work");
+
+	_inputLoop = std::thread(GetFromServer, message, buf, s, slen, si_other);
+}
+
+void Game::GetFromServer(char* message, char* buf, SOCKET s, int slen, sockaddr_in si_other) {
+	while (1) {
+
+	}
+	closesocket(s);
+	WSACleanup();
 }
 
 void Game::DrawRenderItems(ID3D12GraphicsCommandList* cmdList, const std::vector<Mesh*>& ritems)

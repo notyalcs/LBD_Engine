@@ -55,6 +55,10 @@ public:
         }
     }
 
+	static int ParseInt(char c) {
+		return c - '0';
+	}
+
 	static UINT CalcConstantBufferByteSize(UINT byteSize)
 	{
 		// Constant buffers must be a multiple of the minimum hardware

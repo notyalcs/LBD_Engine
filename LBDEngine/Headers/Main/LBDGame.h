@@ -3,6 +3,7 @@
 #include "../Behaviours/Controller.h"
 #include "../Behaviours/Player.h"
 #include "../Behaviours/Physics.h"
+#include "../Behaviours/Platform.h"
 
 class LBDGame
 {

@@ -33,10 +33,19 @@ void LBDGame::BuildRenderItems()
 	CreateMeshObject("shape", "box", "brick", XMMatrixScaling(15.0f, 1.0f, 3.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(-2.5f, 0.5f, offsetZ1 - 15.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
 	CreateMeshObject("shape", "box", "brick", XMMatrixScaling(15.0f, 1.0f, 3.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(2.5f, 0.5f, offsetZ1 - 5.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
 	CreateMeshObject("shape", "box", "brick", XMMatrixScaling(15.0f, 1.0f, 3.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(-2.5f, 0.5f, offsetZ1 + 5.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
-	// Staircase leading to second challenge area.
-	CreateMeshObject("shape", "box", "brick", XMMatrixScaling(5.0f, 1.0f, 5.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(1.75f, 2.0f, offsetZ1 + 15.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
-	CreateMeshObject("shape", "box", "brick", XMMatrixScaling(5.0f, 1.0f, 5.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(-1.75f, 4.0f, offsetZ1 + 25.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
-	CreateMeshObject("shape", "box", "brick", XMMatrixScaling(5.0f, 1.0f, 5.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(2.0f, 7.0f, offsetZ1 + 35.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
+	// Platforms leading to challenge area 2.
+	auto platform{ CreateMeshObject("shape", "box", "brick", XMMatrixScaling(5.0f, 1.0f, 5.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(-2.0f, 2.0f, offsetZ1 + 15.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f)) };
+	auto platformBehaviour{ platform->AddBehaviour<Platform>() };
+	static_cast<Platform*>(platformBehaviour)->AddMovementPoint({ -2.0f, 2.0f, offsetZ1 + 15.0f });
+	static_cast<Platform*>(platformBehaviour)->AddMovementPoint({ 2.0f, 2.0f, offsetZ1 + 15.0f });
+	platform = CreateMeshObject("shape", "box", "brick", XMMatrixScaling(5.0f, 1.0f, 5.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 4.0f, offsetZ1 + 25.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
+	platformBehaviour = platform->AddBehaviour<Platform>();
+	static_cast<Platform*>(platformBehaviour)->AddMovementPoint({ 2.0f, 4.0f, offsetZ1 + 25.0f });
+	static_cast<Platform*>(platformBehaviour)->AddMovementPoint({ -2.0f, 4.0f, offsetZ1 + 25.0f });
+	platform = CreateMeshObject("shape", "box", "brick", XMMatrixScaling(5.0f, 1.0f, 5.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(2.0f, 7.0f, offsetZ1 + 35.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
+	platformBehaviour = platform->AddBehaviour<Platform>();
+	static_cast<Platform*>(platformBehaviour)->AddMovementPoint({ 2.0f, 7.0f, offsetZ1 + 35.0f });
+	static_cast<Platform*>(platformBehaviour)->AddMovementPoint({ -2.0f, 7.0f, offsetZ1 + 35.0f });
 
 	// Small corridor leading to challenge area 2.
 	CreateMeshObject("shape", "grid", "tile", XMMatrixScaling(0.2f, 1.0f, 0.4f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 0.0f, offsetZ1 + 28.5f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
@@ -64,9 +73,18 @@ void LBDGame::BuildRenderItems()
 	CreateMeshObject("shape", "grid", "tile", XMMatrixScaling(0.2f, 1.0f, 1.7f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(28.0f, 0.0f, offsetZ3), XMMatrixScaling(1.0f, 1.0f, 1.0f));
 	CreateMeshObject("shape", "grid", "tile", XMMatrixScaling(3.0f, 1.0f, 0.15f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 0.0f, offsetZ3 + 27.75f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
 	// Platforms
-	CreateMeshObject("shape", "box", "brick", XMMatrixScaling(5.0f, 1.0f, 5.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, -1.0f, offsetZ3 - 15.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
-	CreateMeshObject("shape", "box", "brick", XMMatrixScaling(5.0f, 1.0f, 5.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, -1.0f, offsetZ3), XMMatrixScaling(1.0f, 1.0f, 1.0f));
-	CreateMeshObject("shape", "box", "brick", XMMatrixScaling(5.0f, 1.0f, 5.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, -1.0f, offsetZ3 + 15.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
+	platform = CreateMeshObject("shape", "box", "brick", XMMatrixScaling(5.0f, 1.0f, 5.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(-12.0f, -1.0f, offsetZ3 - 17.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
+	platformBehaviour = platform->AddBehaviour<Platform>();
+	static_cast<Platform*>(platformBehaviour)->AddMovementPoint({ -12.0f, -1.0f, offsetZ3 - 17.0f });
+	static_cast<Platform*>(platformBehaviour)->AddMovementPoint({ 12.0f, -1.0f, offsetZ3 - 17.0f });
+	platform = CreateMeshObject("shape", "box", "brick", XMMatrixScaling(5.0f, 1.0f, 5.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, -1.0f, offsetZ3 + 5.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
+	platformBehaviour = platform->AddBehaviour<Platform>();
+	static_cast<Platform*>(platformBehaviour)->AddMovementPoint({ 0.0f, -1.0f, offsetZ3 + 5.0f });
+	static_cast<Platform*>(platformBehaviour)->AddMovementPoint({ 0.0f, -1.0f, offsetZ3 - 5.0f });
+	platform = CreateMeshObject("shape", "box", "brick", XMMatrixScaling(5.0f, 1.0f, 5.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(12.0f, -1.0f, offsetZ3 + 17.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
+	platformBehaviour = platform->AddBehaviour<Platform>();
+	static_cast<Platform*>(platformBehaviour)->AddMovementPoint({ 12.0f, -1.0f, offsetZ3 + 17.0f });
+	static_cast<Platform*>(platformBehaviour)->AddMovementPoint({ -12.0f, -1.0f, offsetZ3 + 17.0f });
 
 	// Small corridor leading to the goal.
 	CreateMeshObject("shape", "grid", "tile", XMMatrixScaling(0.2f, 1.0f, 0.4f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 0.0f, offsetZ3 + 36.0f), XMMatrixScaling(1.0f, 1.0f, 1.0f));

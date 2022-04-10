@@ -48,8 +48,10 @@
     <ClInclude Include="Headers\Utilities\Utilities.h" />
     <ClInclude Include="Headers\Utilities\WavefrontReader.h" />
     <ClInclude Include="Headers\Main\LBDGame.h" />
+    <ClInclude Include="Headers\Behaviours\Platform.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Behaviours\Platform.cpp" />
     <ClCompile Include="Source\Main\GameState.cpp" />
     <ClCompile Include="Source\Main\LBDGame.cpp" />
     <ClCompile Include="Source\Behaviours\Camera.cpp" />

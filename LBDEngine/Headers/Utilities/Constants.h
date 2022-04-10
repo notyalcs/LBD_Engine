@@ -22,7 +22,7 @@ constexpr float GRAVITY{ -9.8f };
 constexpr float GRAVITY_ADJUST{ 0.00001f };
 constexpr unsigned int MAXIMUM_SUBDIVISIONS = 5u;
 constexpr bool WIREFRAME_STATE = false;
-constexpr float MAXIMUM_PLAYER_VELOCITY = 0.005f;
+constexpr float MAXIMUM_PLAYER_VELOCITY = 0.05f;
 constexpr bool GOD_MODE{ false };
 constexpr float RISE_MOVEMENT_SPEED{ 7.5f };
 constexpr float FIXED_DELTA_TIME{ 0.02f };

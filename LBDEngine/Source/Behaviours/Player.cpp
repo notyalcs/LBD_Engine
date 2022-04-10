@@ -37,40 +37,69 @@ void Player::Update()
 
 	if (!GOD_MODE)
 	{
-		auto cameraLook = mainCamera->GetLook3f();
-		auto cameraRight = mainCamera->GetRight3f();
+		auto cameraLook = XMVector3Normalize({ mainCamera->GetLook3f().x, 0.0f, mainCamera->GetLook3f().z});
+		float cameraLookX = XMVectorGetX(cameraLook);
+		float cameraLookZ = XMVectorGetZ(cameraLook);
+
+		auto cameraRight = XMVector3Normalize({ mainCamera->GetRight3f().x, 0.0f, mainCamera->GetRight3f().z });
+		float cameraRightX = XMVectorGetX(cameraRight);
+		float cameraRightZ = XMVectorGetZ(cameraRight);
 		
 		if (_controller->GetKey('W') && _controller->GetKey('A'))
 		{
-			physics->SetVelocityNotY({ (-1 * cameraRight.x + cameraLook.x) * GameTime::GetDeltaTime() * MovementSpeed, 0.0f, (-1 * cameraRight.z + cameraLook.z) * GameTime::GetDeltaTime() * MovementSpeed });
+			auto xInput = (-1 * cameraRightX + cameraLookX) * GameTime::GetDeltaTime() * MovementSpeed;
+			auto zInput = (-1 * cameraRightZ + cameraLookZ) * GameTime::GetDeltaTime() * MovementSpeed;
+
+			physics->SetVelocityNotY({ xInput, 0.0f, zInput });
 		}
 		else if (_controller->GetKey('W') && _controller->GetKey('D'))
 		{
-			physics->SetVelocityNotY({ (cameraRight.x + cameraLook.x) * GameTime::GetDeltaTime() * MovementSpeed, 0.0f, (cameraRight.z + cameraLook.z) * GameTime::GetDeltaTime() * MovementSpeed });
+			auto xInput = (cameraRightX + cameraLookX) * GameTime::GetDeltaTime() * MovementSpeed;
+			auto zInput = (cameraRightZ + cameraLookZ) * GameTime::GetDeltaTime() * MovementSpeed;
+
+			physics->SetVelocityNotY({ xInput, 0.0f, zInput });
 		}
 		else if (_controller->GetKey('S') && _controller->GetKey('A'))
 		{
-			physics->SetVelocityNotY({ -1 * (cameraRight.x + cameraLook.x) * GameTime::GetDeltaTime() * MovementSpeed, 0.0f, (-1 * cameraRight.z + cameraLook.z) * GameTime::GetDeltaTime() * MovementSpeed });
+			auto xInput = -1 * (cameraRightX + cameraLookX) * GameTime::GetDeltaTime() * MovementSpeed;
+			auto zInput = -1 * (cameraRightZ + cameraLookZ) * GameTime::GetDeltaTime() * MovementSpeed;
+
+			physics->SetVelocityNotY({ xInput, 0.0f, zInput });
 		}
 		else if (_controller->GetKey('S') && _controller->GetKey('D'))
 		{
-			physics->SetVelocityNotY({ (cameraRight.x + -1 * cameraLook.x) * GameTime::GetDeltaTime() * MovementSpeed, 0.0f, (cameraRight.z + -1 * cameraLook.z) * GameTime::GetDeltaTime() * MovementSpeed });
+			auto xInput = (cameraRightX + -1 * cameraLookX) * GameTime::GetDeltaTime() * MovementSpeed;
+			auto zInput = (cameraRightZ + -1 * cameraLookZ) * GameTime::GetDeltaTime() * MovementSpeed;
+
+			physics->SetVelocityNotY({ xInput , 0.0f, zInput });
 		}
 		else if (_controller->GetKey('W'))
 		{
-			physics->SetVelocityNotY({ cameraLook.x * GameTime::GetDeltaTime() * MovementSpeed, 0.0f, cameraLook.z * GameTime::GetDeltaTime() * MovementSpeed });
+			auto xInput = cameraLookX * GameTime::GetDeltaTime() * MovementSpeed;
+			auto zInput = cameraLookZ * GameTime::GetDeltaTime() * MovementSpeed;
+
+			physics->SetVelocityNotY({ xInput, 0.0f, zInput });
 		}
 		else if (_controller->GetKey('S'))
 		{
-			physics->SetVelocityNotY({ -1 * cameraLook.x * GameTime::GetDeltaTime() * MovementSpeed, 0.0f, -1 * cameraLook.z * GameTime::GetDeltaTime() * MovementSpeed });
+			auto xInput = -1 * cameraLookX * GameTime::GetDeltaTime() * MovementSpeed;
+			auto zInput = -1 * cameraLookZ * GameTime::GetDeltaTime() * MovementSpeed;
+
+			physics->SetVelocityNotY({ xInput, 0.0f, zInput });
 		}
 		else if (_controller->GetKey('A'))
 		{
-			physics->SetVelocityNotY({ -1 * cameraRight.x * GameTime::GetDeltaTime() * MovementSpeed, 0.0f, -1 * cameraRight.z * GameTime::GetDeltaTime() * MovementSpeed });
+			auto xInput = -1 * cameraRightX * GameTime::GetDeltaTime() * MovementSpeed;
+			auto zInput = -1 * cameraRightZ * GameTime::GetDeltaTime() * MovementSpeed;
+
+			physics->SetVelocityNotY({ xInput, 0.0f, zInput });
 		}
 		else if (_controller->GetKey('D'))
 		{
-			physics->SetVelocityNotY({ cameraRight.x * GameTime::GetDeltaTime() * MovementSpeed, 0.0f, cameraRight.z * GameTime::GetDeltaTime() * MovementSpeed });
+			auto xInput = cameraRightX * GameTime::GetDeltaTime() * MovementSpeed;
+			auto zInput = cameraRightZ * GameTime::GetDeltaTime() * MovementSpeed;
+
+			physics->SetVelocityNotY({ xInput, 0.0f, zInput });
 		}
 
 		mainCamera->UpdateOrbit(body, 5.0f);

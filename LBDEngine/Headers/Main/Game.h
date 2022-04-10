@@ -2,6 +2,7 @@
 #include "../Utilities/Utilities.h"
 #include "Application.h"
 #include "../Utilities/FrameResource.h"
+
 #include "../Utilities/GeometryGenerator.h"
 #include "../Utilities/GameObject.h"
 #include "../Utilities/WavefrontReader.h"

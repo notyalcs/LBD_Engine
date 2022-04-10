@@ -47,6 +47,7 @@ public:
 			Vector3{ _flag->GetTranslation()._41, _flag->GetTranslation()._42, _flag->GetTranslation()._43 });
 
 		pathToGoal = path.pathToGoal;
+		if (path.pathToGoal.empty()) return;
 		nextNode = &pathToGoal[0];
 
 		/*std::vector<GameObject*> enemies;
@@ -57,6 +58,8 @@ public:
 	}
 
 	void Update() {
+		if (pathToGoal.empty()) return;
+
 		float movementSpeed = 7.0;
 		float range = 1.0;
 

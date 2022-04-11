@@ -57,8 +57,11 @@ private:
 	static void GetFromServer(char* message, char* buf, SOCKET s, int slen, sockaddr_in si_other);
 	
 	void DrawRenderItems(ID3D12GraphicsCommandList* cmdList, const std::vector<Mesh*>& ritems);
-
 	std::array<const CD3DX12_STATIC_SAMPLER_DESC, 6> GetStaticSamplers();
-	std::thread _inputLoop;
 	
+	static std::string _playerPos;
+
+	int _playerNum;
+	std::thread _inputLoop;
+	std::vector<GameObject*> _players;
 };

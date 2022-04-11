@@ -8,7 +8,7 @@
 class LBDGame
 {
 public:
-	void StartGame();
+	std::vector<GameObject*> StartGame();
 	int playerNum;
 
 private:

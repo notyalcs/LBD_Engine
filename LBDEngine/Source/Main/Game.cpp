@@ -16,7 +16,8 @@ bool Game::Initialize()
 
 	LBDGame game;
 	InitToServer(game.playerNum);
-	game.StartGame();
+	_playerNum = game.playerNum;
+	_players = game.StartGame();
 
 	BuildFrameResources();
 	AddPSOs();
@@ -60,6 +61,9 @@ void Game::Update()
 	// Cycle through the circular frame resource array.
 	_currentFrameResourceIndex = (_currentFrameResourceIndex + 1) % NUMBER_OF_FRAME_RESOURCES;
 	_currentFrameResource = _frameResources.at(_currentFrameResourceIndex).get();
+
+	auto trans = _players.at(_playerNum - 1)->GetTranslation();
+	_playerPos = Utilities::StringifyTranslation(trans, _playerNum);
 
 	// If the GPU is not finished with the current frame resource, wait.
 	if (_currentFrameResource->Fence != 0 && _fence->GetCompletedValue() < _currentFrameResource->Fence)

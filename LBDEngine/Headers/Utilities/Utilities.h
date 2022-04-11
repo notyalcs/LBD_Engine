@@ -59,6 +59,20 @@ public:
 		return c - '0';
 	}
 
+	static std::string StringifyTranslation(const XMFLOAT4X4& matrix, int playerNum) {
+		char pn = '0' + playerNum;
+		auto x = std::to_string(matrix._41);
+		auto y = std::to_string(matrix._42);
+		auto z = std::to_string(matrix._43);
+		x.append({','});
+		y.append({','});
+		z.append({','});
+		x.append(y);
+		x.append(z);
+		x.append({pn});
+		return x;
+	}
+
 	static UINT CalcConstantBufferByteSize(UINT byteSize)
 	{
 		// Constant buffers must be a multiple of the minimum hardware

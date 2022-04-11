@@ -1,22 +1,23 @@
 #include "../../Headers/Main/LBDGame.h"
 
-void LBDGame::StartGame()
+std::vector<GameObject*> LBDGame::StartGame()
 {
 	CreatePlayer(XMMatrixTranslation(-1.0f, 1.0f, -10.0f));
 	CreatePlayer(XMMatrixTranslation(1.0f, 1.0f, -10.0f));
 	BuildRenderItems();
+	return _players;
 }
 
 void LBDGame::CreatePlayer(XMMATRIX translation)
 {
 	GameObject* player;
-	_players.push_back(player);
 	player = CreateDynamicMeshObject("shape", "sphere", "stone", 3.0f, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), translation, XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
-	if (_players.size() == playerNum) {
+	if (_players.size() == playerNum - 1) {
 		player->AddBehaviour<Controller>();
 		player->AddBehaviour<Player>();
 	}
 	player->GetBehaviour<Physics>()->SetElasticity(0.0f);
+	_players.push_back(player);
 }
 
 /*

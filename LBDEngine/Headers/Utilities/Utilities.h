@@ -32,6 +32,12 @@ class Utilities
 {
 public:
 
+	struct ParsedTranslation
+	{
+		float x, y, z;
+		int playerNum;
+	};
+
 	//Print Debug works as your console.log
 	static void PrintDebug(double value) {
 		OutputDebugString((std::to_wstring(value) + TEXT(" ")).c_str());
@@ -71,6 +77,41 @@ public:
 		x.append(z);
 		x.append({pn});
 		return x;
+	}
+
+	static ParsedTranslation ParseTranslation(char* arr) {
+		ParsedTranslation parse;
+		size_t size = strlen(arr);
+		int xend = 0;
+		int yend = 0;
+		std::string xs = "";
+		for (size_t i = 0; i < size; ++i) {
+			xs.append({ arr[i] });
+			if (arr[i] == ',') {
+				xend = i + 1;
+				break;
+			}
+		}
+		parse.x = std::stof(xs);
+		std::string ys = "";
+		for (size_t i = xend; i < size; ++i) {
+			ys.append({ arr[i] });
+			if (arr[i] == ',') {
+				yend = i + 1;
+				break;
+			}
+		}
+		parse.y = std::stof(ys);
+		std::string zs = "";
+		for (size_t i = yend; i < size; ++i) {
+			zs.append({ arr[i] });
+			if (arr[i] == ',') {
+				parse.playerNum = arr[i + 1] - '0';
+				break;
+			}
+		}
+		parse.z = std::stof(zs);
+		return parse;
 	}
 
 	static UINT CalcConstantBufferByteSize(UINT byteSize)
@@ -156,3 +197,4 @@ struct Light
     XMFLOAT3 Position = { 0.0f, 0.0f, 0.0f };  // point/spot light only
     float SpotPower = 64.0f;                            // spot light only
 };
+

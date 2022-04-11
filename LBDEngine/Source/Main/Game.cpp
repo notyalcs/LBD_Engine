@@ -1,5 +1,7 @@
 #include "../../Headers/Main/Game.h"
 
+std::string Game::_playerPos = "";
+
 bool Game::Initialize()
 {
 	if (!Application::Initialize()) return false;
@@ -64,6 +66,12 @@ void Game::Update()
 
 	auto trans = _players.at(_playerNum - 1)->GetTranslation();
 	_playerPos = Utilities::StringifyTranslation(trans, _playerNum);
+	auto toParse = const_cast<char*>(_playerPos.c_str());
+	auto parsed = Utilities::ParseTranslation(toParse);
+	//Utilities::PrintDebugLine(parsed.x);
+	//Utilities::PrintDebugLine(parsed.y);
+	//Utilities::PrintDebugLine(parsed.z);
+	//Utilities::PrintDebugLine(parsed.playerNum);
 
 	// If the GPU is not finished with the current frame resource, wait.
 	if (_currentFrameResource->Fence != 0 && _fence->GetCompletedValue() < _currentFrameResource->Fence)
@@ -467,6 +475,22 @@ void Game::InitToServer(int& playerNum) {
 
 void Game::GetFromServer(char* message, char* buf, SOCKET s, int slen, sockaddr_in si_other) {
 	while (1) {
+		auto mes = const_cast<char*>(_playerPos.c_str());
+		auto parsed = Utilities::ParseTranslation(buf);
+		Utilities::PrintDebugLine(parsed.playerNum);
+
+		if (sendto(s, mes, strlen(mes), 0, (struct sockaddr*)&si_other, slen) == SOCKET_ERROR) {
+			exit(EXIT_FAILURE);
+		}
+
+		memset(buf, '\0', BUFLEN);
+
+		if (recvfrom(s, buf, BUFLEN, 0, (struct sockaddr*)&si_other, &slen) == SOCKET_ERROR) {
+			Utilities::PrintDebugLine(L"recvfrom fail");
+			exit(EXIT_FAILURE);
+		}
+
+		auto parsede = Utilities::ParseTranslation(buf);
 
 	}
 	closesocket(s);

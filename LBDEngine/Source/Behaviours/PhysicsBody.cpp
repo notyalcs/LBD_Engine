@@ -29,6 +29,9 @@ void PhysicsBody::Update()
 	}
 	if (!isColliding) {
 		GetGameObject()->SetTranslation(XMLoadFloat4x4(&translationPostForce));
+	} else {
+		auto horizontalVelocity = XMLoadFloat4x4(&GetGameObject()->GetTranslation()) * XMMatrixTranslation(velocity.x, 0.0f, velocity.z);
+		GetGameObject()->SetTranslation(horizontalVelocity);
 	}
 }
 

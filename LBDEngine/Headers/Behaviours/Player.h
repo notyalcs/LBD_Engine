@@ -15,8 +15,8 @@ public:
 	bool GetFloored() { return _floored; }
 
 private:
-	const float JumpHeight{ 0.015f };
-	const float MovementSpeed{ 4.0f };
+	const float JumpHeight{ 0.15f };
+	const float MovementSpeed{ 10.0f };
 
 	Controller* _controller;
 	bool _floored;

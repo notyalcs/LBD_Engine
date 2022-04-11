@@ -5,8 +5,7 @@ std::vector<GameObject*> LBDGame::StartGame()
 	GameObject* _flag = CreateDynamicMeshObject("shape", "sphere", "stone", 3.0f, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 0.5f, 225.0f), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
 	CreatePlayer("Player 1", XMMatrixTranslation(-1.0f, 1.0f, -5.0f));
 	CreatePlayer("Player 2", XMMatrixTranslation(1.0f, 1.0f, -5.0f));
-	_player->GetBehaviour<Player>()->SetName("Player1");
-	CreateEnemy();
+	//CreateEnemy();
 	BuildRenderItems();
 	return _players;
 }
@@ -18,7 +17,7 @@ void LBDGame::CreatePlayer(std::string name, XMMATRIX translation)
 	if (_players.size() == playerNum - 1) {
 		player->AddBehaviour<Controller>();
 		player->AddBehaviour<Player>();
-		static_cast<Player*>(_player->AddBehaviour<Player>())->SetName(name);
+		static_cast<Player*>(player->AddBehaviour<Player>())->SetName(name);
 	}
 	player->GetBehaviour<Physics>()->SetElasticity(0.0f);
 	_players.push_back(player);

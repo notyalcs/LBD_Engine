@@ -11,7 +11,7 @@ public:
     //  Anything with a mask that defines where it can't walk
     //LayerMask unwalkableMask;
     //Size the grid will cover 30x30
-    Vector2 gridWorldSize{ 250, 500 };
+    Vector2 gridWorldSize{ 175, 500 };
     // How much space each node covers
     float nodeRadius = 0.5;
     std::vector< std::vector<Node> > grid;

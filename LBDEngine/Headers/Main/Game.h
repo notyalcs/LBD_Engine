@@ -10,6 +10,7 @@
 #include "LBDGame.h"
 #include "GameState.h"
 #include "../Utilities/GameCameras.h"
+#include <thread>
 
 //Extends application, provides features to application
 //
@@ -23,6 +24,14 @@ public:
 	~Game() override = default;
 
 	bool Initialize() override;
+
+	struct ThreadObject
+	{
+		char* buf;
+		SOCKET s;
+		int slen;
+		sockaddr_in si_other;
+	};
 
 private:
 	float _deltaAccumulator{ 0.0f };
@@ -54,9 +63,16 @@ private:
 	void BuildShapeGeometry();
 	void AddPSOs();
 	void BuildFrameResources();
+
+	void InitToServer(int& playerNum);
+	static void GetFromServer(char* buf, SOCKET s, int slen, sockaddr_in si_other);
 	
 	void DrawRenderItems(ID3D12GraphicsCommandList* cmdList, const std::vector<Mesh*>& ritems);
-
 	std::array<const CD3DX12_STATIC_SAMPLER_DESC, 6> GetStaticSamplers();
-	
+
+	static std::string _playerPos;
+
+	static int _playerNum;
+	std::thread _inputLoop;
+	static std::vector<GameObject*> _players;
 };

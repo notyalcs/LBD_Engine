@@ -32,6 +32,12 @@ class Utilities
 {
 public:
 
+	struct ParsedTranslation
+	{
+		float x, y, z;
+		int playerNum;
+	};
+
 	//Print Debug works as your console.log
 	static void PrintDebug(double value) {
 		OutputDebugString((std::to_wstring(value) + TEXT(" ")).c_str());
@@ -54,6 +60,59 @@ public:
             exit(U_R_DUM);
         }
     }
+
+	static int ParseInt(char c) {
+		return c - '0';
+	}
+
+	static std::string StringifyTranslation(const XMFLOAT4X4& matrix, int playerNum) {
+		char pn = '0' + playerNum;
+		auto x = std::to_string(matrix._41);
+		auto y = std::to_string(matrix._42);
+		auto z = std::to_string(matrix._43);
+		x.append({','});
+		y.append({','});
+		z.append({','});
+		x.append(y);
+		x.append(z);
+		x.append({pn});
+		return x;
+	}
+
+	static ParsedTranslation ParseTranslation(char* arr) {
+		ParsedTranslation parse;
+		size_t size = strlen(arr);
+		int xend = 0;
+		int yend = 0;
+		std::string xs = "";
+		for (size_t i = 0; i < size; ++i) {
+			if (arr[i] == ',') {
+				xend = i + 1;
+				break;
+			}
+			xs.append({ arr[i] });
+		}
+		parse.x = std::stof(xs);
+		std::string ys = "";
+		for (size_t i = xend; i < size; ++i) {
+			if (arr[i] == ',') {
+				yend = i + 1;
+				break;
+			}
+			ys.append({ arr[i] });
+		}
+		parse.y = std::stof(ys);
+		std::string zs = "";
+		for (size_t i = yend; i < size; ++i) {
+			if (arr[i] == ',') {
+				parse.playerNum = arr[i + 1] - '0';
+				break;
+			}
+			zs.append({ arr[i] });
+		}
+		parse.z = std::stof(zs);
+		return parse;
+	}
 
 	template<typename T>
 	static int Sign(T value)
@@ -157,3 +216,4 @@ struct Light
     XMFLOAT3 Position = { 0.0f, 0.0f, 0.0f };  // point/spot light only
     float SpotPower = 64.0f;                            // spot light only
 };
+

@@ -59,7 +59,7 @@ private:
 	void DrawRenderItems(ID3D12GraphicsCommandList* cmdList, const std::vector<Mesh*>& ritems);
 	std::array<const CD3DX12_STATIC_SAMPLER_DESC, 6> GetStaticSamplers();
 	
-	static std::string _playerPos;
+	//static std::string _playerPos;
 
 	int _playerNum;
 	std::thread _inputLoop;

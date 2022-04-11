@@ -63,7 +63,7 @@ void Game::Update()
 	_currentFrameResource = _frameResources.at(_currentFrameResourceIndex).get();
 
 	auto trans = _players.at(_playerNum - 1)->GetTranslation();
-	_playerPos = Utilities::StringifyTranslation(trans, _playerNum);
+	//_playerPos = Utilities::StringifyTranslation(trans, _playerNum);
 
 	// If the GPU is not finished with the current frame resource, wait.
 	if (_currentFrameResource->Fence != 0 && _fence->GetCompletedValue() < _currentFrameResource->Fence)

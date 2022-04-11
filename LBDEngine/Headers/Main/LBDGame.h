@@ -18,8 +18,8 @@ public:
 private:
 	// Player already exists inside of the gameObjects vector, but it's helpful to have a direct pointer to it.
 	void BuildRenderItems();
-	void CreatePlayer(XMMATRIX translation = XMMatrixTranslation(0.0f, 0.0f, 0.0f));
-	void CreateEnemy();
+	void CreatePlayer(std::string name, XMMATRIX translation = XMMatrixTranslation(0.0f, 0.0f, 0.0f));
+	void CreateEnemy(std::string name, GameObject* goalFlag, XMVECTOR translation);
 
 	GameObject* CreateMeshObject(std::string meshGeometryName, std::string submeshGeometryName, std::string materialName, XMMATRIX scale, XMMATRIX rotation, XMMATRIX translation, XMMATRIX textureTransform);
 	GameObject* CreateDynamicMeshObject(std::string meshGeometryName, std::string submeshGeometryName, std::string materialName, float mass, XMMATRIX scale, XMMATRIX rotation, XMMATRIX translation, XMMATRIX textureTransform);

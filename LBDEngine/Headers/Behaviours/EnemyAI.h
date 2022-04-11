@@ -10,6 +10,7 @@
 
 class EnemyAI : public Behaviour {
 public:
+	std::string name;
 
 	GameObject* _enemy;
 	GameObject* _flag;

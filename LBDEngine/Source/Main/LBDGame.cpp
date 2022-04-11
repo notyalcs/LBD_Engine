@@ -2,38 +2,34 @@
 
 std::vector<GameObject*> LBDGame::StartGame()
 {
-	CreatePlayer(XMMatrixTranslation(-1.0f, 1.0f, -5.0f));
-	CreatePlayer(XMMatrixTranslation(1.0f, 1.0f, -5.0f));
+	GameObject* _flag = CreateDynamicMeshObject("shape", "sphere", "stone", 3.0f, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 0.5f, 225.0f), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
+	CreatePlayer("Player 1", XMMatrixTranslation(-1.0f, 1.0f, -5.0f));
+	CreatePlayer("Player 2", XMMatrixTranslation(1.0f, 1.0f, -5.0f));
+	_player->GetBehaviour<Player>()->SetName("Player1");
 	CreateEnemy();
 	BuildRenderItems();
 	return _players;
 }
 
-void LBDGame::CreatePlayer(XMMATRIX translation)
+void LBDGame::CreatePlayer(std::string name, XMMATRIX translation)
 {
 	GameObject* player;
 	player = CreateDynamicMeshObject("shape", "sphere", "stone", 3.0f, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), translation, XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
 	if (_players.size() == playerNum - 1) {
 		player->AddBehaviour<Controller>();
 		player->AddBehaviour<Player>();
-		player->GetBehaviour<Player>()->SetName("Player1");
+		static_cast<Player*>(_player->AddBehaviour<Player>())->SetName(name);
 	}
 	player->GetBehaviour<Physics>()->SetElasticity(0.0f);
 	_players.push_back(player);
 }
 
-void LBDGame::CreateEnemy()
+void LBDGame::CreateEnemy(std::string name, GameObject* goalFlag, XMVECTOR translation)
 {
-	GameObject* _enemy = CreateDynamicMeshObject("shape", "shrek", "shrek", 3.0f, XMMatrixScaling(0.0002f, 0.0002f, 0.0002f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(2.5f, 0.1f, -1.5f), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
-	GameObject* _flag = CreateDynamicMeshObject("shape", "sphere", "stone", 3.0f, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 0.5f, 225.0f), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
-	static_cast<EnemyAI*>(_enemy->AddBehaviour<EnemyAI>())->_flag = _flag;
-	_enemy = CreateDynamicMeshObject("shape", "shrek", "shrek", 3.0f, XMMatrixScaling(0.0002f, 0.0002f, 0.0002f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(2.5f, 0.1f, 0.0f), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
-	static_cast<EnemyAI*>(_enemy->AddBehaviour<EnemyAI>())->_flag = _flag;
-	_enemy = CreateDynamicMeshObject("shape", "shrek", "shrek", 3.0f, XMMatrixScaling(0.0002f, 0.0002f, 0.0002f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(2.5f, 0.1f, 1.5f), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
-	static_cast<EnemyAI*>(_enemy->AddBehaviour<EnemyAI>())->_flag = _flag;
-
-	//_flag->GetBehaviour<Physics>()->SetGravity(false);
-	//_enemy->GetBehaviour<Physics>()->SetGravity(false);
+	GameObject* _enemy = CreateDynamicMeshObject("shape", "shrek", "shrek", 3.0f, XMMatrixScaling(0.0002f, 0.0002f, 0.0002f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslationFromVector(translation), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
+	auto enemyAI{ static_cast<EnemyAI*>(_enemy->AddBehaviour<EnemyAI>()) };
+	enemyAI->_flag = goalFlag;
+	enemyAI->name = name;
 }
 
 /*

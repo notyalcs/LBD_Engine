@@ -10,7 +10,7 @@ void Player::Update()
 {
 	auto mainCamera{ GameCameras::GetMainCamera() };
 
-	IsOnFloor();
+	//IsOnFloor();
 	if (_controller->GetIsMouseDown()) {
 		// Make each pixel correspond to a quarter of a degree.
 		auto lastMousePosition{ _controller->GetLastMousePosition() };
@@ -101,8 +101,12 @@ void Player::Update()
 
 			physics->SetVelocityNotY({ xInput, 0.0f, zInput });
 		}
+		else if (_controller->GetKey(VK_SHIFT))
+		{
+			physics->SetVelocityNotY({ 0.0f, 0.0f, 0.0f });
+		}
 
-		mainCamera->UpdateOrbit(body, 5.0f);
+		mainCamera->UpdateOrbit(body, 6.3f);
 	}
 	else
 	{

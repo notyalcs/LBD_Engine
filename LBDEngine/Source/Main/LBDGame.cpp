@@ -2,8 +2,8 @@
 
 std::vector<GameObject*> LBDGame::StartGame()
 {
-	CreatePlayer(XMMatrixTranslation(-1.0f, 1.0f, -10.0f));
-	CreatePlayer(XMMatrixTranslation(1.0f, 1.0f, -10.0f));
+	CreatePlayer(XMMatrixTranslation(-1.0f, 1.0f, -5.0f));
+	CreatePlayer(XMMatrixTranslation(1.0f, 1.0f, -5.0f));
 	CreateEnemy();
 	BuildRenderItems();
 	return _players;

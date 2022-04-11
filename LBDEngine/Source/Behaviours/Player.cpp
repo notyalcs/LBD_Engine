@@ -10,7 +10,7 @@ void Player::Update()
 {
 	auto mainCamera{ GameCameras::GetMainCamera() };
 
-	IsOnFloor();
+	//IsOnFloor();
 	if (_controller->GetIsMouseDown()) {
 		// Make each pixel correspond to a quarter of a degree.
 		auto lastMousePosition{ _controller->GetLastMousePosition() };

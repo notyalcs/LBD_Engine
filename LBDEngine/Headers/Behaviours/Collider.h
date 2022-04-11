@@ -1,6 +1,7 @@
 #pragma once
 #include "Behaviour.h"
 #include "../Utilities/Trigger.h"
+#include "../Main/GameState.h"
 
 //Adds collision to an object.
 //Allows collision between objects
@@ -42,9 +43,13 @@ public:
 		return _triggered;
 	}
 
+	void IsOnFloor();
+	bool GetFloored() { return _floored; }
+
 private:
 	BoundingBox _boundingBox;
 	bool _isTrigger;
 	bool _triggered;
 	std::vector<Trigger> _associatedTriggers;
+	bool _floored;
 };

@@ -18,8 +18,8 @@ private:
 	GameObject* _player;
 
 	void BuildRenderItems();
-	void CreatePlayer();
-	void CreateEnemy();
+	void CreatePlayer(std::string name);
+	void CreateEnemy(std::string name, GameObject* goalFlag, XMVECTOR translation);
 
 	GameObject* CreateMeshObject(std::string meshGeometryName, std::string submeshGeometryName, std::string materialName, XMMATRIX scale, XMMATRIX rotation, XMMATRIX translation, XMMATRIX textureTransform);
 	GameObject* CreateDynamicMeshObject(std::string meshGeometryName, std::string submeshGeometryName, std::string materialName, float mass, XMMATRIX scale, XMMATRIX rotation, XMMATRIX translation, XMMATRIX textureTransform);

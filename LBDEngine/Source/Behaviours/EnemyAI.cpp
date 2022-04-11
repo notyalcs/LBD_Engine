@@ -1,6 +1,5 @@
 #include "../../Headers/Behaviours/EnemyAI.h"
 
-
 void EnemyAI::Start() {
 	_enemy = GetGameObject();
 

@@ -1,6 +1,7 @@
 #include "../../Headers/Main/Game.h"
 
 std::string Game::_playerPos = "";
+Game::ThreadObject thrd_obj;
 
 bool Game::Initialize()
 {
@@ -20,6 +21,8 @@ bool Game::Initialize()
 	InitToServer(game.playerNum);
 	_playerNum = game.playerNum;
 	_players = game.StartGame();
+	_playerPos = Utilities::StringifyTranslation(_players.at(_playerNum - 1)->GetTranslation(), _playerNum);
+	_inputLoop = std::thread(GetFromServer, thrd_obj.buf, thrd_obj.s, thrd_obj.slen, thrd_obj.si_other);
 
 	BuildFrameResources();
 	AddPSOs();
@@ -425,7 +428,6 @@ void Game::InitToServer(int& playerNum) {
 	SOCKET s;
 	int slen = sizeof(si_other);
 	char buf[BUFLEN];
-	char message[BUFLEN];
 	char init[] = "Init";
 	bool start = false;
 	WSADATA wsa;
@@ -470,16 +472,24 @@ void Game::InitToServer(int& playerNum) {
 
 	Utilities::PrintDebugLine(L"Does this actually work");
 
-	_inputLoop = std::thread(GetFromServer, message, buf, s, slen, si_other);
+	thrd_obj.buf = buf;
+	thrd_obj.s = s;
+	thrd_obj.slen = slen;
+	thrd_obj.si_other = si_other;
 }
 
-void Game::GetFromServer(char* message, char* buf, SOCKET s, int slen, sockaddr_in si_other) {
+void Game::GetFromServer(char* buf, SOCKET s, int slen, sockaddr_in si_other) {
 	while (1) {
+		Sleep(100);
 		auto mes = const_cast<char*>(_playerPos.c_str());
-		auto parsed = Utilities::ParseTranslation(buf);
+		auto parsed = Utilities::ParseTranslation(mes);
+		Utilities::PrintDebugLine(parsed.x);
+		Utilities::PrintDebugLine(parsed.y);
+		Utilities::PrintDebugLine(parsed.z);
 		Utilities::PrintDebugLine(parsed.playerNum);
 
 		if (sendto(s, mes, strlen(mes), 0, (struct sockaddr*)&si_other, slen) == SOCKET_ERROR) {
+			Utilities::PrintDebugLine(L"sendto fail");
 			exit(EXIT_FAILURE);
 		}
 
@@ -489,9 +499,7 @@ void Game::GetFromServer(char* message, char* buf, SOCKET s, int slen, sockaddr_
 			Utilities::PrintDebugLine(L"recvfrom fail");
 			exit(EXIT_FAILURE);
 		}
-
-		auto parsede = Utilities::ParseTranslation(buf);
-
+		/*auto parsede = Utilities::ParseTranslation(buf);*/
 	}
 	closesocket(s);
 	WSACleanup();

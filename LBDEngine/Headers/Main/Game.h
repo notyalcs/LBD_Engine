@@ -24,6 +24,14 @@ public:
 
 	bool Initialize() override;
 
+	struct ThreadObject
+	{
+		char* buf;
+		SOCKET s;
+		int slen;
+		sockaddr_in si_other;
+	};
+
 private:
 	std::vector<std::unique_ptr<FrameResource>> _frameResources;
 	FrameResource* _currentFrameResource = nullptr;
@@ -54,11 +62,11 @@ private:
 	void BuildFrameResources();
 
 	void InitToServer(int& playerNum);
-	static void GetFromServer(char* message, char* buf, SOCKET s, int slen, sockaddr_in si_other);
+	static void GetFromServer(char* buf, SOCKET s, int slen, sockaddr_in si_other);
 	
 	void DrawRenderItems(ID3D12GraphicsCommandList* cmdList, const std::vector<Mesh*>& ritems);
 	std::array<const CD3DX12_STATIC_SAMPLER_DESC, 6> GetStaticSamplers();
-	
+
 	static std::string _playerPos;
 
 	int _playerNum;

@@ -86,29 +86,29 @@ public:
 		int yend = 0;
 		std::string xs = "";
 		for (size_t i = 0; i < size; ++i) {
-			xs.append({ arr[i] });
 			if (arr[i] == ',') {
 				xend = i + 1;
 				break;
 			}
+			xs.append({ arr[i] });
 		}
 		parse.x = std::stof(xs);
 		std::string ys = "";
 		for (size_t i = xend; i < size; ++i) {
-			ys.append({ arr[i] });
 			if (arr[i] == ',') {
 				yend = i + 1;
 				break;
 			}
+			ys.append({ arr[i] });
 		}
 		parse.y = std::stof(ys);
 		std::string zs = "";
 		for (size_t i = yend; i < size; ++i) {
-			zs.append({ arr[i] });
 			if (arr[i] == ',') {
 				parse.playerNum = arr[i + 1] - '0';
 				break;
 			}
+			zs.append({ arr[i] });
 		}
 		parse.z = std::stof(zs);
 		return parse;

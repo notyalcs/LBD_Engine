@@ -27,5 +27,5 @@ constexpr bool GOD_MODE{ false };
 constexpr float RISE_MOVEMENT_SPEED{ 7.5f };
 constexpr int PORT = 2121;
 constexpr int BUFLEN = 512;
-//constexpr auto SERVER = "10.0.0.2";
-constexpr auto SERVER = "192.168.1.84";
+constexpr auto SERVER = "10.0.0.2";
+//constexpr auto SERVER = "192.168.1.84";

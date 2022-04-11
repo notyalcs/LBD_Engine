@@ -3,6 +3,7 @@
 void LBDGame::StartGame()
 {
 	CreatePlayer();
+	_player->GetBehaviour<Player>()->SetName("Player1");
 	CreateEnemy();
 	BuildRenderItems();
 }
@@ -101,7 +102,10 @@ void LBDGame::BuildRenderItems()
 
 	// -- GOAL --
 	CreateMeshObject("shape", "grid", "tile", XMMatrixScaling(0.5f, 1.0f, 0.35f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 0.0f, 223.5f), XMMatrixScaling(1.0f, 1.0f, 1.0f));
+	CreateTriggerZone("shape", "grid", "lava", XMMatrixScaling(0.5f, 10.0f, 0.35f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 0.0f, 223.5f), XMMatrixScaling(1.0f, 1.0f, 1.0f), new Goal());
 
+	// -- DIE --
+	CreateTriggerZone("shape", "grid", "lava", XMMatrixScaling(190.0f, 1.0f, 190.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, -30.0f, 90.0f), XMMatrixScaling(100.0f, 100.0f, 100.0f), new Lava());
 }
 
 GameObject* LBDGame::CreateMeshObject(std::string meshGeometryName, std::string submeshGeometryName, std::string materialName, XMMATRIX scale, XMMATRIX rotation, XMMATRIX translation, XMMATRIX textureTransform)
@@ -143,6 +147,15 @@ GameObject* LBDGame::CreateDynamicMeshObject(std::string meshGeometryName, std::
 	auto physics{ dynamic_cast<Physics*>(meshObject->AddBehaviour<Physics>()) };
 	physics->SetMass(mass); // set mass to 500g, probably definitely add this into the parameter list
 	auto physicsBody = dynamic_cast<PhysicsBody*>(meshObject->AddBehaviour<PhysicsBody>());
+
+	return meshObject;
+}
+
+GameObject* LBDGame::CreateTriggerZone(std::string meshGeometryName, std::string submeshGeometryName, std::string materialName, XMMATRIX scale, XMMATRIX rotation, XMMATRIX translation, XMMATRIX textureTransform, Trigger* trigger)
+{
+	auto meshObject{ CreateMeshObject(meshGeometryName, submeshGeometryName, materialName, scale, rotation, translation, textureTransform) };
+	meshObject->GetBehaviour<Collider>()->SetIsTrigger(true);
+	meshObject->GetBehaviour<Collider>()->AddTrigger(trigger);
 
 	return meshObject;
 }

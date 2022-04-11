@@ -35,7 +35,7 @@ void Player::Update()
 		}
 	}
 
-	if (!GOD_MODE)
+	if (!_dead)
 	{
 		auto cameraLook = XMVector3Normalize({ mainCamera->GetLook3f().x, 0.0f, mainCamera->GetLook3f().z});
 		float cameraLookX = XMVectorGetX(cameraLook);

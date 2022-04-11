@@ -42,9 +42,13 @@ public:
 		return _triggered;
 	}
 
+	void AddTrigger(Trigger* newTrigger) {
+		_associatedTriggers.push_back(newTrigger);
+	}
+
 private:
 	BoundingBox _boundingBox;
 	bool _isTrigger;
 	bool _triggered;
-	std::vector<Trigger> _associatedTriggers;
+	std::vector<Trigger*> _associatedTriggers;
 };

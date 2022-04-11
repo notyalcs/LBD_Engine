@@ -25,6 +25,7 @@
     <ClCompile Include="Source\Utilities\Render.cpp" />
     <ClCompile Include="Source\Utilities\Triggers\Goal.cpp" />
     <ClCompile Include="Source\Utilities\WavefrontReader.cpp" />
+    <ClCompile Include="Source\Utilities\Triggers\Lava.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Headers\Main\GameState.h" />
@@ -61,5 +62,6 @@
     <ClInclude Include="Headers\Main\LBDGame.h" />
     <ClInclude Include="Headers\Behaviours\Platform.h" />
     <ClInclude Include="Headers\Behaviours\EnemyAI.h" />
+    <ClInclude Include="Headers\Utilities\Triggers\Lava.h" />
   </ItemGroup>
 </Project>

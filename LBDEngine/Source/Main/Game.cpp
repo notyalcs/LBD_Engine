@@ -267,6 +267,7 @@ void Game::LoadRenderData()
 	Render::AddTexture(TEXT("./Textures/chair_shitty.dds"), "chair", _device.Get(), _graphicsCommandList.Get());
 	//Render::AddTexture(TEXT("./Textures/WoodCrate01.dds"), "crate", _device.Get(), _graphicsCommandList.Get());
 	Render::AddTexture(TEXT("./Textures/shrek.dds"), "shrek", _device.Get(), _graphicsCommandList.Get());
+	Render::AddTexture(TEXT("./Textures/rp_gd_lava_c.dds"), "lava", _device.Get(), _graphicsCommandList.Get());
 
 	// Add materials.
 	// Right now, the order of the materials must be the same as the order of the textures.
@@ -277,6 +278,7 @@ void Game::LoadRenderData()
 	Render::AddMaterial("brick", { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.02f, 0.02f, 0.02f }, 0.1f);
 	//Render::AddMaterial("crate", { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.05f, 0.05f, 0.05f }, 0.2f);
 	Render::AddMaterial("shrek", { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.05f, 0.05f, 0.05f }, 0.2f);
+	Render::AddMaterial("lava", { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.05f, 0.05f, 0.05f }, 0.2f);
 
 	// Add shaders.
 	Render::AddShader(TEXT("./Shaders/Default.hlsl"), "VS", "standard_vs", "vs_5_1");

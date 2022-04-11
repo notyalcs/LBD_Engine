@@ -8,6 +8,6 @@ void Collider::Update()
 
 void Collider::FireTrigger(GameObject* collidedObject) {
 	for (auto& trigger : Collider::_associatedTriggers) {
-		trigger.FireTrigger(collidedObject);
+		trigger->FireTrigger(collidedObject);
 	}
 }

@@ -71,10 +71,6 @@ void Game::Update()
 	_playerPos = Utilities::StringifyTranslation(trans, _playerNum);
 	auto toParse = const_cast<char*>(_playerPos.c_str());
 	auto parsed = Utilities::ParseTranslation(toParse);
-	//Utilities::PrintDebugLine(parsed.x);
-	//Utilities::PrintDebugLine(parsed.y);
-	//Utilities::PrintDebugLine(parsed.z);
-	//Utilities::PrintDebugLine(parsed.playerNum);
 
 	// If the GPU is not finished with the current frame resource, wait.
 	if (_currentFrameResource->Fence != 0 && _fence->GetCompletedValue() < _currentFrameResource->Fence)
@@ -427,7 +423,7 @@ void Game::InitToServer(int& playerNum) {
 	struct sockaddr_in si_other;
 	SOCKET s;
 	int slen = sizeof(si_other);
-	char buf[BUFLEN];
+	char* buf = new char[BUFLEN];
 	char init[] = "Init";
 	bool start = false;
 	WSADATA wsa;
@@ -466,10 +462,6 @@ void Game::InitToServer(int& playerNum) {
 
 	Utilities::PrintDebugLine(playerNum);
 
-	while (!start) {
-		if (GetAsyncKeyState('F') & 0x8000) start = true;
-	}
-
 	Utilities::PrintDebugLine(L"Does this actually work");
 
 	thrd_obj.buf = buf;
@@ -480,26 +472,21 @@ void Game::InitToServer(int& playerNum) {
 
 void Game::GetFromServer(char* buf, SOCKET s, int slen, sockaddr_in si_other) {
 	while (1) {
-		Sleep(100);
+		Sleep(500);
 		auto mes = const_cast<char*>(_playerPos.c_str());
 		auto parsed = Utilities::ParseTranslation(mes);
-		Utilities::PrintDebugLine(parsed.x);
-		Utilities::PrintDebugLine(parsed.y);
-		Utilities::PrintDebugLine(parsed.z);
-		Utilities::PrintDebugLine(parsed.playerNum);
 
 		if (sendto(s, mes, strlen(mes), 0, (struct sockaddr*)&si_other, slen) == SOCKET_ERROR) {
 			Utilities::PrintDebugLine(L"sendto fail");
 			exit(EXIT_FAILURE);
 		}
 
-		memset(buf, '\0', BUFLEN);
+		//memset(buf, '\0', BUFLEN);
 
 		if (recvfrom(s, buf, BUFLEN, 0, (struct sockaddr*)&si_other, &slen) == SOCKET_ERROR) {
 			Utilities::PrintDebugLine(L"recvfrom fail");
 			exit(EXIT_FAILURE);
 		}
-		/*auto parsede = Utilities::ParseTranslation(buf);*/
 	}
 	closesocket(s);
 	WSACleanup();

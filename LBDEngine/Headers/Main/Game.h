@@ -69,7 +69,7 @@ private:
 
 	static std::string _playerPos;
 
-	int _playerNum;
+	static int _playerNum;
 	std::thread _inputLoop;
-	std::vector<GameObject*> _players;
+	static std::vector<GameObject*> _players;
 };

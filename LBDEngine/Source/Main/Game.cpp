@@ -2,6 +2,8 @@
 
 std::string Game::_playerPos = "";
 Game::ThreadObject thrd_obj;
+std::vector<GameObject*> Game::_players;
+int Game::_playerNum;
 
 bool Game::Initialize()
 {
@@ -471,6 +473,7 @@ void Game::InitToServer(int& playerNum) {
 }
 
 void Game::GetFromServer(char* buf, SOCKET s, int slen, sockaddr_in si_other) {
+	char* boffa = new char[BUFLEN];
 	while (1) {
 		Sleep(500);
 		auto mes = const_cast<char*>(_playerPos.c_str());
@@ -481,12 +484,17 @@ void Game::GetFromServer(char* buf, SOCKET s, int slen, sockaddr_in si_other) {
 			exit(EXIT_FAILURE);
 		}
 
-		//memset(buf, '\0', BUFLEN);
+		memset(boffa, '\0', BUFLEN);
 
-		if (recvfrom(s, buf, BUFLEN, 0, (struct sockaddr*)&si_other, &slen) == SOCKET_ERROR) {
+		if (recvfrom(s, boffa, BUFLEN, 0, (struct sockaddr*)&si_other, &slen) == SOCKET_ERROR) {
 			Utilities::PrintDebugLine(L"recvfrom fail");
 			exit(EXIT_FAILURE);
 		}
+		auto pars = Utilities::ParseTranslation(boffa);
+		if (pars.playerNum != _playerNum) {
+			_players.at(pars.playerNum - 1)->SetTranslation(XMMatrixTranslation(pars.x, pars.y, pars.z));
+		}
+
 	}
 	closesocket(s);
 	WSACleanup();

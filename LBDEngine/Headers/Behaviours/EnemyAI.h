@@ -63,7 +63,7 @@ public:
 		float movementSpeed = 7.0;
 		float range = 1.0;
 
-		XMMATRIX position{ 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, nextNode->worldPosition.x, 0.5f, nextNode->worldPosition.z, 1.0f };
+		XMMATRIX position{ 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, nextNode->worldPosition.x, 0.1f, nextNode->worldPosition.z, 1.0f };
 		Node* endNode = &pathToGoal[pathToGoal.size() - 1];
 		if (nextNode > endNode) {
 			//Start();

@@ -20,8 +20,8 @@ public:
 	std::string GetName() { return _name; };
 
 private:
-	const float JumpHeight{ 0.015f };
-	const float MovementSpeed{ 4.0f };
+	const float JumpHeight{ 0.04f };
+	const float MovementSpeed{ 10.0f };
 
 	std::string _name;
 

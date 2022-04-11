@@ -42,7 +42,7 @@ bool MyGrid::CheckCollision(Vector3 worldPoint) {
         }
 
 
-        if (locationTop == locationBottom) {
+        if (locationTop == locationBottom && locations[i].y >= 0.0f) {
             if (worldPoint.x >= locationLeft && worldPoint.x <= locationRight &&
                 worldPoint.z >= locationFront && worldPoint.z <= locationBack) {
                 walkable = true;

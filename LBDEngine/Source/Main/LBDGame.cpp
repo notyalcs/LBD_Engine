@@ -18,11 +18,16 @@ void LBDGame::CreatePlayer()
 
 void LBDGame::CreateEnemy()
 {
-	GameObject* _enemy = CreateDynamicMeshObject("shape", "shrek", "shrek", 3.0f, XMMatrixScaling(0.0002f, 0.0002f, 0.0002f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(2.5f, 0.1f, 0.0f), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
+	GameObject* _enemy = CreateDynamicMeshObject("shape", "shrek", "shrek", 3.0f, XMMatrixScaling(0.0002f, 0.0002f, 0.0002f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(2.5f, 0.1f, -1.5f), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
 	GameObject* _flag = CreateDynamicMeshObject("shape", "sphere", "stone", 3.0f, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 0.5f, 225.0f), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
+	static_cast<EnemyAI*>(_enemy->AddBehaviour<EnemyAI>())->_flag = _flag;
+	_enemy = CreateDynamicMeshObject("shape", "shrek", "shrek", 3.0f, XMMatrixScaling(0.0002f, 0.0002f, 0.0002f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(2.5f, 0.1f, 0.0f), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
+	static_cast<EnemyAI*>(_enemy->AddBehaviour<EnemyAI>())->_flag = _flag;
+	_enemy = CreateDynamicMeshObject("shape", "shrek", "shrek", 3.0f, XMMatrixScaling(0.0002f, 0.0002f, 0.0002f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(2.5f, 0.1f, 1.5f), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
+	static_cast<EnemyAI*>(_enemy->AddBehaviour<EnemyAI>())->_flag = _flag;
+
 	//_flag->GetBehaviour<Physics>()->SetGravity(false);
 	//_enemy->GetBehaviour<Physics>()->SetGravity(false);
-	static_cast<EnemyAI*>(_enemy->AddBehaviour<EnemyAI>())->_flag = _flag;
 }
 
 /*

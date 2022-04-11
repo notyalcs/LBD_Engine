@@ -9,6 +9,9 @@ void Player::Start()
 void Player::Update()
 {
 	auto mainCamera{ GameCameras::GetMainCamera() };
+	auto translation = GetGameObject()->GetTranslation();
+
+	GetGameObject()->GetBehaviour<Mesh>()->SetTextureTransform(XMMatrixTranslation(GameTime::GetTotalTime(), GameTime::GetTotalTime(), GameTime::GetTotalTime()));
 
 	//IsOnFloor();
 	if (_controller->GetIsMouseDown()) {

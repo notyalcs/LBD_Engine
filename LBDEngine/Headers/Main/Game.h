@@ -47,6 +47,7 @@ private:
 
 	PassConstants _mainPassCB;
 
+	void OnExit() override;
 	void OnResize() override;
 	void Update() override;
 	void Draw() override;
@@ -75,4 +76,5 @@ private:
 	static int _playerNum;
 	std::thread _inputLoop;
 	static std::vector<GameObject*> _players;
+	static bool _isExiting;
 };

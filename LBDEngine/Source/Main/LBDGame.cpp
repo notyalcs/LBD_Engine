@@ -2,10 +2,11 @@
 
 std::vector<GameObject*> LBDGame::StartGame()
 {
-	GameObject* _flag = CreateDynamicMeshObject("shape", "sphere", "stone", 3.0f, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, 0.5f, 225.0f), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
-	CreatePlayer("Player 1", XMMatrixTranslation(-1.0f, 1.0f, -5.0f));
-	CreatePlayer("Player 2", XMMatrixTranslation(1.0f, 1.0f, -5.0f));
-	//CreateEnemy();
+	GameObject* flag = CreateDynamicMeshObject("shape", "cylinder", "tile", 3.0f, XMMatrixScaling(1.0f, 5.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 5.0f, 0.0f), XMMatrixTranslation(0.0f, 0.5f, 225.0f), XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
+	CreatePlayer("Player 1", XMMatrixTranslation(-1.0f, 1.0f, 0.0f));
+	CreatePlayer("Player 2", XMMatrixTranslation(1.0f, 1.0f, 0.0f));
+	CreateEnemy("Enemy 1", flag, { -2.0f, 1.0f, -2.0f });
+	CreateEnemy("Enemy 2", flag, { 2.0f, 1.0f, -1.0f });
 	BuildRenderItems();
 	return _players;
 }
@@ -16,8 +17,11 @@ void LBDGame::CreatePlayer(std::string name, XMMATRIX translation)
 	player = CreateDynamicMeshObject("shape", "sphere", "stone", 3.0f, XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), translation, XMLoadFloat4x4(&MathHelper::CreateIdentity4x4()));
 	if (_players.size() == playerNum - 1) {
 		player->AddBehaviour<Controller>();
-		player->AddBehaviour<Player>();
 		static_cast<Player*>(player->AddBehaviour<Player>())->SetName(name);
+	}
+	else
+	{
+		player->GetBehaviour<Physics>()->SetGravity(false);
 	}
 	player->GetBehaviour<Physics>()->SetElasticity(0.0f);
 	_players.push_back(player);
@@ -145,10 +149,6 @@ GameObject* LBDGame::CreateDynamicMeshObject(std::string meshGeometryName, std::
 	auto meshObject{ CreateMeshObject(meshGeometryName, submeshGeometryName, materialName, scale, rotation, translation, textureTransform) };
 	auto meshGeometry{ Render::GetGeometries().at(meshGeometryName).get() };
 	auto& submeshGeometry{ meshGeometry->Submeshes.at(submeshGeometryName) };
-
-	auto collider{ dynamic_cast<Collider*>(meshObject->AddBehaviour<Collider>()) };
-	collider->SetBoundingBox(submeshGeometry.Bounds);
-	collider->Transform(meshObject->GetWorldTransform());
 
 	auto physics{ dynamic_cast<Physics*>(meshObject->AddBehaviour<Physics>()) };
 	physics->SetMass(mass); // set mass to 500g, probably definitely add this into the parameter list

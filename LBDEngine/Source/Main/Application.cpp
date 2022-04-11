@@ -133,6 +133,7 @@ LRESULT Application::MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM l
 		return 0;
 
 	case WM_DESTROY:
+		OnExit();
 		PostQuitMessage(0);
 
 		return 0;

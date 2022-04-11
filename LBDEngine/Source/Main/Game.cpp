@@ -4,6 +4,7 @@ std::string Game::_playerPos = "";
 Game::ThreadObject thrd_obj;
 std::vector<GameObject*> Game::_players;
 int Game::_playerNum;
+bool Game::_isExiting{ false };
 
 bool Game::Initialize()
 {
@@ -40,6 +41,15 @@ bool Game::Initialize()
 	return true;
 }
 
+void Game::OnExit()
+{
+	_isExiting = true;
+	if (_inputLoop.joinable())
+	{
+		_inputLoop.join();
+	}
+}
+
 void Game::OnResize()
 {
 	Application::OnResize();
@@ -74,9 +84,7 @@ void Game::Update()
 
 	auto trans = _players.at(_playerNum - 1)->GetTranslation();
 	_playerPos = Utilities::StringifyTranslation(trans, _playerNum);
-	auto toParse = const_cast<char*>(_playerPos.c_str());
-	auto parsed = Utilities::ParseTranslation(toParse);
-
+	
 	// If the GPU is not finished with the current frame resource, wait.
 	if (_currentFrameResource->Fence != 0 && _fence->GetCompletedValue() < _currentFrameResource->Fence)
 	{
@@ -472,7 +480,7 @@ void Game::InitToServer(int& playerNum) {
 
 	//inet_pton(AF_INET, SERVER, &si_other.sin_addr.S_un.S_addr);
 
-	if (sendto(s, init, strlen(init), 0, (struct sockaddr*)&si_other, slen) == SOCKET_ERROR) {
+	if (sendto(s, init, static_cast<int>(strlen(init)), 0, (struct sockaddr*)&si_other, slen) == SOCKET_ERROR) {
 		Utilities::PrintDebugLine(L"Send fail");
 		exit(EXIT_FAILURE);
 	}
@@ -498,12 +506,11 @@ void Game::InitToServer(int& playerNum) {
 
 void Game::GetFromServer(char* buf, SOCKET s, int slen, sockaddr_in si_other) {
 	char* boffa = new char[BUFLEN];
-	while (1) {
-		Sleep(500);
+	while (!_isExiting) {
+		//Sleep(1);
 		auto mes = const_cast<char*>(_playerPos.c_str());
-		auto parsed = Utilities::ParseTranslation(mes);
 
-		if (sendto(s, mes, strlen(mes), 0, (struct sockaddr*)&si_other, slen) == SOCKET_ERROR) {
+		if (sendto(s, mes, static_cast<int>(strlen(mes)), 0, (struct sockaddr*)&si_other, slen) == SOCKET_ERROR) {
 			Utilities::PrintDebugLine(L"sendto fail");
 			exit(EXIT_FAILURE);
 		}
@@ -515,10 +522,9 @@ void Game::GetFromServer(char* buf, SOCKET s, int slen, sockaddr_in si_other) {
 			exit(EXIT_FAILURE);
 		}
 		auto pars = Utilities::ParseTranslation(boffa);
-		if (pars.playerNum != _playerNum) {
+		if (pars.playerNum != _playerNum && pars.playerNum != -1) {
 			_players.at(pars.playerNum - 1)->SetTranslation(XMMatrixTranslation(pars.x, pars.y, pars.z));
 		}
-
 	}
 	closesocket(s);
 	WSACleanup();

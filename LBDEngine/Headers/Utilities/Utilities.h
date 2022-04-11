@@ -81,36 +81,49 @@ public:
 
 	static ParsedTranslation ParseTranslation(char* arr) {
 		ParsedTranslation parse;
-		size_t size = strlen(arr);
-		int xend = 0;
-		int yend = 0;
-		std::string xs = "";
-		for (size_t i = 0; i < size; ++i) {
-			if (arr[i] == ',') {
-				xend = i + 1;
-				break;
+
+		try
+		{
+			size_t size = strlen(arr);
+			size_t xend = 0;
+			size_t yend = 0;
+			std::string xs = "";
+			for (size_t i = 0; i < size; ++i) {
+				if (arr[i] == ',') {
+					xend = i + 1;
+					break;
+				}
+				xs.append({ arr[i] });
 			}
-			xs.append({ arr[i] });
-		}
-		parse.x = std::stof(xs);
-		std::string ys = "";
-		for (size_t i = xend; i < size; ++i) {
-			if (arr[i] == ',') {
-				yend = i + 1;
-				break;
+			std::string ys = "";
+			for (size_t i = xend; i < size; ++i) {
+				if (arr[i] == ',') {
+					yend = i + 1;
+					break;
+				}
+				ys.append({ arr[i] });
 			}
-			ys.append({ arr[i] });
-		}
-		parse.y = std::stof(ys);
-		std::string zs = "";
-		for (size_t i = yend; i < size; ++i) {
-			if (arr[i] == ',') {
-				parse.playerNum = arr[i + 1] - '0';
-				break;
+			std::string zs = "";
+			for (size_t i = yend; i < size; ++i) {
+				if (arr[i] == ',') {
+					parse.playerNum = arr[i + 1] - '0';
+					break;
+				}
+				zs.append({ arr[i] });
 			}
-			zs.append({ arr[i] });
+
+			parse.x = std::stof(xs);
+			parse.y = std::stof(ys);
+			parse.z = std::stof(zs);
 		}
-		parse.z = std::stof(zs);
+		catch (...)
+		{
+			parse.playerNum = -1;
+			parse.x = 0.0f;
+			parse.y = 0.0f;
+			parse.z = 0.0f;
+		}
+
 		return parse;
 	}
 

@@ -66,6 +66,7 @@ protected:
     virtual void Draw() = 0;
     
     virtual void OnResize();
+    virtual void OnExit() {}
 
     void Pause();
     void Unpause();

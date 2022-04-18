@@ -5,22 +5,24 @@
 #include <unordered_set>
 #include <iostream>
 
-class Pathfinding
-{
-public:
+namespace LBD{
+    class Pathfinding
+    {
+    public:
 
-    MyGrid grid;
+        MyGrid grid;
 
-    std::vector<Node> pathToGoal;
+        std::vector<Node> pathToGoal;
 
-    // Refer to the PSEUDO-CODE in A* algorithm notes
-    void FindPath(Vector3 startPos, Vector3 targetPos);
+        // Refer to the PSEUDO-CODE in A* algorithm notes
+        void FindPath(Vector3 startPos, Vector3 targetPos);
 
-    // Retraces and calculates what the path it took was, the parent node in the Node class is vital
-    void RetracePath(Node startNode, Node endNode);
+        // Retraces and calculates what the path it took was, the parent node in the Node class is vital
+        void RetracePath(Node startNode, Node endNode);
 
-    // Function to get the distance of two nodes
-    int GetDistance(Node nodeA, Node nodeB);
+        // Function to get the distance of two nodes
+        int GetDistance(Node nodeA, Node nodeB);
 
 
-};
+    };
+}

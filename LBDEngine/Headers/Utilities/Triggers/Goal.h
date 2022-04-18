@@ -5,6 +5,9 @@
 #include "../../Behaviours/EnemyAI.h"
 #include "../../Main/Application.h"
 
-class Goal : public Trigger {
-	void FireTrigger(GameObject* CollidedObject) override;
-};
+namespace LBD {
+
+	class Goal : public Trigger {
+		void FireTrigger(GameObject* CollidedObject) override;
+	};
+}

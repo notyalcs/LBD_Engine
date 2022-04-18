@@ -28,6 +28,7 @@
     <ClInclude Include="Headers\Behaviours\Controller.h" />
     <ClInclude Include="Headers\Behaviours\LinearMotion.h" />
     <ClInclude Include="Headers\Behaviours\Mesh.h" />
+    <ClInclude Include="Headers\Utilities\GltfLoader.h" />
     <ClInclude Include="Headers\Utilities\MyGrid.h" />
     <ClInclude Include="Headers\Behaviours\Pathfinding.h" />
     <ClInclude Include="Headers\Behaviours\Physics.h" />
@@ -54,6 +55,45 @@
     <ClInclude Include="Headers\Utilities\WavefrontReader.h" />
     <ClInclude Include="Headers\Main\LBDGame.h" />
     <ClInclude Include="Headers\Behaviours\Platform.h" />
+    <ClInclude Include="Libraries\GLTFSDK\AnimationUtils.h" />
+    <ClInclude Include="Libraries\GLTFSDK\BufferBuilder.h" />
+    <ClInclude Include="Libraries\GLTFSDK\Color.h" />
+    <ClInclude Include="Libraries\GLTFSDK\Constants.h" />
+    <ClInclude Include="Libraries\GLTFSDK\Deserialize.h" />
+    <ClInclude Include="Libraries\GLTFSDK\Document.h" />
+    <ClInclude Include="Libraries\GLTFSDK\Exceptions.h" />
+    <ClInclude Include="Libraries\GLTFSDK\Extension.h" />
+    <ClInclude Include="Libraries\GLTFSDK\ExtensionHandlers.h" />
+    <ClInclude Include="Libraries\GLTFSDK\ExtensionsKHR.h" />
+    <ClInclude Include="Libraries\GLTFSDK\ExtrasDocument.h" />
+    <ClInclude Include="Libraries\GLTFSDK\GLBResourceReader.h" />
+    <ClInclude Include="Libraries\GLTFSDK\GLBResourceWriter.h" />
+    <ClInclude Include="Libraries\GLTFSDK\GLTF.h" />
+    <ClInclude Include="Libraries\GLTFSDK\GLTFResourceReader.h" />
+    <ClInclude Include="Libraries\GLTFSDK\GLTFResourceWriter.h" />
+    <ClInclude Include="Libraries\GLTFSDK\IndexedContainer.h" />
+    <ClInclude Include="Libraries\GLTFSDK\IStreamCache.h" />
+    <ClInclude Include="Libraries\GLTFSDK\IStreamReader.h" />
+    <ClInclude Include="Libraries\GLTFSDK\IStreamWriter.h" />
+    <ClInclude Include="Libraries\GLTFSDK\Math.h" />
+    <ClInclude Include="Libraries\GLTFSDK\MeshPrimitiveUtils.h" />
+    <ClInclude Include="Libraries\GLTFSDK\MicrosoftGeneratorVersion.h" />
+    <ClInclude Include="Libraries\GLTFSDK\Optional.h" />
+    <ClInclude Include="Libraries\GLTFSDK\PBRUtils.h" />
+    <ClInclude Include="Libraries\GLTFSDK\RapidJsonUtils.h" />
+    <ClInclude Include="Libraries\GLTFSDK\ResourceReaderUtils.h" />
+    <ClInclude Include="Libraries\GLTFSDK\ResourceWriter.h" />
+    <ClInclude Include="Libraries\GLTFSDK\Schema.h" />
+    <ClInclude Include="Libraries\GLTFSDK\SchemaValidation.h" />
+    <ClInclude Include="Libraries\GLTFSDK\Serialize.h" />
+    <ClInclude Include="Libraries\GLTFSDK\StreamCache.h" />
+    <ClInclude Include="Libraries\GLTFSDK\StreamCacheLRU.h" />
+    <ClInclude Include="Libraries\GLTFSDK\StreamUtils.h" />
+    <ClInclude Include="Libraries\GLTFSDK\Traverse.h" />
+    <ClInclude Include="Libraries\GLTFSDK\Validation.h" />
+    <ClInclude Include="Libraries\GLTFSDK\Version.h" />
+    <ClInclude Include="Libraries\GLTFSDK\Visitor.h" />
+    <ClInclude Include="Libraries\SchemaJson.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Behaviours\EnemyAI.cpp" />
@@ -82,6 +122,9 @@
     <ClCompile Include="Source\Utilities\Triggers\Goal.cpp" />
     <ClCompile Include="Source\Utilities\Triggers\Lava.cpp" />
     <ClCompile Include="Source\Utilities\WavefrontReader.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="Libraries\GLTFSDK.lib" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -181,11 +224,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)/Libraries</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalOptions>/FORCE:MULTIPLE %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>GLTFSDK.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)/Libraries</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

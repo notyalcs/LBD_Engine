@@ -386,6 +386,8 @@ void Game::BuildShapeGeometry()
 		"box", "grid", "sphere", "cylinder", "custom", "shrek"
 	};
 
+	attemptGltfLoad("./Models/Duck.glb");
+
 	auto geometry = std::make_unique<MeshGeometry>();
 
 	UINT vertexOffset{ 0 };

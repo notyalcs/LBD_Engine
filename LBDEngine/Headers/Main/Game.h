@@ -7,6 +7,7 @@
 #include "../Utilities/GameObject.h"
 #include "../Utilities/WavefrontReader.h"
 #include "../Behaviours/Mesh.h"
+#include "../Utilities/GltfLoader.h"
 #include "LBDGame.h"
 #include "GameState.h"
 #include "../Utilities/GameCameras.h"

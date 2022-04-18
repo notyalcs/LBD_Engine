@@ -260,11 +260,11 @@ namespace
     }
 }
 
-int attemptGltfLoad(char* argv[])
+int attemptGltfLoad(std::string pathString)
 {
     try
     {
-        std::experimental::filesystem::path path = argv[1U];
+        std::experimental::filesystem::path path = pathString;
 
         if (path.is_relative())
         {

@@ -64,5 +64,48 @@
     <ClInclude Include="Headers\Behaviours\Platform.h" />
     <ClInclude Include="Headers\Behaviours\EnemyAI.h" />
     <ClInclude Include="Headers\Utilities\Triggers\Lava.h" />
+    <ClInclude Include="Libraries\GLTFSDK\AnimationUtils.h" />
+    <ClInclude Include="Libraries\GLTFSDK\BufferBuilder.h" />
+    <ClInclude Include="Libraries\GLTFSDK\Color.h" />
+    <ClInclude Include="Libraries\GLTFSDK\Constants.h" />
+    <ClInclude Include="Libraries\GLTFSDK\Deserialize.h" />
+    <ClInclude Include="Libraries\GLTFSDK\Document.h" />
+    <ClInclude Include="Libraries\GLTFSDK\Exceptions.h" />
+    <ClInclude Include="Libraries\GLTFSDK\Extension.h" />
+    <ClInclude Include="Libraries\GLTFSDK\ExtensionHandlers.h" />
+    <ClInclude Include="Libraries\GLTFSDK\ExtensionsKHR.h" />
+    <ClInclude Include="Libraries\GLTFSDK\ExtrasDocument.h" />
+    <ClInclude Include="Libraries\GLTFSDK\GLBResourceReader.h" />
+    <ClInclude Include="Libraries\GLTFSDK\GLBResourceWriter.h" />
+    <ClInclude Include="Libraries\GLTFSDK\GLTF.h" />
+    <ClInclude Include="Libraries\GLTFSDK\GLTFResourceReader.h" />
+    <ClInclude Include="Libraries\GLTFSDK\GLTFResourceWriter.h" />
+    <ClInclude Include="Libraries\GLTFSDK\IndexedContainer.h" />
+    <ClInclude Include="Libraries\GLTFSDK\IStreamCache.h" />
+    <ClInclude Include="Libraries\GLTFSDK\IStreamReader.h" />
+    <ClInclude Include="Libraries\GLTFSDK\IStreamWriter.h" />
+    <ClInclude Include="Libraries\GLTFSDK\Math.h" />
+    <ClInclude Include="Libraries\GLTFSDK\MeshPrimitiveUtils.h" />
+    <ClInclude Include="Libraries\GLTFSDK\MicrosoftGeneratorVersion.h" />
+    <ClInclude Include="Libraries\GLTFSDK\Optional.h" />
+    <ClInclude Include="Libraries\GLTFSDK\PBRUtils.h" />
+    <ClInclude Include="Libraries\GLTFSDK\RapidJsonUtils.h" />
+    <ClInclude Include="Libraries\GLTFSDK\ResourceReaderUtils.h" />
+    <ClInclude Include="Libraries\GLTFSDK\ResourceWriter.h" />
+    <ClInclude Include="Libraries\GLTFSDK\Schema.h" />
+    <ClInclude Include="Libraries\GLTFSDK\SchemaValidation.h" />
+    <ClInclude Include="Libraries\GLTFSDK\Serialize.h" />
+    <ClInclude Include="Libraries\GLTFSDK\StreamCache.h" />
+    <ClInclude Include="Libraries\GLTFSDK\StreamCacheLRU.h" />
+    <ClInclude Include="Libraries\GLTFSDK\StreamUtils.h" />
+    <ClInclude Include="Libraries\GLTFSDK\Traverse.h" />
+    <ClInclude Include="Libraries\GLTFSDK\Validation.h" />
+    <ClInclude Include="Libraries\GLTFSDK\Version.h" />
+    <ClInclude Include="Libraries\GLTFSDK\Visitor.h" />
+    <ClInclude Include="Libraries\SchemaJson.h" />
+    <ClInclude Include="Headers\Utilities\GltfLoader.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="Libraries\GLTFSDK.lib" />
   </ItemGroup>
 </Project>

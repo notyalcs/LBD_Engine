@@ -1,14 +1,16 @@
 #include "../../Headers/Utilities/GameCameras.h"
 
-Camera* GameCameras::GetMainCamera()
-{
-	auto camera{ _mainCameraObject.GetBehaviour<Camera>()};
-	if (!camera)
+namespace LBD {
+	Camera* GameCameras::GetMainCamera()
 	{
-		camera = dynamic_cast<Camera*>(_mainCameraObject.AddBehaviour<Camera>());
+		auto camera{ _mainCameraObject.GetBehaviour<Camera>() };
+		if (!camera)
+		{
+			camera = dynamic_cast<LBD::Camera*>(_mainCameraObject.AddBehaviour<Camera>());
+		}
+
+		return camera;
 	}
 
-	return camera;
+	GameObject GameCameras::_mainCameraObject;
 }
-
-GameObject GameCameras::_mainCameraObject;

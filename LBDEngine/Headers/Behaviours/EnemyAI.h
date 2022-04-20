@@ -7,18 +7,19 @@
 #include "../Main/LBDGame.h"
 #include "../Main/GameState.h"
 #include "../Utilities/Utilities.h"
+namespace LBD {
+	class EnemyAI : public Behaviour {
+	public:
+		std::string name;
 
-class EnemyAI : public Behaviour {
-public:
-	std::string name;
+		GameObject* _enemy;
+		GameObject* _flag;
 
-	GameObject* _enemy;
-	GameObject* _flag;
+		std::vector<Node> pathToGoal;
+		Node* nextNode;
 
-	std::vector<Node> pathToGoal;
-	Node* nextNode;
+		void Start();
 
-	void Start();
-
-	void Update();
-};
+		void Update();
+	};
+}

@@ -29,4 +29,4 @@ constexpr float FIXED_DELTA_TIME{ 0.02f };
 constexpr int PORT = 2121;
 constexpr int BUFLEN = 512;
 //constexpr auto SERVER = "10.0.0.2";
-constexpr auto SERVER = "192.168.1.76";
+constexpr auto SERVER = "192.168.1.72";

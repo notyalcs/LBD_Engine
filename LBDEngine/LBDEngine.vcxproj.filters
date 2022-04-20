@@ -27,6 +27,7 @@
     <ClCompile Include="Source\Utilities\WavefrontReader.cpp" />
     <ClCompile Include="Source\Utilities\Triggers\Lava.cpp" />
     <ClCompile Include="Source\Behaviours\EnemyAI.cpp" />
+    <ClCompile Include="Source\Utilities\GltfReader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Headers\Main\GameState.h" />
@@ -103,7 +104,8 @@
     <ClInclude Include="Libraries\GLTFSDK\Version.h" />
     <ClInclude Include="Libraries\GLTFSDK\Visitor.h" />
     <ClInclude Include="Libraries\SchemaJson.h" />
-    <ClInclude Include="Headers\Utilities\GltfLoader.h" />
+    <ClInclude Include="Headers\Utilities\GltfReader.h" />
+    <ClInclude Include="Headers\Utilities\GltfBackup.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Libraries\GLTFSDK.lib" />

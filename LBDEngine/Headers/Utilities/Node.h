@@ -59,7 +59,7 @@ namespace LBD {
         int gCost;
         int hCost;
         // Keeps track of parent node/last node (relative path it takes, parent node is the node before it in the path)
-        Node* parent;
+        Node* parent = nullptr;
 
         Node() = default;
 
@@ -103,9 +103,9 @@ namespace LBD {
             gridY = n.gridY;
             gCost = n.gCost;
             hCost = n.hCost;
-            parent = new Node;
+            parent = new Node();
             if (n.parent != nullptr) {
-                *parent = *n.parent;
+                *(parent) = *(n.parent);
             }
             else {
                 parent = nullptr;

@@ -117,6 +117,9 @@ namespace LBD {
 
 		// -- DIE --
 		CreateTriggerZone("shape", "grid", "lava", XMMatrixScaling(190.0f, 1.0f, 190.0f), XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f), XMMatrixTranslation(0.0f, -30.0f, 90.0f), XMMatrixScaling(100.0f, 100.0f, 100.0f), new Lava());
+
+		// -- Test Object --
+		CreateMeshObject("shape", "chair", "chair", XMMatrixScaling(1.0f, 1.0f, 1.0f), XMMatrixRotationRollPitchYaw(0.0f, 1.0f, 0.0f), XMMatrixTranslation(0.0f, 5.0f, 225.0f), XMMatrixScaling(1.0f, -1.0f, 1.0f));
 	}
 
 	GameObject* LBDGame::CreateMeshObject(std::string meshGeometryName, std::string submeshGeometryName, std::string materialName, XMMATRIX scale, XMMATRIX rotation, XMMATRIX translation, XMMATRIX textureTransform)

@@ -291,6 +291,7 @@ namespace LBD {
 		//Render::AddTexture(TEXT("./Textures/WoodCrate01.dds"), "crate", _device.Get(), _graphicsCommandList.Get());
 		Render::AddTexture(TEXT("./Textures/shrek.dds"), "shrek", _device.Get(), _graphicsCommandList.Get());
 		Render::AddTexture(TEXT("./Textures/rp_gd_lava_c.dds"), "lava", _device.Get(), _graphicsCommandList.Get());
+//		Render::AddTexture(TEXT("./Textures/DuckCM.dds"), "duck", _device.Get(), _graphicsCommandList.Get());
 
 		// Add materials.
 		// Right now, the order of the materials must be the same as the order of the textures.
@@ -302,6 +303,7 @@ namespace LBD {
 		//Render::AddMaterial("crate", { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.05f, 0.05f, 0.05f }, 0.2f);
 		Render::AddMaterial("shrek", { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.05f, 0.05f, 0.05f }, 0.2f);
 		Render::AddMaterial("lava", { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.05f, 0.05f, 0.05f }, 0.2f);
+//		Render::AddMaterial("duck", { 1.0f, 1.0f, 1.0f, 1.0f }, { 0.05f, 0.05f, 0.05f }, 0.2f);
 
 		// Add shaders.
 		Render::AddShader(TEXT("./Shaders/Default.hlsl"), "VS", "standard_vs", "vs_5_1");
@@ -379,20 +381,19 @@ namespace LBD {
 			GeometryGenerator::CreateGrid(20.0f, 30.0f, 60, 40),
 			GeometryGenerator::CreateSphere(0.5f, 20, 20),
 			GeometryGenerator::CreateCylinder(0.5f, 0.3f, 3.0f, 20, 20),
-			WavefrontReader::ReadFile("./Models/rudimentary_armchair_tris.obj"),
+			GltfReader::ReadStaticMesh("./Models/rudimentary_armchair_tris.gltf"),
+			GltfReader::ReadStaticMesh("./Models/Duck.glb"),
+//			WavefrontReader::ReadFile("./Models/rudimentary_armchair_tris.obj"),
 			WavefrontReader::ReadFile("./Models/shrek.obj")
 		};
 		std::string names[] =
 		{
-			"box", "grid", "sphere", "cylinder", "custom", "shrek"
+			"box", "grid", "sphere", "cylinder", "chair", "duck", "shrek"
 		};
 
-		if (attemptGltfLoad("./Models/Duck.glb")) {
-			Utilities::PrintDebugLine(L"Model test failure.");
-		}
-		else {
-			Utilities::PrintDebugLine(L"GLTF returns success.");
-		}
+		
+//		GltfReader::ReadStaticMesh("./Models/Duck.glb");
+
 		auto geometry = std::make_unique<MeshGeometry>();
 
 		UINT vertexOffset{ 0 };

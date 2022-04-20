@@ -28,7 +28,8 @@
     <ClInclude Include="Headers\Behaviours\Controller.h" />
     <ClInclude Include="Headers\Behaviours\LinearMotion.h" />
     <ClInclude Include="Headers\Behaviours\Mesh.h" />
-    <ClInclude Include="Headers\Utilities\GltfLoader.h" />
+    <ClInclude Include="Headers\Utilities\GltfBackup.h" />
+    <ClInclude Include="Headers\Utilities\GltfReader.h" />
     <ClInclude Include="Headers\Utilities\MyGrid.h" />
     <ClInclude Include="Headers\Behaviours\Pathfinding.h" />
     <ClInclude Include="Headers\Behaviours\Physics.h" />
@@ -117,6 +118,7 @@
     <ClCompile Include="Source\Utilities\GameObject.cpp" />
     <ClCompile Include="Source\Utilities\GameTime.cpp" />
     <ClCompile Include="Source\Utilities\GeometryGenerator.cpp" />
+    <ClCompile Include="Source\Utilities\GltfReader.cpp" />
     <ClCompile Include="Source\Utilities\MyGrid.cpp" />
     <ClCompile Include="Source\Utilities\Render.cpp" />
     <ClCompile Include="Source\Utilities\Triggers\Goal.cpp" />
@@ -225,6 +227,7 @@
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)/Libraries</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

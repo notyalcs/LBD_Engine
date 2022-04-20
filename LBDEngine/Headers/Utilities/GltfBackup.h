@@ -1,16 +1,16 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 #pragma once
-#define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
 
 #include <GLTFSDK/GLTF.h>
 #include <GLTFSDK/GLTFResourceReader.h>
 #include <GLTFSDK/GLBResourceReader.h>
 #include <GLTFSDK/Deserialize.h>
+#include <GLTFSDK/MeshPrimitiveUtils.h>
 
-// Replace this with <filesystem> (and use std::filesystem rather than
-// std::experimental::filesystem) if your toolchain fully supports C++17
-#include <experimental/filesystem>
+#include "Utilities.h"
+
+#include <filesystem>
 
 #include <fstream>
 #include <sstream>
@@ -19,181 +19,85 @@
 #include <cassert>
 #include <cstdlib>
 
+#include "../../Source/Utilities/GltfReader.cpp"
+#include <cstdint>
+#include <DirectXMath.h>
+#include <vector>
+#include "Utilities.h"
+#include "GeometryGenerator.h"
+
 using namespace Microsoft::glTF;
 
-namespace
+//Taken directly from the example
+// The glTF SDK is decoupled from all file I/O by the IStreamReader (and IStreamWriter)
+// interface(s) and the C++ stream-based I/O library. This allows the glTF SDK to be used in
+// sandboxed environments, such as WebAssembly modules and UWP apps, where any file I/O code
+// must be platform or use-case specific.
+class StreamReader : public IStreamReader
 {
-    // The glTF SDK is decoupled from all file I/O by the IStreamReader (and IStreamWriter)
-    // interface(s) and the C++ stream-based I/O library. This allows the glTF SDK to be used in
-    // sandboxed environments, such as WebAssembly modules and UWP apps, where any file I/O code
-    // must be platform or use-case specific.
-    class StreamReader : public IStreamReader
+public:
+    StreamReader(std::filesystem::path pathBase) : m_pathBase(std::move(pathBase))
     {
-    public:
-        StreamReader(std::experimental::filesystem::path pathBase) : m_pathBase(std::move(pathBase))
-        {
-            assert(m_pathBase.has_root_path());
-        }
-
-        // Resolves the relative URIs of any external resources declared in the glTF manifest
-        std::shared_ptr<std::istream> GetInputStream(const std::string& filename) const override
-        {
-            // In order to construct a valid stream:
-            // 1. The filename argument will be encoded as UTF-8 so use filesystem::u8path to
-            //    correctly construct a path instance.
-            // 2. Generate an absolute path by concatenating m_pathBase with the specified filename
-            //    path. The filesystem::operator/ uses the platform's preferred directory separator
-            //    if appropriate.
-            // 3. Always open the file stream in binary mode. The glTF SDK will handle any text
-            //    encoding issues for us.
-            auto streamPath = m_pathBase / std::experimental::filesystem::u8path(filename);
-            auto stream = std::make_shared<std::ifstream>(streamPath, std::ios_base::binary);
-
-            // Check if the stream has no errors and is ready for I/O operations
-            if (!stream || !(*stream))
-            {
-                throw std::runtime_error("Unable to create a valid input stream for uri: " + filename);
-            }
-
-            return stream;
-        }
-
-    private:
-        std::experimental::filesystem::path m_pathBase;
-    };
-
-    // Uses the Document class to print some basic information about various top-level glTF entities
-    void PrintDocumentInfo(const Document& document)
-    {
-        // Asset Info
-        std::cout << "Asset Version:    " << document.asset.version << "\n";
-        std::cout << "Asset MinVersion: " << document.asset.minVersion << "\n";
-        std::cout << "Asset Generator:  " << document.asset.generator << "\n";
-        std::cout << "Asset Copyright:  " << document.asset.copyright << "\n\n";
-
-        // Scene Info
-        std::cout << "Scene Count: " << document.scenes.Size() << "\n";
-
-        if (document.scenes.Size() > 0U)
-        {
-            std::cout << "Default Scene Index: " << document.GetDefaultScene().id << "\n\n";
-        }
-        else
-        {
-            std::cout << "\n";
-        }
-
-        // Entity Info
-        std::cout << "Node Count:     " << document.nodes.Size() << "\n";
-        std::cout << "Camera Count:   " << document.cameras.Size() << "\n";
-        std::cout << "Material Count: " << document.materials.Size() << "\n\n";
-
-        // Mesh Info
-        std::cout << "Mesh Count: " << document.meshes.Size() << "\n";
-        std::cout << "Skin Count: " << document.skins.Size() << "\n\n";
-
-        // Texture Info
-        std::cout << "Image Count:   " << document.images.Size() << "\n";
-        std::cout << "Texture Count: " << document.textures.Size() << "\n";
-        std::cout << "Sampler Count: " << document.samplers.Size() << "\n\n";
-
-        // Buffer Info
-        std::cout << "Buffer Count:     " << document.buffers.Size() << "\n";
-        std::cout << "BufferView Count: " << document.bufferViews.Size() << "\n";
-        std::cout << "Accessor Count:   " << document.accessors.Size() << "\n\n";
-
-        // Animation Info
-        std::cout << "Animation Count: " << document.animations.Size() << "\n\n";
-
-        for (const auto& extension : document.extensionsUsed)
-        {
-            std::cout << "Extension Used: " << extension << "\n";
-        }
-
-        if (!document.extensionsUsed.empty())
-        {
-            std::cout << "\n";
-        }
-
-        for (const auto& extension : document.extensionsRequired)
-        {
-            std::cout << "Extension Required: " << extension << "\n";
-        }
-
-        if (!document.extensionsRequired.empty())
-        {
-            std::cout << "\n";
-        }
+        assert(m_pathBase.has_root_path());
     }
 
-    // Uses the Document and GLTFResourceReader classes to print information about various glTF binary resources
-    void PrintResourceInfo(const Document& document, const GLTFResourceReader& resourceReader)
+    // Resolves the relative URIs of any external resources declared in the glTF manifest
+    std::shared_ptr<std::istream> GetInputStream(const std::string& filename) const override
     {
-        // Use the resource reader to get each mesh primitive's position data
-        for (const auto& mesh : document.meshes.Elements())
+        // In order to construct a valid stream:
+        // 1. The filename argument will be encoded as UTF-8 so use filesystem::u8path to
+        //    correctly construct a path instance.
+        // 2. Generate an absolute path by concatenating m_pathBase with the specified filename
+        //    path. The filesystem::operator/ uses the platform's preferred directory separator
+        //    if appropriate.
+        // 3. Always open the file stream in binary mode. The glTF SDK will handle any text
+        //    encoding issues for us.
+        auto streamPath = m_pathBase / std::filesystem::path(filename);
+        auto stream = std::make_shared<std::ifstream>(streamPath, std::ios_base::binary);
+
+        // Check if the stream has no errors and is ready for I/O operations
+        if (!stream || !(*stream))
         {
-            std::cout << "Mesh: " << mesh.id << "\n";
-
-            for (const auto& meshPrimitive : mesh.primitives)
-            {
-                std::string accessorId;
-
-                if (meshPrimitive.TryGetAttributeAccessorId(ACCESSOR_POSITION, accessorId))
-                {
-                    const Accessor& accessor = document.accessors.Get(accessorId);
-
-                    const auto data = resourceReader.ReadBinaryData<float>(document, accessor);
-                    const auto dataByteLength = data.size() * sizeof(float);
-
-                    std::cout << "MeshPrimitive: " << dataByteLength << " bytes of position data\n";
-                }
-            }
-
-            std::cout << "\n";
+            throw std::runtime_error("Unable to create a valid input stream for uri: " + filename);
         }
 
-        // Use the resource reader to get each image's data
-        for (const auto& image : document.images.Elements())
-        {
-            std::string filename;
-
-            if (image.uri.empty())
-            {
-                assert(!image.bufferViewId.empty());
-
-                auto& bufferView = document.bufferViews.Get(image.bufferViewId);
-                auto& buffer = document.buffers.Get(bufferView.bufferId);
-
-                filename += buffer.uri; //NOTE: buffer uri is empty if image is stored in GLB binary chunk
-            }
-            else if (IsUriBase64(image.uri))
-            {
-                filename = "Data URI";
-            }
-            else
-            {
-                filename = image.uri;
-            }
-
-            auto data = resourceReader.ReadBinaryData(document, image);
-
-            std::cout << "Image: " << image.id << "\n";
-            std::cout << "Image: " << data.size() << " bytes of image data\n";
-
-            if (!filename.empty())
-            {
-                std::cout << "Image filename: " << filename << "\n\n";
-            }
-        }
+        return stream;
     }
 
-    void PrintInfo(const std::experimental::filesystem::path& path)
-    {
-        // Pass the absolute path, without the filename, to the stream reader
+private:
+    std::filesystem::path m_pathBase;
+};
+
+class GltfReader
+{
+public:
+    static GeometryObject ReadStaticMesh(std::string pathName) {
+        //this part is also taken from the example
+        std::filesystem::path path = pathName;
+
+        if (path.is_relative())
+        {
+            auto pathCurrent = std::filesystem::current_path();
+
+            // Convert the relative path into an absolute path by appending the command line argument to the current path
+            pathCurrent /= path;
+            pathCurrent.swap(path);
+        }
+
+        if (!path.has_filename())
+        {
+            throw std::runtime_error("Model path has no filename");
+        }
+
+        if (!path.has_extension())
+        {
+            throw std::runtime_error("Model path has no filename extension");
+        }
+
         auto streamReader = std::make_unique<StreamReader>(path.parent_path());
 
-        std::experimental::filesystem::path pathFile = path.filename();
-        std::experimental::filesystem::path pathFileExt = pathFile.extension();
+        std::filesystem::path pathFile = path.filename();
+        std::filesystem::path pathFileExt = pathFile.extension();
 
         std::string manifest;
 
@@ -207,7 +111,7 @@ namespace
         // If the file has a '.gltf' extension then create a GLTFResourceReader
         if (pathFileExt == MakePathExt(GLTF_EXTENSION))
         {
-            auto gltfStream = streamReader->GetInputStream(pathFile.u8string()); // Pass a UTF-8 encoded filename to GetInputString
+            auto gltfStream = streamReader->GetInputStream(pathFile.string()); // Pass a UTF-8 encoded filename to GetInputString
             auto gltfResourceReader = std::make_unique<GLTFResourceReader>(std::move(streamReader));
 
             std::stringstream manifestStream;
@@ -224,7 +128,7 @@ namespace
         // JSON chunk and resource data from the binary chunk.
         if (pathFileExt == MakePathExt(GLB_EXTENSION))
         {
-            auto glbStream = streamReader->GetInputStream(pathFile.u8string()); // Pass a UTF-8 encoded filename to GetInputString
+            auto glbStream = streamReader->GetInputStream(pathFile.string()); // Pass a UTF-8 encoded filename to GetInputString
             auto glbResourceReader = std::make_unique<GLBResourceReader>(std::move(streamReader), std::move(glbStream));
 
             manifest = glbResourceReader->GetJson(); // Get the manifest from the JSON chunk
@@ -234,7 +138,7 @@ namespace
 
         if (!resourceReader)
         {
-            throw std::runtime_error("Command line argument path filename extension must be .gltf or .glb");
+            throw std::runtime_error("Extension of GLTF file appears to be incorrect.");
         }
 
         Document document;
@@ -253,47 +157,57 @@ namespace
             throw std::runtime_error(ss.str());
         }
 
-        std::cout << "### glTF Info - " << pathFile << " ###\n\n";
+        //Ripped-off-from-example part ends
 
-        PrintDocumentInfo(document);
-        PrintResourceInfo(document, *resourceReader);
-    }
-}
+        MeshPrimitive meshPrim = document.meshes[0].primitives[0];
 
-int attemptGltfLoad(std::string pathString)
-{
-    try
-    {
-        std::experimental::filesystem::path path = pathString;
+        //Load position coordinates
+        std::vector<float> positionSeries = Microsoft::glTF::MeshPrimitiveUtils::GetPositions(document, *resourceReader, meshPrim);
 
-        if (path.is_relative())
+        std::vector<XMFLOAT3> positions{};
+
+        for (int i = 0; i < positionSeries.size(); i += 3)
         {
-            auto pathCurrent = std::experimental::filesystem::current_path();
-
-            // Convert the relative path into an absolute path by appending the command line argument to the current path
-            pathCurrent /= path;
-            pathCurrent.swap(path);
+            positions.emplace_back(XMFLOAT3(positionSeries[i], positionSeries[i + 1], positionSeries[i + 2]));
         }
 
-        if (!path.has_filename())
+        //Load normal coordinates
+        std::vector<float> normalSeries = Microsoft::glTF::MeshPrimitiveUtils::GetNormals(document, *resourceReader, meshPrim);
+
+        std::vector<XMFLOAT3> normals{};
+
+        for (int i = 0; i < normalSeries.size(); i += 3)
         {
-            throw std::runtime_error("Command line argument path has no filename");
+            normals.emplace_back(XMFLOAT3(normalSeries[i], normalSeries[i + 1], normalSeries[i + 2]));
         }
 
-        if (!path.has_extension())
+        //Load texture coordinates, TexCoords 0 only for now
+        std::vector<float> texSeries = Microsoft::glTF::MeshPrimitiveUtils::GetTexCoords_0(document, *resourceReader, meshPrim);
+
+        std::vector<XMFLOAT2> texCoords{};
+
+        for (int i = 0; i < texSeries.size(); i += 2)
         {
-            throw std::runtime_error("Command line argument path has no filename extension");
+            texCoords.emplace_back(XMFLOAT2(texSeries[i], texSeries[i + 1]));
         }
 
-        PrintInfo(path);
-    }
-    catch (const std::runtime_error& ex)
-    {
-        std::cerr << "Error! - ";
-        std::cerr << ex.what() << "\n";
+        std::vector<uint16_t> indices = Microsoft::glTF::MeshPrimitiveUtils::GetIndices16(document, *resourceReader, meshPrim);
 
-        return EXIT_FAILURE;
-    }
+        std::vector<GeometryVertex> verts{};
+        std::vector<uint16_t> resInd{};
+        for (uint32_t i = 0; i < indices.size(); i++) {
+            GeometryVertex v = GeometryVertex();
+            v.Position = positions[indices[i]];//things seem to work when I do this
+            v.Normal = normals[indices[i]];//but the way it's done looks very suspicious
+            v.TexC = texCoords[indices[i]];//I might be missing something
+            verts.emplace_back(v);
+            resInd.emplace_back(i);
+        }
 
-    return EXIT_SUCCESS;
-}
+        GeometryObject result = GeometryObject();
+        result.Vertices = verts;
+        result.Indices = resInd;
+
+        return result;
+    }
+};

@@ -468,9 +468,10 @@ namespace LBD {
 		char* buf = new char[BUFLEN];
 		char init[] = "Init";
 		bool start = false;
+		WORD version = MAKEWORD(2, 2);
 		WSADATA wsa;
 
-		if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0) {
+		if (WSAStartup(version, &wsa) != 0) {
 			Utilities::PrintDebugLine(L"WSAStartup fail");
 			exit(EXIT_FAILURE);
 		}

@@ -28,5 +28,6 @@ constexpr float RISE_MOVEMENT_SPEED{ 12.5f };
 constexpr float FIXED_DELTA_TIME{ 0.02f };
 constexpr int PORT = 2121;
 constexpr int BUFLEN = 512;
-//constexpr auto SERVER = "10.0.0.2";
-constexpr auto SERVER = "192.168.1.72";
+
+//IPv4 OF YOUR SERVER NEEDS TO GO HERE (ex: "192.163.1.0"):
+constexpr auto SERVER = "###.###.###.###";
